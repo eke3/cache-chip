@@ -7,10 +7,10 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 
 entity cache_cell is
-    port(   write_data      : in std_logic_vector(7 downto 0);
+    port(   write_data      : in std_logic;
             chip_enable    : in std_logic;
             RW              : in std_logic;
-            read_data       : out std_logic_vector(7 downto 0));
+            read_data       : out std_logic);
 
 end cache_cell;
 
@@ -40,7 +40,7 @@ architecture structural of cache_cell is
     for selector: selector use entity work.selector(structural);
     for tx: tx use entity work.tx(structural);
 
-    signal tx_data_in : std_logic_vector(7 downto 0);
+    signal tx_data_in : std_logic;
     signal write_enable, read_enable : std_logic;
 
 begin
