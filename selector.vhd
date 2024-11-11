@@ -14,7 +14,7 @@ entity selector is
 end selector;
 
 architecture structural of selector is
-    component and_2x12
+    component and_2x1
         port(   A  : in std_logic;
                 B  : in std_logic;
                 output  : out std_logic);
