@@ -2,16 +2,18 @@
 
 library IEEE;
 library STD;
-use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_1164.all;
 
 entity inverter is
-    Port ( input : in STD_LOGIC;
-           output : out STD_LOGIC);
-end inverter;
+    port (
+        input  : in  STD_LOGIC;
+        output : out STD_LOGIC
+    );
+end entity inverter;
 
 architecture Structural of inverter is
 
 begin
     output <= not (input);
 
-end Structural;
+end architecture Structural;

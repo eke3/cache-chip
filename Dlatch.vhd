@@ -1,33 +1,34 @@
 -- Entity: positive level triggered D latch
 -- Architecture : structural
--- Author: 
+-- Author:
 --
-  
+
 
 library STD;
-library IEEE;                      
-use IEEE.std_logic_1164.all;       
+library IEEE;
+use IEEE.std_logic_1164.all;
 
-entity Dlatch is                      
-  port ( d   : in  std_logic;
-         clk : in  std_logic;
-         q   : out std_logic;
-         qbar: out std_logic); 
-end Dlatch;                          
+entity Dlatch is
+    port (
+        d    : in  std_logic;
+        clk  : in  std_logic;
+        q    : out std_logic;
+        qbar : out std_logic
+    );
+end entity Dlatch;
 
-architecture structural of Dlatch is 
+architecture structural of Dlatch is
 
- 
-  
+
 begin
-  
-  output: process (d,clk)                  
 
-  begin                           
-    if clk = '1' then 
-    q <= d;
-    qbar <= not d ;
- end if; 
- end process output;        
-                             
-end structural;  
+    output: process (d, clk) is
+
+    begin
+        if clk = '1' then
+            q    <= d;
+            qbar <= not d;
+        end if;
+    end process output;
+
+end architecture structural;
