@@ -6,69 +6,94 @@ library STD;
 library IEEE;
 use IEEE.std_logic_1164.all;
 
-entity cache_vector_1bit is
+entity cache_cell is
     port (
-        RW          : in  std_logic;               -- 1-bit Read/Write signal (shared)
-        write_data  : in  std_logic;               -- 1-bit write data (shared)
-        reset       : in  std_logic;               -- New reset input
-        chip_enable : in  std_logic_vector(3 downto 0); -- 4-bit chip enable, one for each cache cell
-        read_data_3 : out std_logic;               -- 1-bit read data output for cell 3
-        read_data_2 : out std_logic;               -- 1-bit read data output for cell 2
-        read_data_1 : out std_logic;               -- 1-bit read data output for cell 1
-        read_data_0 : out std_logic                -- 1-bit read data output for cell 0
+        write_data  : in  std_logic;
+        reset       : in  std_logic; -- New reset input
+        chip_enable : in  std_logic;
+        RW          : in  std_logic;
+        read_data   : out std_logic
     );
-end entity cache_vector_1bit;
 
-architecture structural of cache_vector_1bit is
-    component cache_cell is
+end entity cache_cell;
+
+architecture structural of cache_cell is
+    component Dlatch is
         port (
-            write_data  : in  std_logic;           -- 1-bit write data
-            reset       : in  std_logic;           -- Reset input for each cache cell instance
-            chip_enable : in  std_logic;           -- 1-bit chip enable
-            RW          : in  std_logic;           -- 1-bit Read/Write signal
-            read_data   : out std_logic            -- 1-bit read data
+            d    : in  std_logic;
+            clk  : in  std_logic;
+            q    : out std_logic;
+            qbar : out std_logic
         );
-    end component cache_cell;
+    end component Dlatch;
 
-    -- Instantiate four cache_cell components with unique chip_enable and read_data
-    for cache_0, cache_1, cache_2, cache_3: cache_cell use entity work.cache_cell(structural);
+    component selector is
+        port (
+            chip_enable  : in  std_logic;
+            RW           : in  std_logic;
+            read_enable  : out std_logic;
+            write_enable : out std_logic
+        );
+    end component selector;
+
+    component tx is
+        port (
+            sel    : in  std_logic;
+            selnot : in  std_logic;
+            input  : in  std_logic;
+            output : out std_logic
+        );
+    end component tx;
+
+    component mux_2x1 is
+        port (
+            A      : in  std_logic;
+            B      : in  std_logic;
+            sel    : in  std_logic;
+            output : out std_logic
+        );
+    end component mux_2x1;
+
+    for d_latch: Dlatch use entity work.Dlatch(structural);
+    for selector_inst: selector use entity work.selector(structural);
+    for tx_gate: tx use entity work.tx(structural);
+
+    signal tx_data_in                : std_logic;
+    signal tx_selnot_in              : std_logic;
+    signal write_enable, read_enable : std_logic;
+    signal chip_enable_mux_out       : std_logic;
 
 begin
-    -- Map each cache cell to its respective chip enable, read data output, and reset signal
-    cache_0: cache_cell
+
+    -- Mux to generate chip_enable_mux_out
+    chip_enable_mux: component mux_2x1
     port map (
-        write_data  => write_data,       -- Shared write data
-        reset       => reset,            -- Shared reset signal
-        chip_enable => chip_enable(0),   -- Unique chip enable for cache cell 0
-        RW          => RW,               -- Shared Read/Write
-        read_data   => read_data_0       -- Unique read data output for cache cell 0
+        A      => chip_enable,
+        B      => reset,
+        sel    => reset,
+        output => chip_enable_mux_out
     );
 
-    cache_1: cache_cell
+    selector_inst: component selector
     port map (
-        write_data  => write_data,       -- Shared write data
-        reset       => reset,            -- Shared reset signal
-        chip_enable => chip_enable(1),   -- Unique chip enable for cache cell 1
-        RW          => RW,               -- Shared Read/Write
-        read_data   => read_data_1       -- Unique read data output for cache cell 1
+        chip_enable_mux_out,
+        RW,
+        read_enable,
+        write_enable
     );
-
-    cache_2: cache_cell
+    d_latch: component Dlatch
     port map (
-        write_data  => write_data,       -- Shared write data
-        reset       => reset,            -- Shared reset signal
-        chip_enable => chip_enable(2),   -- Unique chip enable for cache cell 2
-        RW          => RW,               -- Shared Read/Write
-        read_data   => read_data_2       -- Unique read data output for cache cell 2
+        write_data,
+        write_enable,
+        tx_data_in,
+        tx_selnot_in
     );
-
-    cache_3: cache_cell
+    tx_gate: component tx
     port map (
-        write_data  => write_data,       -- Shared write data
-        reset       => reset,            -- Shared reset signal
-        chip_enable => chip_enable(3),   -- Unique chip enable for cache cell 3
-        RW          => RW,               -- Shared Read/Write
-        read_data   => read_data_3       -- Unique read data output for cache cell 3
+        read_enable,
+        write_enable,
+        tx_data_in,
+        read_data
     );
 
 end architecture structural;

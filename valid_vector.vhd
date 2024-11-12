@@ -1,12 +1,17 @@
+-- Entity: valid_vector
+-- Architecture: Structural
+
+library STD;
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 
 entity valid_vector is
     port (
-        write_data  : in  STD_LOGIC; -- Shared write data for all cells
+        write_data  : in  STD_LOGIC; -- Shared write data for demux
         reset       : in  STD_LOGIC; -- Shared reset signal for all cells
         chip_enable : in  STD_LOGIC_VECTOR(3 downto 0); -- 4-bit chip enable (1 bit per cell)
         RW          : in  STD_LOGIC; -- Shared Read/Write signal for all cells
+        sel         : in  STD_LOGIC_VECTOR(1 downto 0); -- 2-bit selector for demux, comes from decoder input
         read_data_3 : out STD_LOGIC; -- Read data output for cell 3
         read_data_2 : out STD_LOGIC; -- Read data output for cell 2
         read_data_1 : out STD_LOGIC; -- Read data output for cell 1
@@ -26,44 +31,71 @@ architecture Structural of valid_vector is
         );
     end component valid_cell;
 
+    -- Declare the demux_1x4 component
+    component demux_1x4 is
+        port (
+            data_in    : in  STD_LOGIC;                    -- 1-bit input
+            sel        : in  STD_LOGIC_VECTOR(1 downto 0); -- 2-bit selector
+            data_out_3 : out STD_LOGIC;                    -- Output for selection "11"
+            data_out_2 : out STD_LOGIC;                    -- Output for selection "10"
+            data_out_1 : out STD_LOGIC;                    -- Output for selection "01"
+            data_out_0 : out STD_LOGIC                     -- Output for selection "00"
+        );
+    end component demux_1x4;
+
+    -- Internal signals for demux outputs
+    signal demux_out_0, demux_out_1, demux_out_2, demux_out_3 : STD_LOGIC;
+
+    for demux: demux_1x4 use entity work.demux_1x4(structural);
     for cell_0, cell_1, cell_2, cell_3: valid_cell use entity work.valid_cell(structural);
 
 begin
+    -- Instantiate the demux_1x4 and connect the shared write_data and sel
+    demux: component demux_1x4
+    port map (
+        data_in     => write_data,                         -- Shared write data input
+        sel         => sel,                                -- 2-bit selector input
+        data_out_0  => demux_out_0,                        -- Output connected to cell_0's write_data
+        data_out_1  => demux_out_1,                        -- Output connected to cell_1's write_data
+        data_out_2  => demux_out_2,                        -- Output connected to cell_2's write_data
+        data_out_3  => demux_out_3                         -- Output connected to cell_3's write_data
+    );
+
     -- Instantiate each valid_cell and connect signals as required
     cell_0: component valid_cell
     port map (
-        write_data  => write_data,     -- Shared write data
-        reset       => reset,          -- Shared reset signal
-        chip_enable => chip_enable(0), -- Unique chip enable for cell 0
-        RW          => RW,             -- Shared Read/Write signal
-        read_data   => read_data_0     -- Unique read data output for cell 0
+        write_data  => demux_out_0,                        -- Demux output for cell 0
+        reset       => reset,                              -- Shared reset signal
+        chip_enable => chip_enable(0),                     -- Unique chip enable for cell 0
+        RW          => RW,                                 -- Shared Read/Write signal
+        read_data   => read_data_0                         -- Unique read data output for cell 0
     );
 
     cell_1: component valid_cell
     port map (
-        write_data  => write_data,     -- Shared write data
-        reset       => reset,          -- Shared reset signal
-        chip_enable => chip_enable(1), -- Unique chip enable for cell 1
-        RW          => RW,             -- Shared Read/Write signal
-        read_data   => read_data_1     -- Unique read data output for cell 1
+        write_data  => demux_out_1,                        -- Demux output for cell 1
+        reset       => reset,                              -- Shared reset signal
+        chip_enable => chip_enable(1),                     -- Unique chip enable for cell 1
+        RW          => RW,                                 -- Shared Read/Write signal
+        read_data   => read_data_1                         -- Unique read data output for cell 1
     );
 
     cell_2: component valid_cell
     port map (
-        write_data  => write_data,     -- Shared write data
-        reset       => reset,          -- Shared reset signal
-        chip_enable => chip_enable(2), -- Unique chip enable for cell 2
-        RW          => RW,             -- Shared Read/Write signal
-        read_data   => read_data_2     -- Unique read data output for cell 2
+        write_data  => demux_out_2,                        -- Demux output for cell 2
+        reset       => reset,                              -- Shared reset signal
+        chip_enable => chip_enable(2),                     -- Unique chip enable for cell 2
+        RW          => RW,                                 -- Shared Read/Write signal
+        read_data   => read_data_2                         -- Unique read data output for cell 2
     );
 
     cell_3: component valid_cell
     port map (
-        write_data  => write_data,     -- Shared write data
-        reset       => reset,          -- Shared reset signal
-        chip_enable => chip_enable(3), -- Unique chip enable for cell 3
-        RW          => RW,             -- Shared Read/Write signal
-        read_data   => read_data_3     -- Unique read data output for cell 3
+        write_data  => demux_out_3,                        -- Demux output for cell 3
+        reset       => reset,                              -- Shared reset signal
+        chip_enable => chip_enable(3),                     -- Unique chip enable for cell 3
+        RW          => RW,                                 -- Shared Read/Write signal
+        read_data   => read_data_3                         -- Unique read data output for cell 3
     );
 
 end architecture Structural;
