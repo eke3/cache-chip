@@ -18,6 +18,7 @@ architecture Structural of valid_cell is
     component cache_cell is
         port (
             write_data  : in  std_logic; -- 1-bit write data
+            reset => reset,
             chip_enable : in  std_logic; -- 1-bit chip enable
             RW          : in  std_logic; -- 1-bit Read/Write signal
             read_data   : out std_logic  -- 1-bit read data
@@ -42,10 +43,11 @@ architecture Structural of valid_cell is
         );
     end component inverter;
 
-    signal sel_not, reset_not, write_data_mux_out, chip_enable_mux_out, rw_mux_out : STD_LOGIC;
+    signal sel_not, reset_not, write_data_mux_out, rw_mux_out : STD_LOGIC;
 
     for sel_inverter, reset_inverter: inverter use entity work.inverter(structural);
-    for write_data_mux, chip_enable_mux, rw_mux: mux_2x1 use entity work.mux_2x1(structural);
+    for write_data_mux, rw_mux: mux_2x1 use entity work.mux_2x1(structural);
+    for cache_cell_inst: cache_cell use entity work.cache_cell(structural);
 
 begin
 
@@ -71,14 +73,6 @@ begin
         output      => write_data_mux_out
     );
 
-    chip_enable_mux: component mux_2x1
-    port map (
-        A           => chip_enable,
-        B           => reset,
-        sel         => reset,
-        output      => chip_enable_mux_out
-    );
-
     rw_mux: component mux_2x1
     port map (
         A           => RW,
@@ -90,8 +84,9 @@ begin
     cache_cell_inst: component cache_cell
     port map (
         write_data  => write_data_mux_out,
-        chip_enable => chip_enable_mux_out,
+        chip_enable => chip_enable,
         RW          => rw_mux_out,
+        reset => reset,
         read_data   => read_data
     );
 
