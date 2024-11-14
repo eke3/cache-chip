@@ -29,7 +29,7 @@ architecture Test of demux_1x8_tb is
 
     -- Procedure to print the inputs and outputs of the demux_1x8
     procedure print_output is
-        variable out_line : line;
+        variable out_line        : line;
         variable output_sequence : std_logic_vector(7 downto 0); -- to hold concatenated outputs
     begin
         -- Print the current values of the inputs
@@ -41,8 +41,8 @@ architecture Test of demux_1x8_tb is
         end loop;
 
         -- Concatenate the outputs into a single 8-bit sequence, from data_out_7 to data_out_0
-        output_sequence := data_out_7 & data_out_6 & data_out_5 & data_out_4 &
-                           data_out_3 & data_out_2 & data_out_1 & data_out_0;
+        output_sequence  :=
+            data_out_7 & data_out_6 & data_out_5 & data_out_4 & data_out_3 & data_out_2 & data_out_1 & data_out_0;
 
         -- Print the output sequence
         write(out_line, string'(" | Data Out (7-0): "));
