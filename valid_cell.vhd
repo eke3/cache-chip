@@ -18,7 +18,7 @@ architecture Structural of valid_cell is
     component cache_cell is
         port (
             write_data  : in  std_logic; -- 1-bit write data
-            reset => reset,
+            reset : in std_logic;
             chip_enable : in  std_logic; -- 1-bit chip enable
             RW          : in  std_logic; -- 1-bit Read/Write signal
             read_data   : out std_logic  -- 1-bit read data

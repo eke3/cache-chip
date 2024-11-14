@@ -37,7 +37,7 @@ architecture Structural of demux_1x2 is
 
     -- For the components
     for inv0: inverter use entity work.inverter(structural);
-    for and0, and1: and_2x1 use entity work.and_2x1(structural);
+    for and_gate_1, and_gate_2: and_2x1 use entity work.and_2x1(structural);
 
 begin
     -- Instantiate the inverter for sel
