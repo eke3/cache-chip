@@ -11,7 +11,7 @@ entity cache_cell_8bit is
         write_data  : in  std_logic_vector(7 downto 0);
         chip_enable : in  std_logic;
         RW          : in  std_logic;
-        read_data   : out std_logic(7 downto 0)
+        read_data   : out std_logic_vector(7 downto 0)
     );
 end entity cache_cell_8bit;
 
