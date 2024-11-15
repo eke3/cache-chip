@@ -60,23 +60,23 @@ architecture Structural of demux_1x16 is
     signal demux_out_2 : STD_LOGIC;                        -- Output from second demux_1x2
 
     -- Internal signals for each of the outputs from the two demux_1x8 components
-    signal out_0_1     : STD_LOGIC;                        -- Data routed to output 0 of the first demux_1x8
-    signal out_1_1     : STD_LOGIC;                        -- Data routed to output 1 of the first demux_1x8
-    signal out_2_1     : STD_LOGIC;                        -- Data routed to output 2 of the first demux_1x8
-    signal out_3_1     : STD_LOGIC;                        -- Data routed to output 3 of the first demux_1x8
-    signal out_4_1     : STD_LOGIC;                        -- Data routed to output 4 of the first demux_1x8
-    signal out_5_1     : STD_LOGIC;                        -- Data routed to output 5 of the first demux_1x8
-    signal out_6_1     : STD_LOGIC;                        -- Data routed to output 6 of the first demux_1x8
-    signal out_7_1     : STD_LOGIC;                        -- Data routed to output 7 of the first demux_1x8
+    --signal out_0_1     : STD_LOGIC;                        -- Data routed to output 0 of the first demux_1x8
+    --signal out_1_1     : STD_LOGIC;                        -- Data routed to output 1 of the first demux_1x8
+    --signal out_2_1     : STD_LOGIC;                        -- Data routed to output 2 of the first demux_1x8
+    --signal out_3_1     : STD_LOGIC;                        -- Data routed to output 3 of the first demux_1x8
+    --signal out_4_1     : STD_LOGIC;                        -- Data routed to output 4 of the first demux_1x8
+    --signal out_5_1     : STD_LOGIC;                        -- Data routed to output 5 of the first demux_1x8
+    --signal out_6_1     : STD_LOGIC;                        -- Data routed to output 6 of the first demux_1x8
+    --signal out_7_1     : STD_LOGIC;                        -- Data routed to output 7 of the first demux_1x8
 
-    signal out_0_2     : STD_LOGIC;                        -- Data routed to output 0 of the second demux_1x8
-    signal out_1_2     : STD_LOGIC;                        -- Data routed to output 1 of the second demux_1x8
-    signal out_2_2     : STD_LOGIC;                        -- Data routed to output 2 of the second demux_1x8
-    signal out_3_2     : STD_LOGIC;                        -- Data routed to output 3 of the second demux_1x8
-    signal out_4_2     : STD_LOGIC;                        -- Data routed to output 4 of the second demux_1x8
-    signal out_5_2     : STD_LOGIC;                        -- Data routed to output 5 of the second demux_1x8
-    signal out_6_2     : STD_LOGIC;                        -- Data routed to output 6 of the second demux_1x8
-    signal out_7_2     : STD_LOGIC;                        -- Data routed to output 7 of the second demux_1x8
+    --signal out_0_2     : STD_LOGIC;                        -- Data routed to output 0 of the second demux_1x8
+    --signal out_1_2     : STD_LOGIC;                        -- Data routed to output 1 of the second demux_1x8
+    --signal out_2_2     : STD_LOGIC;                        -- Data routed to output 2 of the second demux_1x8
+    --signal out_3_2     : STD_LOGIC;                        -- Data routed to output 3 of the second demux_1x8
+    --signal out_4_2     : STD_LOGIC;                        -- Data routed to output 4 of the second demux_1x8
+    --signal out_5_2     : STD_LOGIC;                        -- Data routed to output 5 of the second demux_1x8
+    --signal out_6_2     : STD_LOGIC;                        -- Data routed to output 6 of the second demux_1x8
+    --signal out_7_2     : STD_LOGIC;                        -- Data routed to output 7 of the second demux_1x8
 
     for demux_1x2_inst: demux_1x2 use entity work.demux_1x2(structural);
     for demux_1x8_inst_1, demux_1x8_inst_2: demux_1x8 use entity work.demux_1x8(structural);

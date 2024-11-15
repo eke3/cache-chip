@@ -15,8 +15,8 @@ architecture Test of block_cache_tb is
     signal block_offset: std_logic_vector(3 downto 0);
     signal cpu_data    : std_logic_vector(7 downto 0);
     signal read_data   : std_logic_vector(7 downto 0);
-    signal CE          : std_logic_vector(15 downto 0);
-    signal demux_out   : std_logic_vector(15 downto 0);
+    --signal CE          : std_logic_vector(15 downto 0);
+    --signal demux_out   : std_logic_vector(15 downto 0);
 
 begin
 
@@ -38,17 +38,30 @@ begin
         -- Initialize signals
         mem_data    <= "10000000";
         cpu_data    <= "00000001";
-        hit_miss    <= '1';
+        hit_miss    <= '1'; -- hit
         R_W         <= '0'; -- Write operation
-        byte_offset <= "0000";
-        block_offset<= "0000";
+        byte_offset <= "1000";
+        block_offset<= "1000";
         
         -- Wait for a while and then change inputs to simulate different scenarios
         wait for 10 ns;
         
-        -- Stimulate more values
+        -- read hit
+        hit_miss    <= '1'; 
+        R_W         <= '1';  
+        
+        wait for 10 ns;
+        
+        -- read miss
         hit_miss    <= '0';  -- Miss scenario
         R_W         <= '1';  -- Read operation
+        
+        wait for 10 ns;
+        
+        -- read hit
+        hit_miss    <= '1';  -- Miss scenario
+        R_W         <= '1';  -- Read operation
+        
         
         -- Wait and finish the simulation
         wait for 20 ns;

@@ -158,7 +158,7 @@ begin
         block_cell_1: entity work.cache_cell_8bit
             port map (
                 demux_out(127-(8*i) downto 127-(8*i)-7),
-                CE(15-((i)*1)),
+                CE(15-((i)*1)), --15
                 R_W,
                 read_array(127-(8*i) downto 127-(8*i)-7)
             );
@@ -168,7 +168,7 @@ begin
         block_cell_2: entity work.cache_cell_8bit
             port map (
                 demux_out(95-(8*i) downto 95-(8*i)-7),
-                CE(11-((i)*1)),
+                CE(11-((i)*1)), --11
                 R_W,
                 read_array(95-(8*i) downto 95-(8*i)-7)
             );
@@ -178,7 +178,7 @@ begin
         block_cell_3: entity work.cache_cell_8bit
             port map (
                 demux_out(63-(8*i) downto 63-(8*i)-7),
-                CE(7-((i)*1)),
+                CE(7-((i)*1)), --7
                 R_W,
                 read_array(63-(8*i) downto 63-(8*i)-7)
             );
@@ -188,7 +188,7 @@ begin
         block_cell_4: entity work.cache_cell_8bit
             port map (
                 demux_out(31-(8*i) downto 31-(8*i)-7),
-                CE(3-((i)*1)),
+                CE(3-((i)*1)), --3
                 R_W,
                 read_array(31-(8*i) downto 31-(8*i)-7)
             );
@@ -197,22 +197,22 @@ begin
     demux: demux_1x16_8bit port map(
         out_data,
         comb_addr,
-        demux_out(7 downto 0),
-        demux_out(15 downto 8),
-        demux_out(23 downto 16),
-        demux_out(31 downto 24),
-        demux_out(39 downto 32),
-        demux_out(47 downto 40),
-        demux_out(55 downto 48),
-        demux_out(63 downto 56),
-        demux_out(71 downto 64),
-        demux_out(79 downto 72),
-        demux_out(87 downto 80),
-        demux_out(95 downto 88),
-        demux_out(103 downto 96),
-        demux_out(111 downto 104),
+        demux_out(127 downto 120),
         demux_out(119 downto 112),
-        demux_out(127 downto 120)
+        demux_out(111 downto 104),
+        demux_out(103 downto 96),
+        demux_out(95 downto 88),
+        demux_out(87 downto 80),
+        demux_out(79 downto 72),
+        demux_out(71 downto 64),
+        demux_out(63 downto 56),
+        demux_out(55 downto 48),
+        demux_out(47 downto 40),
+        demux_out(39 downto 32),
+        demux_out(31 downto 24),
+        demux_out(23 downto 16),
+        demux_out(15 downto 8),
+        demux_out(7 downto 0)   
     );
 
     data_input_selector_1: data_input_selector port map(
