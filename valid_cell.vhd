@@ -1,86 +1,85 @@
 -- Entity: valid_cell
--- cells for valid vector
+-- Architecture: structural
+-- Author:
 
+library STD;
 library IEEE;
-use IEEE.STD_LOGIC_1164.all;
+use IEEE.std_logic_1164.all;
 
 entity valid_cell is
     port (
-        write_data  : in  STD_LOGIC;
-        reset       : in  STD_LOGIC;
-        chip_enable : in  STD_LOGIC;
-        RW          : in  STD_LOGIC;
-        read_data   : out STD_LOGIC
+        write_data  : in  std_logic; -- Write data input
+        reset       : in  std_logic; -- Reset signal
+        chip_enable : in  std_logic; -- Chip enable signal
+        RW          : in  std_logic; -- Read/Write signal
+        read_data   : out std_logic -- Read data output
     );
 end entity valid_cell;
 
 architecture Structural of valid_cell is
+    -- Declare the cache_cell component
     component cache_cell is
         port (
-            write_data  : in  std_logic; -- 1-bit write data
-            reset       : in  std_logic;
-            chip_enable : in  std_logic; -- 1-bit chip enable
-            RW          : in  std_logic; -- 1-bit Read/Write signal
-            read_data   : out std_logic  -- 1-bit read data
+            write_data  : in  std_logic;           -- 1-bit write data
+            chip_enable : in  std_logic;           -- 1-bit chip enable
+            RW          : in  std_logic;           -- 1-bit Read/Write signal
+            read_data   : out std_logic            -- 1-bit read data
         );
     end component cache_cell;
 
-    -- Declare the mux_2x1 component
+    -- Declare the mux_2x1 component for write_data, chip_enable, and RW
     component mux_2x1 is
         port (
-            A      : in  STD_LOGIC;
-            B      : in  STD_LOGIC;
-            sel    : in  STD_LOGIC;
-            output : out STD_LOGIC
+            A      : in  std_logic;                -- Input 0
+            B      : in  std_logic;                -- Input 1
+            sel    : in  std_logic;                -- sel signal
+            output : out std_logic                 -- Output of the multiplexer
         );
     end component mux_2x1;
 
-    -- Declare the inverter component
-    component inverter is
-        port (
-            input  : in  STD_LOGIC;
-            output : out STD_LOGIC
-        );
-    end component inverter;
-
-    signal reset_not, write_data_mux_out, rw_mux_out : STD_LOGIC;
-
-    for reset_inverter: inverter use entity work.inverter(structural);
-    for write_data_mux, rw_mux: mux_2x1 use entity work.mux_2x1(structural);
-    for cache_cell_inst: cache_cell use entity work.cache_cell(structural);
+    -- Signals to wire the muxes
+    signal mux_write_data_out  : std_logic;        -- Output of the mux for write_data
+    signal mux_chip_enable_out : std_logic;        -- Output of the mux for chip_enable
+    signal mux_rw_out          : std_logic;        -- Output of the mux for RW
+    signal high_wire           : std_logic := '1';
+    signal low_wire            : std_logic := '0'; -- Initial high and low wires
 
 begin
 
-    -- Instantiate the inverter to generate reset_not signal
-    reset_inverter: component inverter
+    -- Instantiate mux for write_data (pass 0 if reset = 1, otherwise pass write_data)
+    mux_write_data: component mux_2x1
     port map (
-        input       => reset,
-        output      => reset_not
+        A           => write_data,                 -- When reset = 0, pass write_data
+        B           => low_wire,                   -- When reset = 1, pass 0
+        sel         => reset,                      -- sel is controlled by reset
+        output      => mux_write_data_out          -- Output of the mux
     );
 
-    write_data_mux: component mux_2x1
+    -- Instantiate mux for chip_enable (pass 1 if reset = 1, otherwise pass chip_enable)
+    mux_chip_enable: component mux_2x1
     port map (
-        A           => write_data,
-        B           => reset_not,
-        sel         => reset,
-        output      => write_data_mux_out
+        A           => chip_enable,                -- When reset = 0, pass chip_enable
+        B           => high_wire,                  -- When reset = 1, pass 1
+        sel         => reset,                      -- sel is controlled by reset
+        output      => mux_chip_enable_out         -- Output of the mux
     );
 
-    rw_mux: component mux_2x1
+    -- Instantiate mux for RW (pass 0 if reset = 1, otherwise pass RW)
+    mux_rw: component mux_2x1
     port map (
-        A           => RW,
-        B           => reset_not,
-        sel         => reset,
-        output      => rw_mux_out
+        A           => RW,                         -- When reset = 0, pass RW
+        B           => low_wire,                   -- When reset = 1, pass 0
+        sel         => reset,                      -- sel is controlled by reset
+        output      => mux_rw_out                  -- Output of the mux
     );
 
+    -- Instantiate the cache_cell component
     cache_cell_inst: component cache_cell
     port map (
-        write_data  => write_data_mux_out,
-        chip_enable => chip_enable,
-        RW          => rw_mux_out,
-        reset       => reset,
-        read_data   => read_data
+        write_data  => mux_write_data_out,         -- Connected to mux output
+        chip_enable => mux_chip_enable_out,        -- Connected to mux output
+        RW          => mux_rw_out,                 -- Connected to mux output
+        read_data   => read_data                   -- Read data output
     );
 
 end architecture Structural;

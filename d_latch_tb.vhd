@@ -34,7 +34,7 @@ architecture Test of d_latch_tb is
 
 begin
 
-    DECODER: entity work.D_latch
+    DECODER: entity work.Dlatch
     port map (
         d    => d,
         clk  => clk,
