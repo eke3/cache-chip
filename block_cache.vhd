@@ -2,7 +2,6 @@
 -- Architecture: structural
 -- Author:
 
-library STD;
 library IEEE;
 use IEEE.std_logic_1164.all;
 
@@ -62,8 +61,16 @@ architecture structural of block_cache is
     component mux_16x1_8bit
         port (
             inputs : in  STD_LOGIC_VECTOR(127 downto 0);  -- 16 inputs, each 8-bit wide
-            sel    : in  STD_LOGIC_VECTOR(3 downto 0);    -- 4-bit select signal
+            sel    : in  STD_LOGIC_VECTOR(15 downto 0);    -- 4-bit select signal
             output : out STD_LOGIC_VECTOR(7 downto 0)     -- 8-bit output
+        );
+    end component;
+
+    component concatenator
+        port(
+            input_a : in std_logic_vector(1 downto 0);  -- First 2-bit input
+            input_b : in std_logic_vector(1 downto 0);  -- Second 2-bit input
+            output  : out std_logic_vector(3 downto 0)  -- Concatenated 4-bit output
         );
     end component;
     
@@ -81,6 +88,8 @@ architecture structural of block_cache is
 
     for mux: mux_2x1_8bit use entity work.mux_2x1_8bit(structural);
 
+    for concatenator: concatenator use entity work.concatenator(structural);
+
     --signal block_off_0, block_off_1, byte_off_0, byte_off_1, sel_0, sel_1, sel_2, sel_3, sel_4, sel_5, sel_6, sel_7, sel_8, 
     --sel_9, sel_10, sel_11, sel_12, sel_13, sel_14, sel_15 : std_logic;
 
@@ -92,6 +101,8 @@ architecture structural of block_cache is
 
     --type logic_array is array (0 to 4) of std_logic_vector(7 downto 0);
     signal read_array(127 downto 0);
+
+    signal comb_add(3 downto 0);
 
 begin
 
@@ -173,7 +184,7 @@ begin
 
     demux: demux_1x16_8bit port map(
         out_data,
-        cpu_addr(3:0),
+        comb_addr(3:0),
         demux_out(0),
         demux_out(1),
         demux_out(2),
@@ -205,5 +216,11 @@ begin
         sel    <= CE;    -- 4-bit select signal
         output <= read_data;     -- 8-bit output
     );
+
+    concatenator: concatenator port map(
+        block_offset,
+        byte_offset,
+        comb_addr
+    )
 
 end block_cache;
