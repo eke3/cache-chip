@@ -36,10 +36,10 @@ begin
     stim_proc: process
     begin
         -- Initialize signals
-        mem_data    <= "00000001";
+        mem_data    <= "10000000";
         cpu_data    <= "00000001";
         hit_miss    <= '1';
-        R_W         <= '0'; -- Read operation
+        R_W         <= '0'; -- Write operation
         byte_offset <= "0000";
         block_offset<= "0000";
         
@@ -48,7 +48,7 @@ begin
         
         -- Stimulate more values
         hit_miss    <= '0';  -- Miss scenario
-        R_W         <= '1';  -- Write operation
+        R_W         <= '1';  -- Read operation
         
         -- Wait and finish the simulation
         wait for 20 ns;

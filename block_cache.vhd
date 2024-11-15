@@ -82,6 +82,12 @@ architecture structural of block_cache is
         );
     end component;
     
+    component one_hot_to_binary
+        port(
+            one_hot : in  STD_LOGIC_VECTOR(3 downto 0); -- One-hot encoded input
+            binary  : out STD_LOGIC_VECTOR(1 downto 0)  -- 2-bit binary output
+        );
+    end component;
 
     --for block_0000, block_0001, block_0010, block_0011, block_0100, block_0101, block_0110, block_0111, block_1000, block_1001, 
     --block_1010, block_1011, block_1100, block_1101, block_1110, block_1111: cache_cell_8bit use entity work.cache_cell_8bit(structural);
@@ -92,6 +98,8 @@ architecture structural of block_cache is
 
     for concatenator_1: concatenator use entity work.concatenator(structural);
 
+    for convert_1, convert_2: one_hot_to_binary use entity work.one_hot_to_binary(structural);
+
     --signal block_off_0, block_off_1, byte_off_0, byte_off_1, sel_0, sel_1, sel_2, sel_3, sel_4, sel_5, sel_6, sel_7, sel_8, 
     --sel_9, sel_10, sel_11, sel_12, sel_13, sel_14, sel_15 : std_logic;
 
@@ -99,12 +107,14 @@ architecture structural of block_cache is
 
     signal CE: std_logic_vector (15 downto 0);
 
-    signal demux_out: std_logic_vector(15 downto 0);
+    signal demux_out: std_logic_vector(127 downto 0);
 
     --type logic_array is array (0 to 4) of std_logic_vector(7 downto 0);
     signal read_array: std_logic_vector(127 downto 0);
 
-    signal comb_addr: std_logic_vector(127 downto 0);
+    signal comb_addr: std_logic_vector(3 downto 0);
+
+    signal block_off_bin, byte_off_bin: std_logic_vector (1 downto 0);
 
 begin
 
@@ -144,43 +154,43 @@ begin
                 );
     end generate gen_cell_4;
 
-    gen_cell_5: for i in 1 to 4 generate
+    gen_cell_5: for i in 0 to 3 generate
         block_cell_1: entity work.cache_cell_8bit
             port map (
-                demux_out(127 downto 127-(8*i)),
-                CE(15-((i-1)*1)),
+                demux_out(127-(8*i) downto 127-(8*i)-7),
+                CE(15-((i)*1)),
                 R_W,
-                read_array(127 downto 127-(8*i))
+                read_array(127-(8*i) downto 127-(8*i)-7)
             );
     end generate gen_cell_5;
 
-    gen_cell_6: for i in 1 to 4 generate
+    gen_cell_6: for i in 0 to 3 generate
         block_cell_2: entity work.cache_cell_8bit
             port map (
-                demux_out(95 downto 95-(8*i)),
-                CE(11-((i-1)*1)),
+                demux_out(95-(8*i) downto 95-(8*i)-7),
+                CE(11-((i)*1)),
                 R_W,
-                read_array(95 downto 95-(8*i))
+                read_array(95-(8*i) downto 95-(8*i)-7)
             );
     end generate gen_cell_6;
 
-    gen_cell_7: for i in 1 to 4 generate
+    gen_cell_7: for i in 0 to 3 generate
         block_cell_3: entity work.cache_cell_8bit
             port map (
-                demux_out(63 downto 63-(8*i)),
-                CE(7-((i-1)*1)),
+                demux_out(63-(8*i) downto 63-(8*i)-7),
+                CE(7-((i)*1)),
                 R_W,
-                read_array(63 downto 63-(8*i))
+                read_array(63-(8*i) downto 63-(8*i)-7)
             );
     end generate gen_cell_7;
 
-    gen_cell_8: for i in 1 to 4 generate
+    gen_cell_8: for i in 0 to 3 generate
         block_cell_4: entity work.cache_cell_8bit
             port map (
-                demux_out(31 downto 0),
-                CE(3-((i-1)*1)),
+                demux_out(31-(8*i) downto 31-(8*i)-7),
+                CE(3-((i)*1)),
                 R_W,
-                read_array(31 downto 0)
+                read_array(31-(8*i) downto 31-(8*i)-7)
             );
     end generate gen_cell_8;
 
@@ -219,9 +229,19 @@ begin
         read_data     -- 8-bit output
     );
 
-    concatenator_1: concatenator port map(
+    convert_1: one_hot_to_binary port map(
         block_offset,
+        block_off_bin
+    );
+
+    convert_2: one_hot_to_binary port map(
         byte_offset,
+        byte_off_bin
+    );
+
+    concatenator_1: concatenator port map(
+        block_off_bin,
+        byte_off_bin,
         comb_addr
     );
 

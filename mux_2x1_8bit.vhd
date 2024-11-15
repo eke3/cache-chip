@@ -48,8 +48,6 @@ architecture Structural of mux_2x1_8bit is
 
     -- Instantiate the components
     for sel_inverter: inverter use entity work.inverter(structural);
-    for and_gate0, and_gate1: and_2x1 use entity work.and_2x1(structural);
-    for or_gate: or_2x1 use entity work.or_2x1(structural);
 
 begin
 
@@ -62,7 +60,7 @@ begin
 
     -- Instantiate the and_2x1 gates for each bit of the 8-bit input
     gen_and_gate0: for i in 0 to 7 generate
-        and_gate0: component and_2x1
+        and_gate0: entity work.and_2x1
         port map (
             A      => A(i),
             B      => sel_not,
@@ -71,7 +69,7 @@ begin
     end generate gen_and_gate0;
 
     gen_and_gate1: for i in 0 to 7 generate
-        and_gate1: component and_2x1
+        and_gate1: entity work.and_2x1
         port map (
             A      => B(i),
             B      => sel,
@@ -81,7 +79,7 @@ begin
 
     -- Instantiate the or_2x1 gate to combine the outputs of the and gates for each bit
     gen_or_gate: for i in 0 to 7 generate
-        or_gate: component or_2x1
+        or_gate: entity work.or_2x1
         port map (
             A      => and_out0(i),
             B      => and_out1(i),

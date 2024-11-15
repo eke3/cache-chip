@@ -9,7 +9,7 @@ entity data_input_selector is
         mem_data: in std_logic_vector(7 downto 0);
         hit_miss: in std_logic;
         R_W:      in std_logic;
-        out_data: out std_logic_vector(7 downto 0);
+        out_data: out std_logic_vector(7 downto 0)
     );
 end data_input_selector;
 
