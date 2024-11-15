@@ -9,7 +9,6 @@ use IEEE.std_logic_1164.all;
 entity cache_cell is
     port (
         write_data  : in  std_logic;
-        reset       : in  std_logic; -- New reset input
         chip_enable : in  std_logic;
         RW          : in  std_logic;
         read_data   : out std_logic
@@ -45,38 +44,17 @@ architecture structural of cache_cell is
         );
     end component tx;
 
-    component mux_2x1 is
-        port (
-            A      : in  std_logic;
-            B      : in  std_logic;
-            sel    : in  std_logic;
-            output : out std_logic
-        );
-    end component mux_2x1;
-
     for d_latch: Dlatch use entity work.Dlatch(structural);
     for selector_inst: selector use entity work.selector(structural);
-    for tx_gate: tx use entity work.tx(structural);
+    for tx_inst: tx use entity work.tx(structural);
 
     signal tx_data_in                : std_logic;
-    signal tx_selnot_in              : std_logic;
     signal write_enable, read_enable : std_logic;
-    signal chip_enable_mux_out       : std_logic;
 
 begin
-
-    -- Mux to generate chip_enable_mux_out
-    chip_enable_mux: component mux_2x1
-    port map (
-        A      => chip_enable,
-        B      => reset,
-        sel    => reset,
-        output => chip_enable_mux_out
-    );
-
     selector_inst: component selector
     port map (
-        chip_enable_mux_out,
+        chip_enable,
         RW,
         read_enable,
         write_enable
@@ -86,9 +64,9 @@ begin
         write_data,
         write_enable,
         tx_data_in,
-        tx_selnot_in
+        open
     );
-    tx_gate: component tx
+    tx_inst: component tx
     port map (
         read_enable,
         write_enable,
