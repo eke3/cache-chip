@@ -2,7 +2,7 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 
 -- Entity for concatenator
-entity concatenator is
+entity concatenator_8bit is
     port (
         in0 : in std_logic;  -- First 2-bit input
         in1 : in std_logic;  -- Second 2-bit input
@@ -23,10 +23,10 @@ entity concatenator is
 
         output  : out std_logic_vector(15 downto 0)  -- Concatenated 4-bit output
     );
-end entity concatenator;
+end entity concatenator_8bit;
 
 -- Architecture using structural approach
-architecture structural of concatenator is
+architecture structural of concatenator_8bit is
     -- Declare a component that acts as a simple bit buffer
     component buffer_1bit is
         port (
@@ -36,20 +36,109 @@ architecture structural of concatenator is
     end component;
 
     -- Intermediate signals for each individual bit of the 4-bit output
-    signal bit: std_logic_vector(15 downto 0);
+    signal bits: std_logic_vector(15 downto 0);
+    
+    for buffer1, buffer2, buffer3, buffer4, buffer5, buffer6, buffer7, buffer8, buffer9, buffer10, buffer11, buffer12, buffer13, buffer14, buffer15, buffer16: buffer_1bit use entity work.buffer_1bit(structural);
     
 begin
     -- Instantiate buffer components for each bit
 
-    gen_1: for i in 0 to 15 generate
-        buffer_bit_0: entity work.buffer_1bit
-        port map (
-            in_bit  => input_a(i),
-            out_bit => bit(i)
-        );
-    end generate;
+   buffer1: component buffer_1bit
+    port map (
+        in0,
+        out_bit => bits(0)
+    );
+    
+    buffer2: component buffer_1bit
+    port map (
+        in1,
+        out_bit => bits(1)
+    );
+    
+    buffer3: component buffer_1bit
+    port map (
+        in2,
+        out_bit => bits(2)
+    );
 
+    buffer4: component buffer_1bit
+    port map (
+        in3,
+        out_bit => bits(3)
+    );
+    
+    buffer5: component buffer_1bit
+    port map (
+        in4,
+        out_bit => bits(4)
+    );
+    
+    buffer6: component buffer_1bit
+    port map (
+        in5,
+        out_bit => bits(5)
+    );
+    
+    buffer7: component buffer_1bit
+    port map (
+        in6,
+        out_bit => bits(6)
+    );
+    
+    buffer8: component buffer_1bit
+    port map (
+        in7,
+        out_bit => bits(7)
+    );
+    
+    buffer9: component buffer_1bit
+    port map (
+        in8,
+        out_bit => bits(8)
+    );
+    
+    buffer10: component buffer_1bit
+    port map (
+        in9,
+        out_bit => bits(9)
+    );
+
+    buffer11: component buffer_1bit
+    port map (
+        in10,
+        out_bit => bits(10)
+    );
+    
+    buffer12: component buffer_1bit
+    port map (
+        in11,
+        out_bit => bits(11)
+    );
+    
+    buffer13: component buffer_1bit
+    port map (
+        in12,
+        out_bit => bits(12)
+    );
+    
+    buffer14: component buffer_1bit
+    port map (
+        in13,
+        out_bit => bits(13)
+    );
+
+    buffer15: component buffer_1bit
+    port map (
+        in14,
+        out_bit => bits(14)
+    );
+    
+    buffer16: component buffer_1bit
+    port map (
+        in15,
+        out_bit => bits(15)
+    );
     -- Concatenate the output bits to form the 4-bit result
-    output <= bit(15) & bit(14) & bit(13) & bit(12) & bit(11) & bit(10) & bit(9) & bit(8) & bit(7) & bit(6) & bit(5) & bit(4) & bit(3) & bit(2) & bit(1) & bit(0);  -- Corrected order
+    output <= bits(15) & bits(14) & bits(13) & bits(12) & bits(11) & bits(10) & bits(9) & bits(8) & bits(7) & bits(6) & bits(5) & bits(4) & bits(3) & bits(2) & bits(1) & bits(0);  -- Corrected order
 
 end architecture structural;
