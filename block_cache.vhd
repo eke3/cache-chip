@@ -61,7 +61,8 @@ architecture structural of block_cache is
     component mux_16x1_8bit
         port (
             inputs : in  STD_LOGIC_VECTOR(127 downto 0);  -- 16 inputs, each 8-bit wide
-            sel    : in  STD_LOGIC_VECTOR(15 downto 0);    -- 4-bit select signal
+            sel    : in  STD_LOGIC_VECTOR(15 downto 0);   -- 16-bit 1-hot select signal
+            sel_4bit: in std_logic_vector(3 downto 0);
             output : out STD_LOGIC_VECTOR(7 downto 0)     -- 8-bit output
         );
     end component;
@@ -226,6 +227,7 @@ begin
     mux: mux_16x1_8bit port map(
         read_array, -- 16 inputs, each 8-bit wide
         CE,   -- 4-bit select signal
+        comb_addr,
         read_data     -- 8-bit output
     );
 

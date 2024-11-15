@@ -78,7 +78,7 @@ begin
         inputs => bits(127-(16*i) downto 127-(16*i)-15),
         sel => sel_4bit,
         sel_one_hot => sel,
-        output => output(i)
+        output => output(7-i)
     );
     end generate;
 
