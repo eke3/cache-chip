@@ -4,7 +4,7 @@ use IEEE.std_logic_1164.all;
 entity block_cache_tb is
 end block_cache_tb;
 
-architecture behavior of block_cache_tb is
+architecture Test of block_cache_tb is
 
     -- Test signals
     signal mem_data    : std_logic_vector(7 downto 0);
@@ -55,4 +55,4 @@ begin
         assert false report "Test completed" severity failure;
     end process;
 
-end behavior;
+end Test;
