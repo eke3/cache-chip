@@ -17,6 +17,15 @@ entity block_cache is
 end block_cache;
 
 architecture structural of block_cache is
+
+    component readmiss_writehit 
+    port(
+        hit_miss: in std_logic;
+        R_W: in std_logic;
+        enable_cache_write: out std_logic
+    );
+    end component;
+    
     component cache_cell_8bit
         port(
             write_data      : in std_logic_vector(7 downto 0);
@@ -101,6 +110,8 @@ architecture structural of block_cache is
 
     for convert_1, convert_2: one_hot_to_binary use entity work.one_hot_to_binary(structural);
 
+    for enable_cache_write: readmiss_writehit use entity work.readmiss_writehit(structural);
+
     --signal block_off_0, block_off_1, byte_off_0, byte_off_1, sel_0, sel_1, sel_2, sel_3, sel_4, sel_5, sel_6, sel_7, sel_8, 
     --sel_9, sel_10, sel_11, sel_12, sel_13, sel_14, sel_15 : std_logic;
 
@@ -116,6 +127,8 @@ architecture structural of block_cache is
     signal comb_addr: std_logic_vector(3 downto 0);
 
     signal block_off_bin, byte_off_bin: std_logic_vector (1 downto 0);
+    
+    signal cache_RW: std_logic;
 
 begin
 
@@ -154,13 +167,19 @@ begin
                     CE(3-(i*1))
                 );
     end generate gen_cell_4;
+    
+    enable_cache_write: readmiss_writehit port map(
+        hit_miss => hit_miss,
+        R_W => R_W,
+        enable_cache_write => cache_RW
+    );
 
     gen_cell_5: for i in 0 to 3 generate
         block_cell_1: entity work.cache_cell_8bit
             port map (
                 demux_out(127-(8*i) downto 127-(8*i)-7),
                 CE(15-((i)*1)), --15
-                R_W,
+                cache_RW,
                 read_array(127-(8*i) downto 127-(8*i)-7)
             );
     end generate gen_cell_5;
@@ -170,7 +189,7 @@ begin
             port map (
                 demux_out(95-(8*i) downto 95-(8*i)-7),
                 CE(11-((i)*1)), --11
-                R_W,
+                cache_RW,
                 read_array(95-(8*i) downto 95-(8*i)-7)
             );
     end generate gen_cell_6;
@@ -180,7 +199,7 @@ begin
             port map (
                 demux_out(63-(8*i) downto 63-(8*i)-7),
                 CE(7-((i)*1)), --7
-                R_W,
+                cache_RW,
                 read_array(63-(8*i) downto 63-(8*i)-7)
             );
     end generate gen_cell_7;
@@ -190,7 +209,7 @@ begin
             port map (
                 demux_out(31-(8*i) downto 31-(8*i)-7),
                 CE(3-((i)*1)), --3
-                R_W,
+                cache_RW,
                 read_array(31-(8*i) downto 31-(8*i)-7)
             );
     end generate gen_cell_8;

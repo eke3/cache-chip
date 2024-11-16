@@ -48,8 +48,9 @@ architecture structural of cache_cell is
     for selector_inst: selector use entity work.selector(structural);
     for tx_inst: tx use entity work.tx(structural);
 
-    signal tx_data_in                : std_logic;
+    signal q               : std_logic;
     signal write_enable, read_enable : std_logic;
+    signal q_inv                     : std_logic;
 
 begin
     selector_inst: component selector
@@ -63,14 +64,14 @@ begin
     port map (
         write_data,
         write_enable,
-        tx_data_in,
-        open
+        q, 
+        q_inv
     );
     tx_inst: component tx
     port map (
         read_enable,
         write_enable,
-        tx_data_in,
+        q,
         read_data
     );
 

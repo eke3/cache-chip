@@ -49,8 +49,11 @@ begin
         -- read hit
         hit_miss    <= '1'; 
         R_W         <= '1';  
-        
+        mem_data    <= "00010000";
+        cpu_data    <= "00001100";
         wait for 10 ns;
+        
+        cpu_data    <= "00100000";
         
         -- read miss
         hit_miss    <= '0';  -- Miss scenario
@@ -61,6 +64,9 @@ begin
         -- read hit
         hit_miss    <= '1';  -- Miss scenario
         R_W         <= '1';  -- Read operation
+        wait for 1 ps;
+        mem_data    <= "00000000";
+        cpu_data    <= "00000000";
         
         
         -- Wait and finish the simulation

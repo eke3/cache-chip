@@ -47,7 +47,7 @@ begin
     begin
         while true loop
             clk <= '0';
-            wait for 10 ns;
+            wait for 20 ns;
             clk <= '1';
             wait for 10 ns;
         end loop;
@@ -65,22 +65,22 @@ begin
         d       <= '0';
         print_output;                           -- 2. Print the output
 
-        wait for 50 ns;                         -- 3. Wait for 5 ns
+        wait for 60 ns;                         -- 3. Wait for 5 ns
 
         print_output;                           -- 4. Print the output again after waiting
 
         -- 5. Change d to 1
         d       <= '1';
-        wait for 1 ns;                          -- Add a small wait to allow the process to execute
+        --wait for 1 ns;                          -- Add a small wait to allow the process to execute
         print_output;                           -- 6. Print the output after changing d
 
-        wait for 50 ns;                         -- 7. Wait for 5 ns
+        wait for 60 ns;                         -- 7. Wait for 5 ns
 
         print_output;                           -- 8. Print the output again after waiting
         d       <= '0';
-        wait for 1 ns;                          -- Add a small wait to allow the process to execute
+        --wait for 1 ns;                          -- Add a small wait to allow the process to execute
         print_output;                           -- 6. Print the output after changing d
-        wait for 50 ns;
+        wait for 60 ns;
         print_output;
         wait;                                   -- End the process (or keep waiting for further input)
     end process stimulus_process;

@@ -75,6 +75,8 @@ begin
 
         -- Test Case 5: Read after overwrite (Expect read_data = 0)
         RW          <= '1'; -- Read mode
+        wait for 1 ns;
+        write_data  <= '1';
         wait for 10 ns;
         print_output;
 
