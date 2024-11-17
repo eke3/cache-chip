@@ -15,6 +15,7 @@ architecture Test of block_cache_tb is
     signal block_offset: std_logic_vector(3 downto 0);
     signal cpu_data    : std_logic_vector(7 downto 0);
     signal read_data   : std_logic_vector(7 downto 0);
+    signal sel : std_logic_vector(3 downto 0);
     --signal CE          : std_logic_vector(15 downto 0);
     --signal demux_out   : std_logic_vector(15 downto 0);
 
@@ -30,6 +31,7 @@ begin
             block_offset=> block_offset,
             cpu_data    => cpu_data,
             read_data   => read_data
+--            sel => sel
         );
 
     -- Stimulus process
@@ -37,41 +39,55 @@ begin
     begin
         -- Initialize signals
         mem_data    <= "10000000";
-        cpu_data    <= "00000001";
+        cpu_data    <= X"0F";
         hit_miss    <= '1'; -- hit
         R_W         <= '0'; -- Write operation
         byte_offset <= "1000";
         block_offset<= "1000";
+        sel <= "1111";
         
         -- Wait for a while and then change inputs to simulate different scenarios
         wait for 10 ns;
+
         
         -- read hit
         hit_miss    <= '1'; 
         R_W         <= '1';  
-        mem_data    <= "00010000";
-        cpu_data    <= "00001100";
+        wait for 10 ns;
+        assert read_data = X"0F"
+            report "Test Case 1 Failed: Expected read_data = X'0F'" severity error;
+        
+        wait for 5 ps;
+        hit_miss <= '0';
         wait for 10 ns;
         
-        cpu_data    <= "00100000";
-        
-        -- read miss
-        hit_miss    <= '0';  -- Miss scenario
-        R_W         <= '1';  -- Read operation
-        
+        cpu_data <= X"0A";
+        R_W <= '0';
+        hit_miss <= '1';
+        block_offset <= "0001";
+        byte_offset <= "0001";
+
+        R_W <= '1';
+        -- Test Case 1: Select input 0
+        sel <= "0000"; -- Select input 0        
         wait for 10 ns;
         
-        -- read hit
-        hit_miss    <= '1';  -- Miss scenario
-        R_W         <= '1';  -- Read operation
-        wait for 1 ps;
-        mem_data    <= "00000000";
-        cpu_data    <= "00000000";
+        cpu_data <= X"0B";
+        R_W <= '0';
+        hit_miss <= '1';
+        block_offset <= "0010";
+        byte_offset <= "0001";
+        wait for 10 ns;
         
+        R_W <= '1';
+
+
         
-        -- Wait and finish the simulation
-        wait for 20 ns;
-        assert false report "Test completed" severity failure;
+        wait for 10 ns;
+        assert read_data = X"0B"
+            report "Test Case  2 failed: expected read_data = X'0B'" severity error;
+        wait;
+        
     end process;
 
 end Test;

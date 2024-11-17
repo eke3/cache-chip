@@ -69,10 +69,24 @@ architecture structural of block_cache is
 
     component mux_16x1_8bit
         port (
-            inputs : in  STD_LOGIC_VECTOR(127 downto 0);  -- 16 inputs, each 8-bit wide
-            sel    : in  STD_LOGIC_VECTOR(15 downto 0);   -- 16-bit 1-hot select signal
-            sel_4bit: in std_logic_vector(3 downto 0);
-            output : out STD_LOGIC_VECTOR(7 downto 0)     -- 8-bit output
+        read_data0  : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 0
+        read_data1  : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 1
+        read_data2  : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 2
+        read_data3  : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 3
+        read_data4  : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 4
+        read_data5  : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 5
+        read_data6  : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 6
+        read_data7  : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 7
+        read_data8  : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 8
+        read_data9  : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 9
+        read_data10 : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 10
+        read_data11 : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 11
+        read_data12 : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 12
+        read_data13 : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 13
+        read_data14 : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 14
+        read_data15 : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 15
+        sel         : in  STD_LOGIC_VECTOR(3 downto 0); -- 4-bit select signal
+        F           : out STD_LOGIC_VECTOR(7 downto 0)   -- 8-bit Output
         );
     end component;
 
@@ -130,140 +144,154 @@ architecture structural of block_cache is
     
     signal cache_RW: std_logic;
 
-begin
+    begin
 
-    gen_cell_1: for i in 0 to 3 generate
+        gen_cell_1: for i in 0 to 3 generate
             and_1: entity work.and_2x1
                 port map (
-                    block_offset(0),
-                    byte_offset(i),
-                    CE(15-(i*1))
+                    A => block_offset(0),
+                    B => byte_offset(i),
+                    output => CE(15 - (i * 1))
                 );
-    end generate gen_cell_1;
-
-    gen_cell_2: for i in 0 to 3 generate
+        end generate gen_cell_1;
+    
+        gen_cell_2: for i in 0 to 3 generate
             and_2: entity work.and_2x1
                 port map (
-                    block_offset(1),
-                    byte_offset(i),
-                    CE(11-(i*1))
+                    A => block_offset(1),
+                    B => byte_offset(i),
+                    output => CE(11 - (i * 1))
                 );
-    end generate gen_cell_2;
-
-    gen_cell_3: for i in 0 to 3 generate
+        end generate gen_cell_2;
+    
+        gen_cell_3: for i in 0 to 3 generate
             and_3: entity work.and_2x1
                 port map (
-                    block_offset(2),
-                    byte_offset(i),
-                    CE(7-(i*1))
+                    A => block_offset(2),
+                    B => byte_offset(i),
+                    output => CE(7 - (i * 1))
                 );
-    end generate gen_cell_3;
-
-    gen_cell_4: for i in 0 to 3 generate
+        end generate gen_cell_3;
+    
+        gen_cell_4: for i in 0 to 3 generate
             and_4: entity work.and_2x1
                 port map (
-                    block_offset(3),
-                    byte_offset(i),
-                    CE(3-(i*1))
+                    A => block_offset(3),
+                    B => byte_offset(i),
+                    output => CE(3 - (i * 1))
                 );
-    end generate gen_cell_4;
+        end generate gen_cell_4;
     
-    enable_cache_write: readmiss_writehit port map(
-        hit_miss => hit_miss,
-        R_W => R_W,
-        enable_cache_write => cache_RW
-    );
-
-    gen_cell_5: for i in 0 to 3 generate
-        block_cell_1: entity work.cache_cell_8bit
-            port map (
-                demux_out(127-(8*i) downto 127-(8*i)-7),
-                CE(15-((i)*1)), --15
-                cache_RW,
-                read_array(127-(8*i) downto 127-(8*i)-7)
-            );
-    end generate gen_cell_5;
-
-    gen_cell_6: for i in 0 to 3 generate
-        block_cell_2: entity work.cache_cell_8bit
-            port map (
-                demux_out(95-(8*i) downto 95-(8*i)-7),
-                CE(11-((i)*1)), --11
-                cache_RW,
-                read_array(95-(8*i) downto 95-(8*i)-7)
-            );
-    end generate gen_cell_6;
-
-    gen_cell_7: for i in 0 to 3 generate
-        block_cell_3: entity work.cache_cell_8bit
-            port map (
-                demux_out(63-(8*i) downto 63-(8*i)-7),
-                CE(7-((i)*1)), --7
-                cache_RW,
-                read_array(63-(8*i) downto 63-(8*i)-7)
-            );
-    end generate gen_cell_7;
-
-    gen_cell_8: for i in 0 to 3 generate
-        block_cell_4: entity work.cache_cell_8bit
-            port map (
-                demux_out(31-(8*i) downto 31-(8*i)-7),
-                CE(3-((i)*1)), --3
-                cache_RW,
-                read_array(31-(8*i) downto 31-(8*i)-7)
-            );
-    end generate gen_cell_8;
-
-    demux: demux_1x16_8bit port map(
-        out_data,
-        comb_addr,
-        demux_out(127 downto 120),
-        demux_out(119 downto 112),
-        demux_out(111 downto 104),
-        demux_out(103 downto 96),
-        demux_out(95 downto 88),
-        demux_out(87 downto 80),
-        demux_out(79 downto 72),
-        demux_out(71 downto 64),
-        demux_out(63 downto 56),
-        demux_out(55 downto 48),
-        demux_out(47 downto 40),
-        demux_out(39 downto 32),
-        demux_out(31 downto 24),
-        demux_out(23 downto 16),
-        demux_out(15 downto 8),
-        demux_out(7 downto 0)   
-    );
-
-    data_input_selector_1: data_input_selector port map(
-        cpu_data,
-        mem_data,
-        hit_miss,
-        R_W,
-        out_data
-    );
-
-    mux: mux_16x1_8bit port map(
-        read_array, -- 16 inputs, each 8-bit wide
-        CE,   -- 4-bit select signal
-        comb_addr,
-        read_data     -- 8-bit output
-    );
-
-    convert_1: one_hot_to_binary port map(
-        block_offset,
-        block_off_bin
-    );
-
-    convert_2: one_hot_to_binary port map(
-        byte_offset,
-        byte_off_bin
-    );
-
-    concatenator_1: concatenator port map(
-        block_off_bin,
-        byte_off_bin,
-        comb_addr
-    );
-
-end architecture structural;
+        enable_cache_write: readmiss_writehit port map(
+            hit_miss => hit_miss,
+            R_W => R_W,
+            enable_cache_write => cache_RW
+        );
+    
+        gen_cell_5: for i in 0 to 3 generate
+            block_cell_1: entity work.cache_cell_8bit
+                port map (
+                    write_data => demux_out(127 - (8 * i) downto 127 - (8 * i) - 7),
+                    chip_enable => CE(15 - ((i) * 1)),
+                    RW => cache_RW,
+                    read_data => read_array(127 - (8 * i) downto 127 - (8 * i) - 7)
+                );
+        end generate gen_cell_5;
+    
+        gen_cell_6: for i in 0 to 3 generate
+            block_cell_2: entity work.cache_cell_8bit
+                port map (
+                    write_data => demux_out(95 - (8 * i) downto 95 - (8 * i) - 7),
+                    chip_enable => CE(11 - ((i) * 1)),
+                    RW => cache_RW,
+                    read_data => read_array(95 - (8 * i) downto 95 - (8 * i) - 7)
+                );
+        end generate gen_cell_6;
+    
+        gen_cell_7: for i in 0 to 3 generate
+            block_cell_3: entity work.cache_cell_8bit
+                port map (
+                    write_data => demux_out(63 - (8 * i) downto 63 - (8 * i) - 7),
+                    chip_enable => CE(7 - ((i) * 1)),
+                    RW => cache_RW,
+                    read_data => read_array(63 - (8 * i) downto 63 - (8 * i) - 7)
+                );
+        end generate gen_cell_7;
+    
+        gen_cell_8: for i in 0 to 3 generate
+            block_cell_4: entity work.cache_cell_8bit
+                port map (
+                    write_data => demux_out(31 - (8 * i) downto 31 - (8 * i) - 7),
+                    chip_enable => CE(3 - ((i) * 1)),
+                    RW => cache_RW,
+                    read_data => read_array(31 - (8 * i) downto 31 - (8 * i) - 7)
+                );
+        end generate gen_cell_8;
+    
+        demux: demux_1x16_8bit port map(
+            data_in => out_data,
+            sel => comb_addr,
+            data_out_0 => demux_out(127 downto 120),
+            data_out_1 => demux_out(119 downto 112),
+            data_out_2 => demux_out(111 downto 104),
+            data_out_3 => demux_out(103 downto 96),
+            data_out_4 => demux_out(95 downto 88),
+            data_out_5 => demux_out(87 downto 80),
+            data_out_6 => demux_out(79 downto 72),
+            data_out_7 => demux_out(71 downto 64),
+            data_out_8 => demux_out(63 downto 56),
+            data_out_9 => demux_out(55 downto 48),
+            data_out_10 => demux_out(47 downto 40),
+            data_out_11 => demux_out(39 downto 32),
+            data_out_12 => demux_out(31 downto 24),
+            data_out_13 => demux_out(23 downto 16),
+            data_out_14 => demux_out(15 downto 8),
+            data_out_15 => demux_out(7 downto 0)
+        );
+    
+        data_input_selector_1: data_input_selector port map(
+            cpu_data => cpu_data,
+            mem_data => mem_data,
+            hit_miss => hit_miss,
+            R_W => R_W,
+            out_data => out_data
+        );
+    
+        mux: mux_16x1_8bit port map(
+            read_data0 => read_array(127 downto 120),
+            read_data1 => read_array(119 downto 112),
+            read_data2 => read_array(111 downto 104),
+            read_data3 => read_array(103 downto 96),
+            read_data4 => read_array(95 downto 88),
+            read_data5 => read_array(87 downto 80),
+            read_data6 => read_array(79 downto 72),
+            read_data7 => read_array(71 downto 64),
+            read_data8 => read_array(63 downto 56),
+            read_data9 => read_array(55 downto 48),
+            read_data10 => read_array(47 downto 40),
+            read_data11 => read_array(39 downto 32),
+            read_data12 => read_array(31 downto 24),
+            read_data13 => read_array(23 downto 16),
+            read_data14 => read_array(15 downto 8),
+            read_data15 => read_array(7 downto 0),
+            sel => comb_addr,
+            F => read_data
+        );
+    
+        convert_1: one_hot_to_binary port map(
+            one_hot => block_offset,
+            binary => block_off_bin
+        );
+    
+        convert_2: one_hot_to_binary port map(
+            one_hot => byte_offset,
+            binary => byte_off_bin
+        );
+    
+        concatenator_1: concatenator port map(
+            input_a => block_off_bin,
+            input_b => byte_off_bin,
+            output => comb_addr
+        );
+    
+    end architecture structural;
