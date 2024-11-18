@@ -26,13 +26,14 @@ entity state_machine is
         mem_addr_ready: in std_logic;
         write_done: in std_logic;
 
+        -- add output cpu_address to send to system
+        -- add 
         cache_RW: out std_logic;
         valid_RW: out std_logic;
         tag_RW: out std_logic;
         decoder_enable: out std_logic;
         mem_addr: out std_logic_vector(7 downto 0)
         mem_addr_out_enable: out std_logic;
-        addr_register_enable: out std_logic;
         data_mux_enable: out std_logic;
         busy: out std_logic;
     );
@@ -90,6 +91,13 @@ architecture structural of state_machine is
     );
     end component;
 
+    component buffer_1bit
+        port(
+            in_bit  : in  std_logic;  -- Input bit
+            out_bit : out std_logic   -- Output bit
+        );
+    end component;
+
     for and_1, and_2, and_3: and_2x1 use entity work.and_2x1(structural);
 
     for and3_1, and3_2, and3_3: and_2x1 use entity work.and_3x1(structural);
@@ -101,8 +109,10 @@ architecture structural of state_machine is
     for mux_1, mux_2: mux_2x1 use entity work.mux_2x1(structural);
 
     for or_1: or_2x1 use entity work.or_2x1(structural);
+
+    for buffer_1: buffer_1bit use entity work.buffer_1bit(structural);
     
-    signal hit_miss_inv, not_busy, temp_oe_1, temp_oe_2: std_logic;
+    signal hit_miss_inv, not_busy, temp_oe_1, temp_oe_2, output_enable_temp: std_logic;
 
 begin
     and_1: and_2x1 port map(
@@ -117,22 +127,6 @@ begin
         start,
         cache_RW
     );
-
-    mux_2: mux_2x1 port map(
-        R_W,
-        "0"
-        start,
-        valid_RW
-    );
-
-    mux_3: mux_2x1 port map(
-        R_W,
-        "0"
-        start,
-        tag_RW
-    );
-
-
 
     and3_2: and_3x1 port map(
         valid_ready,
@@ -174,8 +168,38 @@ begin
     or_1: or_2x1 port map(
         temp_oe_1,
         temp_oe_2,
+        output_enable_temp
+    );
+
+    and_3: and_2x1 port map(
+        output_enable_temp,
+        not_clk,
         output_enable
     );
+
+    and_4: and_3x1 port map(
+        valid_ready,
+        not_clk,
+        data_mux_enable
+    );
+
+    and4_2: and_4x1 port map(
+        valid_ready,
+        hit_miss_inv,
+        R_W,
+        not_clk,
+        valid_RW
+    );
+
+    and4_3: and_4x1 port map(
+        valid_ready,
+        hit_miss_inv,
+        R_W,
+        not_clk,
+        tag_RW
+    );
+
+
 
 
 end structural;
