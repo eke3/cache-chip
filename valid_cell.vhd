@@ -1,7 +1,3 @@
--- Entity: valid_cell
--- Architecture: structural
--- Author:
-
 library STD;
 library IEEE;
 use IEEE.std_logic_1164.all;
@@ -43,6 +39,7 @@ architecture Structural of valid_cell is
     signal mux_rw_out          : std_logic;        -- Output of the mux for RW
     signal high_wire           : std_logic := '1';
     signal low_wire            : std_logic := '0'; -- Initial high and low wires
+    signal outline : std_logic;
 
 begin
 
@@ -79,7 +76,9 @@ begin
         write_data  => mux_write_data_out,         -- Connected to mux output
         chip_enable => mux_chip_enable_out,        -- Connected to mux output
         RW          => mux_rw_out,                 -- Connected to mux output
-        read_data   => read_data                   -- Read data output
+        read_data   => outline                   -- Read data output
     );
+    
+    read_data <= outline;
 
 end architecture Structural;

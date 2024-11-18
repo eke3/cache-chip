@@ -12,17 +12,14 @@ architecture Test of valid_vector_tb is
             chip_enable : in  std_logic_vector(3 downto 0);
             RW          : in  std_logic;
             sel         : in  std_logic_vector(1 downto 0);
-            read_data_3 : out std_logic;
-            read_data_2 : out std_logic;
-            read_data_1 : out std_logic;
-            read_data_0 : out std_logic
+            read_data : out std_logic
         );
     end component valid_vector;
 
     signal write_data, reset, RW                              : std_logic;
     signal chip_enable                                        : std_logic_vector(3 downto 0);
     signal sel                                                : std_logic_vector(1 downto 0);
-    signal read_data_3, read_data_2, read_data_1, read_data_0 : std_logic;
+    signal read_data : std_logic;
 
 begin
     uut: component valid_vector
@@ -32,14 +29,19 @@ begin
         chip_enable => chip_enable,
         RW          => RW,
         sel         => sel,
-        read_data_3 => read_data_3,
-        read_data_2 => read_data_2,
-        read_data_1 => read_data_1,
-        read_data_0 => read_data_0
+        read_data => read_data
     );
 
     process
     begin
+    
+        write_data <= 'X';
+        chip_enable <= "0001";
+        sel <= "00";
+        RW <= '1';
+        reset <= '0';
+        wait for 10 ns;
+        
         -- Reset
         reset       <= '1';
         write_data  <= '0';
@@ -50,6 +52,13 @@ begin
 
         -- Release reset
         reset       <= '0';
+        wait for 10 ns;
+        
+        RW <= '1';
+        chip_enable <= "0001";
+        wait for 10 ns;
+        
+        
         -- Write 1 to cell 0
         write_data  <= '1';
         chip_enable <= "0001";
@@ -62,7 +71,7 @@ begin
         chip_enable <= "0001";
         RW          <= '1'; -- RW=0 for read
         wait for 10 ns;
-        report "Read data from cell 0: " & std_logic'image(read_data_0);
+        report "Read data from cell 0: " & std_logic'image(read_data);
 
 
         -- Write 1 to cell 1
@@ -83,7 +92,7 @@ begin
         chip_enable <= "0010";
         RW          <= '1'; -- RW=0 for read
         wait for 10 ns;
-        report "Read data from cell 1: " & std_logic'image(read_data_1);
+        report "Read data from cell 1: " & std_logic'image(read_data);
 
 
         -- Read from cell 0
@@ -91,7 +100,7 @@ begin
         chip_enable <= "0001";
         RW          <= '1'; -- RW=0 for read
         wait for 10 ns;
-        report "Read data from cell 0: " & std_logic'image(read_data_0);
+        report "Read data from cell 0: " & std_logic'image(read_data);
 
         -- ... (similarly for cells 2 and 3)
 
@@ -103,7 +112,7 @@ begin
         chip_enable <= "0010";
         RW          <= '1'; -- RW=0 for read
         wait for 10 ns;
-        report "Read data from cell 1: " & std_logic'image(read_data_1);
+        report "Read data from cell 1: " & std_logic'image(read_data);
 
 
         -- Read from cell 0
@@ -111,7 +120,7 @@ begin
         chip_enable <= "0001";
         RW          <= '1'; -- RW=0 for read
         wait for 10 ns;
-        report "Read data from cell 0: " & std_logic'image(read_data_0);
+        report "Read data from cell 0: " & std_logic'image(read_data);
 
         -- Reset
         reset       <= '1';
@@ -130,7 +139,7 @@ begin
         chip_enable <= "0010";
         RW          <= '1'; -- RW=0 for read
         wait for 10 ns;
-        report "Read data from cell 1: " & std_logic'image(read_data_1);
+        report "Read data from cell 1: " & std_logic'image(read_data);
 
 
         -- Read from cell 0
@@ -138,7 +147,7 @@ begin
         chip_enable <= "0001";
         RW          <= '1'; -- RW=0 for read
         wait for 10 ns;
-        report "Read data from cell 0: " & std_logic'image(read_data_0);
+        report "Read data from cell 0: " & std_logic'image(read_data);
 
         wait;
     end process;

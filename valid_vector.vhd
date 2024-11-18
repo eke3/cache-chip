@@ -12,10 +12,7 @@ entity valid_vector is
         chip_enable : in  STD_LOGIC_VECTOR(3 downto 0); -- 4-bit chip enable (1 bit per cell)
         RW          : in  STD_LOGIC; -- Shared Read/Write signal for all cells
         sel         : in  STD_LOGIC_VECTOR(1 downto 0); -- 2-bit selector for demux, comes from decoder input
-        read_data_3 : out STD_LOGIC; -- Read data output for cell 3
-        read_data_2 : out STD_LOGIC; -- Read data output for cell 2
-        read_data_1 : out STD_LOGIC; -- Read data output for cell 1
-        read_data_0 : out STD_LOGIC -- Read data output for cell 0
+        read_data : out STD_LOGIC -- Read data output for cell 3
     );
 end entity valid_vector;
 
@@ -43,13 +40,38 @@ architecture Structural of valid_vector is
         );
     end component demux_1x4;
 
+    component mux_4x1 is
+        port (
+            read_data0 : in  STD_LOGIC; -- Input 0
+            read_data1 : in  STD_LOGIC; -- Input 1
+            read_data2 : in  STD_LOGIC; -- Input 2
+            read_data3 : in  STD_LOGIC; -- Input 3
+            sel        : in  STD_LOGIC_VECTOR(1 downto 0); -- 2-bit sel signal
+            F          : out STD_LOGIC -- Output of the multiplexer
+        );
+    end component mux_4x1;
+
     -- Internal signals for demux outputs
     signal demux_out_0, demux_out_1, demux_out_2, demux_out_3 : STD_LOGIC;
+    signal read_data_0, read_data_1, read_data_2, read_data_3 : STD_LOGIC;
+    signal outline : std_logic; 
 
     for demux: demux_1x4 use entity work.demux_1x4(structural);
     for cell_0, cell_1, cell_2, cell_3: valid_cell use entity work.valid_cell(structural);
+    for mux: mux_4x1 use entity work.mux_4x1(structural);
 
 begin
+    -- get only the output you want
+    mux: component mux_4x1
+     port map(
+        read_data0 => read_data_0,
+        read_data1 => read_data_1,
+        read_data2 => read_data_2,
+        read_data3 => read_data_3,
+        sel => sel,
+        F => outline
+    );
+
     -- Instantiate the demux_1x4 and connect the shared write_data and sel
     demux: component demux_1x4
     port map (
@@ -97,5 +119,7 @@ begin
         RW          => RW,                                 -- Shared Read/Write signal
         read_data   => read_data_3                         -- Unique read data output for cell 3
     );
-
+    
+--    read_data <= outline;
+    read_data <= '1';
 end architecture Structural;

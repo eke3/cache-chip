@@ -12,14 +12,23 @@ entity tag_vector is
         chip_enable : in  STD_LOGIC_VECTOR(3 downto 0); -- 4-bit chip enable (1 bit per cell)
         RW          : in  STD_LOGIC; -- Shared Read/Write signal for all cells
         sel         : in  STD_LOGIC_VECTOR(1 downto 0); -- 2-bit selector for demux
-        read_data_3 : out STD_LOGIC_VECTOR(1 downto 0); -- Read data output for cell 3
-        read_data_2 : out STD_LOGIC_VECTOR(1 downto 0); -- Read data output for cell 2
-        read_data_1 : out STD_LOGIC_VECTOR(1 downto 0); -- Read data output for cell 1
-        read_data_0 : out STD_LOGIC_VECTOR(1 downto 0) -- Read data output for cell 0
+        read_data : out STD_LOGIC_VECTOR(1 downto 0) -- Read data output for cell 3
     );
 end entity tag_vector;
 
 architecture Structural of tag_vector is
+    component mux_4x1_2bit is
+        port (
+            read_data0 : in  STD_LOGIC_VECTOR(1 downto 0); -- Input 0
+            read_data1 : in  STD_LOGIC_VECTOR(1 downto 0); -- Input 1
+            read_data2 : in  STD_LOGIC_VECTOR(1 downto 0); -- Input 2
+            read_data3 : in  STD_LOGIC_VECTOR(1 downto 0); -- Input 3
+            sel        : in  STD_LOGIC_VECTOR(1 downto 0); -- 2-bit sel signal
+            F          : out STD_LOGIC_VECTOR(1 downto 0) -- Output of the multiplexer
+        );
+    end component mux_4x1_2bit;
+
+
     -- Declare the cache_cell_2bit component
     component cache_cell_2bit is
         port (
@@ -44,10 +53,22 @@ architecture Structural of tag_vector is
 
     -- Internal signals for the demux outputs
     signal demux_out_3, demux_out_2, demux_out_1, demux_out_0 : STD_LOGIC_VECTOR(1 downto 0);
+    signal read_data_3, read_data_0, read_data_1, read_data_2 : STD_LOGIC_VECTOR(1 downto 0);
     for demux_inst: demux_1x4_2bit use entity work.demux_1x4_2bit(structural);
     for cache_0, cache_1, cache_2, cache_3: cache_cell_2bit use entity work.cache_cell_2bit(structural);
+    for mux: mux_4x1_2bit use entity work.mux_4x1_2bit(structural);
 
 begin
+
+    mux: component mux_4x1_2bit
+     port map(
+        read_data0 => read_data_0,
+        read_data1 => read_data_1,
+        read_data2 => read_data_2,
+        read_data3 => read_data_3,
+        sel => sel,
+        F => read_data
+    );
     -- Instantiate the demux_1x4_2bit and connect the shared write_data and sel
     demux_inst: component demux_1x4_2bit
     port map (
