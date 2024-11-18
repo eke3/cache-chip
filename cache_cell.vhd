@@ -55,24 +55,24 @@ architecture structural of cache_cell is
 begin
     selector_inst: component selector
     port map (
-        chip_enable,
-        RW,
-        read_enable,
-        write_enable
+        chip_enable => chip_enable,
+        RW => RW,
+        read_enable => read_enable,
+        write_enable => write_enable
     );
     d_latch: component Dlatch
     port map (
-        write_data,
-        write_enable,
-        q, 
-        q_inv
+        d => write_data,
+        clk => write_enable,
+        q => q,
+        qbar => q_inv
     );
     tx_inst: component tx
     port map (
-        read_enable,
-        write_enable,
-        q,
-        read_data
+        sel => read_enable,
+        selnot => write_enable,
+        input => q,
+        output => read_data
     );
 
 end architecture structural;

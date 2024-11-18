@@ -151,7 +151,7 @@ architecture test of write_tb is
     signal read_valid : std_logic;
     signal read_tag : std_logic_vector(1 downto 0);
     signal cmp_tag, cmp_valid : std_logic;
-    signal hit_miss, hit_miss_reg : std_logic;
+    signal hit_miss, hit_miss_reg, valid_reg : std_logic;
     signal data_reg1, data_reg2 : std_logic_vector(7 downto 0);
     signal byte_reg1, block_reg1 : std_logic_vector(1 downto 0);
     signal byte_decoder_out, block_decoder_out : std_logic_vector(3 downto 0);
@@ -162,8 +162,24 @@ architecture test of write_tb is
     -- Throwaway signals
     signal mem_data : std_logic_vector(7 downto 0);
     signal mem_addr : std_logic_vector(7 downto 0);
-    signal read_cache : std_logic_vector(7 downto 0);
+    signal read_cache, read_cache_reg : std_logic_vector(7 downto 0);
 
+
+
+
+
+
+
+
+        signal valid_reset, valid_write, valid_RW, valid_read : std_logic;
+        signal valid_sel : std_logic_vector(1 downto 0);
+        signal valid_chip_enable : std_logic_vector(3 downto 0);
+        
+        
+        
+        
+        
+        
 
     begin
         data_ff: component dff_negedge_8bit
@@ -179,7 +195,7 @@ architecture test of write_tb is
             port map ( d => write_tag, clk => clk, q => tag_reg, qbar => open );
 
         valid_ff: component dff_negedge
-            port map ( d => write_valid, clk => clk, q => read_valid, qbar => open );
+            port map ( d => write_valid, clk => clk, q => valid_reg, qbar => open );
 
         data_ff2: component dff_posedge_8bit
             port map ( d => data_reg1, clk => clk, q => data_reg2, qbar => open );
@@ -200,7 +216,7 @@ architecture test of write_tb is
             port map ( write_data => tag_reg, chip_enable => block_decoder_out, RW => RW_tag, sel => block_reg1, read_data => read_tag );
 
         valid_vec: component valid_vector
-            port map ( write_data => write_valid, reset => reset, chip_enable => block_decoder_out, RW => RW_valid, sel => block_reg1, read_data => read_valid );
+            port map ( write_data => valid_reg, reset => reset, chip_enable => block_decoder_out, RW => RW_valid, sel => block_reg1, read_data => read_valid );
 
         tag_cmp: component tag_comparator_2x1
             port map ( A => tag_reg, B => read_tag, output => cmp_tag );
@@ -218,88 +234,81 @@ architecture test of write_tb is
 
         cache: component block_cache
             port map (mem_data => mem_data, mem_addr => mem_addr, hit_miss => hit_miss_reg, R_W => RW_cache, byte_offset => byte_decoder_reg, block_offset => block_decoder_reg, cpu_data => data_reg2, read_data => read_cache);
+           
+        -- register for read data
+        
+        read_cache_ff: component dff_negedge_8bit 
+            port map ( d => read_cache, clk => clk, q => read_cache_reg, qbar => open );
 
         stimulus: process
         begin
             -- Initialize signals
             clk <= '1';
-            reset <= '0';
-            write_valid <= '1';
-            write_tag <= "11";
-            write_cache <= X"0F";
+            reset <= '1';
+            write_valid <= '1'; -- going to make one of the rows valid
+            RW_valid <= '0'; -- write to valid
+            write_tag <= "01"; -- going to make one of the rows valid
+            RW_tag <= '0'; -- write to tag
             block_offset <= "00";
             byte_offset <= "00";
+            
+            wait for 10 ns;
+            reset <= '0'; -- unpress reset
+            
             wait for 10 ns;
             clk <= '0';
-            wait for 10 ns;
-
-            -- system reset
-            reset <= '1';
-            wait for 10 ns;
-            reset <= '0';
-            wait for 10 ns;
-            
-            -- check that valid contains zeros
-            -- monitor 'read_valid' signal
             decoder_enable <= '1';
-            RW_valid <= '1';
-                        RW_tag <= '0';
-
             wait for 10 ns;
-            clk <= '1';
-            wait for 10 ns;
-            clk <= '0';
-            wait for 10 ns;
-            clk <= '1';
-            wait for 10 ns;
-            clk <= '0';
-            wait for 10 ns;
-
-
-            --RW_tag <= '0';
-            wait for 10 ns;
-            clk <= '1';
-            wait for 10 ns;
-            clk <= '0';
-            wait for 10 ns;
-            clk <= '1';
-            wait for 10 ns;
-            clk <= '0';
-            wait for 10 ns;
-            -- put ones in the first 2 rows of valid vector
+            clk <= '1'; -- prepare clock to start program
             
-            RW_tag <= '1';
+            write_cache <= X"0F"; -- going to write 0F to cell at (00,00)
+            RW_cache <= '0'; -- writing to cache
+            RW_valid <= '1'; -- need to read valid to check for hit/miss
+            RW_tag <= '1'; -- need to read tag to check for hit/miss
             wait for 10 ns;
-            clk <= '1';
-            wait for 10 ns;
-            clk <= '0';
-            wait for 10 ns;
-            clk <= '1';
-            wait for 10 ns;
-            clk <= '0';
+            clk <= '0'; -- on negative edge the above value write_cache get loaded into registers
+            -- while on negative level, hit/miss is calculated
             wait for 10 ns;
             
-            RW_cache <= '0';
-            wait for 10 ns;
             clk <= '1';
-            wait for 10 ns;
+            wait for 10 ns; -- on this positive edge, hit/miss latches to hit_miss_reg
+            -- on this positive level, a write happens to the cache cell 
+            
+            decoder_enable <= '0';
             clk <= '0';
-            wait for 10 ns;
-            clk <= '1';
-            wait for 10 ns;
-            clk <= '0';
+            -- disable decoder on negative edge
             wait for 10 ns;
             
-            RW_cache <= '1';
-            wait for 10 ns;
+            -- now lets check to see if it was successfully written
+            RW_cache <= '1'; -- read from that same cache cell
+            write_cache <= "XXXXXXXX"; -- dont care about this anymore
             clk <= '1';
             wait for 10 ns;
+            decoder_enable <= '1'; -- enable decoder before operation
+
             clk <= '0';
+            -- this is the start of the operation. in the sim window, the new XXXX for write_cache latches on this negative edge
+            -- BUSY would go high on this negative edge
             wait for 10 ns;
+--            decoder_enable <= '1';
+            clk <= '1'; -- hit/miss latches to a register on this positive edge
+            -- data gets read from the cache, is not available yet. will be latched to an output register on the next negative edge
+            wait for 10 ns;
+            
+            decoder_enable <= '0';
+            clk <= '0';
+            -- data from cache latches to an output register and should be available starting from this negative edge
+            -- BUSY would go low on this negative edge
+            wait for 10 ns;
+            
+            clk <= '1';
+            wait for 10 ns;
+            
+            clk <= '0';
+            -- BUSY would go low on this negative edge
+            wait for 10 ns;
+            
 
-
-
-            -- put 11 in the first 2 rows of tag vector
 
             wait;
         end process;

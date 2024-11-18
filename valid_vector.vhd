@@ -120,6 +120,6 @@ begin
         read_data   => read_data_3                         -- Unique read data output for cell 3
     );
     
---    read_data <= outline;
-    read_data <= '1';
+    read_data <= outline;
+--    read_data <= '1';
 end architecture Structural;
