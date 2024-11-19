@@ -25,20 +25,14 @@ architecture structural of shift_register_bit_2 is
         );
     end component;
 
-    for dff_1, dff_2: dff use entity work.dff(structural);
+    for dff_1: dff use entity work.dff(structural);
 
-    signal count_1: std_logic;
+    --signal count_1: std_logic;
 
 begin
 
     dff_1: dff port map(
         input,
-        clk,
-        count_1
-    );
-
-    dff_2: dff port map(
-        count_1,
         clk,
         output
     );

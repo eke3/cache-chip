@@ -16,8 +16,8 @@ architecture behavior of tb_state_machine is
             cpu_addr: in std_logic_vector(7 downto 0);
             mem_addr_ready: in std_logic;
             cache_RW: out std_logic;
-            valid_RW: out std_logic;
-            tag_RW: out std_logic;
+            valid_WE: out std_logic;
+            tag_WE: out std_logic;
             decoder_enable: out std_logic;
             mem_addr_out_enable: out std_logic;
             data_mux_enable: out std_logic;
@@ -55,8 +55,8 @@ begin
             cpu_addr => tb_cpu_addr,
             mem_addr_ready => tb_mem_addr_ready,
             cache_RW => tb_cache_RW,
-            valid_RW => tb_valid_RW,
-            tag_RW => tb_tag_RW,
+            valid_WE => tb_valid_RW,
+            tag_WE => tb_tag_RW,
             decoder_enable => tb_decoder_enable,
             mem_addr_out_enable => tb_mem_addr_out_enable,
             data_mux_enable => tb_data_mux_enable,
@@ -75,7 +75,7 @@ begin
     stimulus_process: process
     begin
         -- Reset the system
-        wait for 50 ns;
+        wait for 480 ns;
         tb_start <= '0';
         tb_hit_miss <= '0';
         tb_R_W <= '0';
@@ -89,14 +89,14 @@ begin
         tb_cpu_addr <= "10101010";
         tb_hit_miss <= '1';
         wait for 20 ns; tb_start <='0';
-        wait for 60 ns;
+        wait for 100 ns;
 
         -- Test Case 2: read hit
         tb_start <= '1';
         tb_R_W <= '1';
         tb_cpu_addr <= "10101010";
         wait for 20 ns; tb_start <='0';
-        wait for 60 ns;
+        wait for 100 ns;
 
         -- test case: write miss
         tb_start <= '1';
@@ -104,7 +104,7 @@ begin
         tb_hit_miss <= '0';
         tb_cpu_addr <= "11001100";
         wait for 20 ns; tb_start <='0';
-        wait for 40 ns;
+        wait for 100 ns;
 
         tb_mem_addr_ready <= '0';
         
@@ -113,7 +113,7 @@ begin
         tb_hit_miss <= '0';
         tb_cpu_addr <= "11001100";
         wait for 20 ns; tb_start <='0';
-        wait for 40 ns;
+        wait for 100 ns;
 
          -- read miss
         tb_start <= '1';
