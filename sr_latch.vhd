@@ -42,7 +42,5 @@ begin
             B      => Q,
             output => Qn
         );
-    --Q <= Q_wire;
-    --Qn <= Qn_wire;
 
 end architecture structural;

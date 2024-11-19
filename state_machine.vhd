@@ -131,7 +131,7 @@ architecture structural of state_machine is
         );
     end component;
 
-    for and_1, and_2: and_2x1 use entity work.and_2x1(structural);
+    for and_2: and_2x1 use entity work.and_2x1(structural);
 
     for and3_1, and3_3: and_3x1 use entity work.and_3x1(structural);
 
@@ -151,18 +151,18 @@ architecture structural of state_machine is
     
     signal hit_miss_inv, RW_inv, not_busy, temp_oe_1, temp_oe_2, output_enable_temp, read_miss_count, read_hit_count, write_count: std_logic;
 
-    signal read_miss_trigger, read_hit_trigger, set, reset, not_clk, valid_ready, timers, busy_sig: std_logic;
+    signal read_miss_trigger, read_hit_trigger, set, reset, not_clk, valid_ready, busy_sig: std_logic;
 
 begin
-    and_1: and_2x1 port map(
-        start,
-        not_clk,
-        decoder_enable
-    );
+    --and_1: and_2x1 port map(
+    --    start,
+    --    not_clk,
+    --    decoder_enable
+    --);
 
     mux_1: mux_2x1 port map(
-        R_W,
         '0',
+        R_W,
         busy_sig,
         cache_RW
     );
@@ -235,21 +235,21 @@ begin
 
     and_5: and_2x1 port map(
         start,
-        clk,
+        not_clk,
         set
     );
 
-    or_2: or_2x1 port map(
-        output_enable_temp,
-        timers,
-        reset
-    );
+  --  or_2: or_2x1 port map(
+  --      output_enable_temp,
+  --      timers,
+  --      reset
+  --  );
 
     or3_1: or_3x1 port map(
         read_miss_count,
         read_hit_count,
         write_count,
-        timers
+        reset
     );
 
     shift_reg_2_1: shift_register_bit_2 port map(
@@ -297,5 +297,5 @@ begin
     );
 
     busy <= busy_sig;
-    
+    decoder_enable <= busy_sig;
 end structural;
