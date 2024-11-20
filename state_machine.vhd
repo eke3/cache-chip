@@ -18,19 +18,18 @@ entity state_machine is
     port(
         clk: in std_logic;
         start: in std_logic;
+        reset_in: in std_logic;
         hit_miss: in std_logic;
         R_W: in std_logic;
         cpu_addr: in std_logic_vector(7 downto 0);
         mem_addr_ready: in std_logic;
-
-        -- add output cpu_address to send to system
-        -- add 
 
         cache_RW: out std_logic;
         valid_WE: out std_logic;
         tag_WE: out std_logic;
         decoder_enable: out std_logic;
         mem_addr_out_enable: out std_logic;
+        mem_data_read_enable: out std_logic;
         data_mux_enable: out std_logic;
         busy: out std_logic; -- also use for decoder enable
         output_enable: out std_logic -- cpu data output enable
@@ -141,6 +140,14 @@ architecture structural of state_machine is
         );
     end component;
 
+    component shift_register_bit_7
+        port(
+            input: in std_logic;
+            clk: in std_logic;
+            output: out std_logic
+        );
+    end component;
+
     for and_2: and_2x1 use entity work.and_2x1(structural);
 
     for and3_1, and3_3, and3_2: and_3x1 use entity work.and_3x1(structural);
@@ -153,10 +160,6 @@ architecture structural of state_machine is
 
     for or_1: or_2x1 use entity work.or_2x1(structural);
 
-    --for shift_reg_2_1: shift_register_bit_2 use entity work.shift_register_bit_2(structural);
-
-    --for shift_reg_3: shift_register_bit_3 use entity work.shift_register_bit_3(structural);
-
     for shift_reg_19: shift_register_bit_19 use entity work.shift_register_bit_19(structural);
     
     signal hit_miss_inv, RW_inv, not_busy, temp_oe_1, temp_oe_2, output_enable_temp, read_miss_count, read_hit_count, write_count: std_logic;
@@ -166,6 +169,8 @@ architecture structural of state_machine is
     signal write_count_criteria, set_temp, set_temp_2, output_enable_temp_2, output_enable_temp_3, read_miss: std_logic;
     
     signal tag_WE_sig, valid_WE_sig: std_logic;
+    
+    signal mem_addr_out_enable_sig, shift_7_enable: std_logic;
     
 begin
     --and_1: and_2x1 port map(
@@ -185,7 +190,7 @@ begin
         valid_ready,
         hit_miss_inv,
         R_W,
-        mem_addr_out_enable
+        mem_addr_out_enable_sig
     );
 
     inverter_1: inverter port map(
@@ -351,8 +356,22 @@ begin
         set
     );
 
+    shift_reg_7: shift_register_bit_7 port map(
+        shift_7_enable,
+        clk,
+        mem_data_read_enable
+    );
+
+    or_3: or_2x1 port map(
+       mem_addr_out_enable_sig,
+       reset_in,
+       shift_7_enable
+    );
+
     busy <= busy_sig;
     decoder_enable <= busy_sig;
     tag_WE <= tag_WE_sig;
     valid_WE <= valid_WE_sig;
+    mem_addr_out_enable <= mem_addr_out_enable_sig;
+    
 end structural;

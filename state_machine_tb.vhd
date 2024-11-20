@@ -11,6 +11,7 @@ architecture behavior of tb_state_machine is
         port(
             clk: in std_logic;
             start: in std_logic;
+            reset_in: in std_logic;
             hit_miss: in std_logic;
             R_W: in std_logic;
             cpu_addr: in std_logic_vector(7 downto 0);
@@ -20,6 +21,7 @@ architecture behavior of tb_state_machine is
             tag_WE: out std_logic;
             decoder_enable: out std_logic;
             mem_addr_out_enable: out std_logic;
+            mem_data_read_enable: out std_logic;
             data_mux_enable: out std_logic;
             busy: out std_logic;
             output_enable: out std_logic
@@ -38,9 +40,11 @@ architecture behavior of tb_state_machine is
     signal tb_tag_RW            : std_logic;
     signal tb_decoder_enable    : std_logic;
     signal tb_mem_addr_out_enable : std_logic;
+    signal tb_mem_data_read_enable: std_logic;
     signal tb_data_mux_enable   : std_logic;
     signal tb_busy              : std_logic;
     signal tb_output_enable     : std_logic;
+    signal tb_reset_in: std_logic;
 
     -- Clock generation process
 
@@ -50,6 +54,7 @@ begin
     uut: state_machine port map (
             clk => tb_clk,
             start => tb_start,
+            reset_in => tb_reset_in,
             hit_miss => tb_hit_miss,
             R_W => tb_R_W,
             cpu_addr => tb_cpu_addr,
@@ -59,6 +64,7 @@ begin
             tag_WE => tb_tag_RW,
             decoder_enable => tb_decoder_enable,
             mem_addr_out_enable => tb_mem_addr_out_enable,
+            mem_data_read_enable => tb_mem_data_read_enable,
             data_mux_enable => tb_data_mux_enable,
             busy => tb_busy,
             output_enable => tb_output_enable
@@ -75,7 +81,10 @@ begin
     stimulus_process: process
     begin
         -- Reset the system
-        wait for 480 ns;
+        tb_reset_in <= '1';
+        wait for 10 ns;
+        tb_reset_in <= '0';
+        wait for 470 ns;
         tb_start <= '0';
         tb_hit_miss <= '0';
         tb_R_W <= '0';
