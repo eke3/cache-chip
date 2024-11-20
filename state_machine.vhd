@@ -21,8 +21,8 @@ entity state_machine is
         reset_in: in std_logic;
         hit_miss: in std_logic;
         R_W: in std_logic;
-        cpu_addr: in std_logic_vector(7 downto 0);
-        mem_addr_ready: in std_logic;
+        cpu_addr: in std_logic_vector(5 downto 0);
+        --mem_addr_ready: in std_logic;
 
         cache_RW: out std_logic;
         valid_WE: out std_logic;
@@ -172,6 +172,8 @@ architecture structural of state_machine is
     
     signal mem_addr_out_enable_sig, shift_7_enable: std_logic;
     
+    signal mem_addr_ready: std_logic;
+    
 begin
     --and_1: and_2x1 port map(
     --    start,
@@ -250,14 +252,14 @@ begin
     sr_latch_2: sr_latch port map(
         read_miss,
         busy_sig_inv,
-        valid_WE_sig
+        mem_addr_ready
     );
     
-    sr_latch_3: sr_latch port map(
-        read_miss,
-        busy_sig_inv,
-        tag_WE_sig
-    );
+    --sr_latch_3: sr_latch port map(
+    --    read_miss,
+    --    busy_sig_inv,
+    --    tag_WE_sig
+    --);
 
     and4_1: and_4x1 port map(
         hit_miss_inv,
@@ -370,8 +372,8 @@ begin
 
     busy <= busy_sig;
     decoder_enable <= busy_sig;
-    tag_WE <= tag_WE_sig;
-    valid_WE <= valid_WE_sig;
+    tag_WE <= mem_addr_ready;
+    valid_WE <= mem_addr_ready;
     mem_addr_out_enable <= mem_addr_out_enable_sig;
     
 end structural;

@@ -11,7 +11,7 @@ architecture test of chip_test is
 
   component chip
     port (
-      cpu_add    : in  std_logic_vector(5 downto 0);
+      cpu_addr    : in  std_logic_vector(5 downto 0);
       cpu_data   : inout  std_logic_vector(7 downto 0);
       cpu_rd_wrn : in  std_logic;
       start      : in  std_logic;
@@ -22,7 +22,7 @@ architecture test of chip_test is
       Gnd        : in  std_logic;
       busy       : out std_logic;
       mem_en     : out std_logic;
-      mem_add    : out std_logic_vector(5 downto 0)
+      mem_addr    : out std_logic_vector(5 downto 0)
     );
   end component;
 
