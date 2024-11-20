@@ -8,14 +8,14 @@ architecture Test of block_cache_tb is
 
     -- Test signals
     signal mem_data    : std_logic_vector(7 downto 0);
-    signal mem_addr    : std_logic_vector(7 downto 0);
+    signal mem_addr    : std_logic_vector(5 downto 0);
     signal hit_miss    : std_logic;
     signal R_W         : std_logic;
     signal byte_offset : std_logic_vector(3 downto 0);
     signal block_offset: std_logic_vector(3 downto 0);
     signal cpu_data    : std_logic_vector(7 downto 0);
     signal read_data   : std_logic_vector(7 downto 0);
-    signal sel : std_logic_vector(3 downto 0);
+--    signal sel : std_logic_vector(3 downto 0);
     --signal CE          : std_logic_vector(15 downto 0);
     --signal demux_out   : std_logic_vector(15 downto 0);
 
@@ -44,7 +44,7 @@ begin
         R_W         <= '0'; -- Write operation
         byte_offset <= "1000";
         block_offset<= "1000";
-        sel <= "1111";
+--        sel <= "1111";
         
         -- Wait for a while and then change inputs to simulate different scenarios
         wait for 10 ns;
@@ -69,7 +69,7 @@ begin
 
         R_W <= '1';
         -- Test Case 1: Select input 0
-        sel <= "0000"; -- Select input 0        
+--        sel <= "0000"; -- Select input 0        
         wait for 10 ns;
         
         cpu_data <= X"0B";
