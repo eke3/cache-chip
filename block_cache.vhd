@@ -7,7 +7,7 @@ use IEEE.std_logic_1164.all;
 
 entity block_cache is
     port(   mem_data    : in std_logic_vector(7 downto 0);
-            mem_addr    : out std_logic_vector(7 downto 0);
+            mem_addr    : out std_logic_vector(5 downto 0);
             hit_miss    : in std_logic;
             R_W         : in std_logic;
             byte_offset : in std_logic_vector(3 downto 0);

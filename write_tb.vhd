@@ -108,6 +108,8 @@ architecture test of write_tb is
 
     component valid_vector is
         port (
+            vdd         : in  STD_LOGIC; -- Power supply
+            gnd         : in  STD_LOGIC; -- Ground
             write_data  : in  STD_LOGIC; -- Shared write data for demux
             reset       : in  STD_LOGIC; -- Shared reset signal for all cells
             chip_enable : in  STD_LOGIC_VECTOR(3 downto 0); -- 4-bit chip enable (1 bit per cell)
@@ -119,7 +121,7 @@ architecture test of write_tb is
 
     component block_cache is
         port(   mem_data    : in std_logic_vector(7 downto 0);
-                mem_addr    : out std_logic_vector(7 downto 0);
+                mem_addr    : out std_logic_vector(5 downto 0);
                 hit_miss    : in std_logic;
                 R_W         : in std_logic;
                 byte_offset : in std_logic_vector(3 downto 0);
@@ -136,6 +138,21 @@ architecture test of write_tb is
         );
     end component and_2x1;
 
+    component inverter is
+        port (
+            input  : in  STD_LOGIC;
+            output : out STD_LOGIC
+        );
+    end component inverter;
+
+    component nand_2x1 is
+        port (
+            A      : in  STD_LOGIC;
+            B      : in  STD_LOGIC;
+            output : out STD_LOGIC
+        );
+    end component nand_2x1;
+
     -- System inputs
     signal clk, reset : std_logic;
     signal write_cache : std_logic_vector(7 downto 0);
@@ -146,56 +163,51 @@ architecture test of write_tb is
     -- State machine signals
     signal RW_valid, RW_tag, RW_cache : std_logic;
     signal decoder_enable : std_logic;
+    signal load_chip : std_logic;
 
     -- Intermediate signals
     signal read_valid : std_logic;
     signal read_tag : std_logic_vector(1 downto 0);
     signal cmp_tag, cmp_valid : std_logic;
-    signal hit_miss, hit_miss_reg, valid_reg : std_logic;
+    signal hit_miss, hit_miss_reg : std_logic;
     signal data_reg1, data_reg2 : std_logic_vector(7 downto 0);
     signal byte_reg1, block_reg1 : std_logic_vector(1 downto 0);
     signal byte_decoder_out, block_decoder_out : std_logic_vector(3 downto 0);
     signal byte_decoder_reg, block_decoder_reg : std_logic_vector(3 downto 0);
     signal tag_reg : std_logic_vector(1 downto 0);
-    signal high_wire : std_logic := '1';
+    signal vdd : std_logic := '1';
+    signal gnd : std_logic := '0';
+    signal read_cache : std_logic_vector(7 downto 0);
+    signal not_clk, chip_load_logic : std_logic;
+--    signal valid_reg : std_logic;
 
     -- Throwaway signals
     signal mem_data : std_logic_vector(7 downto 0);
-    signal mem_addr : std_logic_vector(7 downto 0);
-    signal read_cache, read_cache_reg : std_logic_vector(7 downto 0);
-
-
-
-
-
-
-
-
-        signal valid_reset, valid_write, valid_RW, valid_read : std_logic;
-        signal valid_sel : std_logic_vector(1 downto 0);
-        signal valid_chip_enable : std_logic_vector(3 downto 0);
-        
-        
-        
-        
-        
+    signal mem_addr : std_logic_vector(5 downto 0);
+    signal read_cache_reg : std_logic_vector(7 downto 0);
         
 
     begin
+        clock_inv: component inverter
+            port map ( input => clk, output => not_clk );
+
+        chip_load: component nand_2x1
+            port map ( A => not_clk, B => load_chip, output => chip_load_logic );
+
         data_ff: component dff_negedge_8bit
-            port map ( d => write_cache, clk => clk, q => data_reg1, qbar => open );
+            port map ( d => write_cache, clk => chip_load_logic, q => data_reg1, qbar => open );
 
         byte_ff: component dff_negedge_2bit
-            port map ( d => byte_offset, clk => clk, q => byte_reg1, qbar => open );
+            port map ( d => byte_offset, clk => chip_load_logic, q => byte_reg1, qbar => open );
 
         block_ff: component dff_negedge_2bit
-            port map ( d => block_offset, clk => clk, q => block_reg1, qbar => open );
+            port map ( d => block_offset, clk => chip_load_logic, q => block_reg1, qbar => open );
 
         tag_ff: component dff_negedge_2bit
-            port map ( d => write_tag, clk => clk, q => tag_reg, qbar => open );
-
-        valid_ff: component dff_negedge
-            port map ( d => write_valid, clk => clk, q => valid_reg, qbar => open );
+            port map ( d => write_tag, clk => chip_load_logic, q => tag_reg, qbar => open );
+        
+--        valid_ff: component dff_negedge
+--            port map ( d => write_valid, clk => clk, q => valid_reg, qbar => open );
 
         data_ff2: component dff_posedge_8bit
             port map ( d => data_reg1, clk => clk, q => data_reg2, qbar => open );
@@ -215,14 +227,17 @@ architecture test of write_tb is
         tag_vec: component tag_vector
             port map ( write_data => tag_reg, chip_enable => block_decoder_out, RW => RW_tag, sel => block_reg1, read_data => read_tag );
 
+--        valid_vec: component valid_vector
+--            port map ( write_data => valid_reg, reset => reset, chip_enable => block_decoder_out, RW => RW_valid, sel => block_reg1, read_data => read_valid );
+            
         valid_vec: component valid_vector
-            port map ( write_data => valid_reg, reset => reset, chip_enable => block_decoder_out, RW => RW_valid, sel => block_reg1, read_data => read_valid );
+            port map ( vdd => vdd, gnd => gnd, write_data => write_valid, reset => reset, chip_enable => block_decoder_out, RW => RW_valid, sel => block_reg1, read_data => read_valid );
 
         tag_cmp: component tag_comparator_2x1
             port map ( A => tag_reg, B => read_tag, output => cmp_tag );
 
         valid_cmp: component valid_comparator_2x1
-            port map ( A => high_wire, B => read_valid, output => cmp_valid );
+            port map ( A => vdd, B => read_valid, output => cmp_valid );
 
         hit_miss_cmp: component and_2x1
             port map ( A => cmp_tag, B => cmp_valid, output => hit_miss );
@@ -245,22 +260,39 @@ architecture test of write_tb is
             -- Initialize signals
             clk <= '1';
             reset <= '1';
-            write_valid <= '1'; -- going to make one of the rows valid
-            RW_valid <= '0'; -- write to valid
+--            write_valid <= '1'; -- going to make one of the rows valid
             write_tag <= "01"; -- going to make one of the rows valid
-            RW_tag <= '0'; -- write to tag
-            block_offset <= "00";
-            byte_offset <= "00";
+            block_offset <= "01";
+            byte_offset <= "01";
             
             wait for 10 ns;
             reset <= '0'; -- unpress reset
             
             wait for 10 ns;
+
             clk <= '0';
             decoder_enable <= '1';
+            RW_tag <= '0'; -- write to tag
+            RW_valid <= '0'; -- write to valid
+            write_valid <= '1'; -- going to make one of the rows valid
+                        load_chip <= '1';
+
+
+
             wait for 10 ns;
             clk <= '1'; -- prepare clock to start program
-            
+            wait for 10 ns;
+            clk <= '0';
+            decoder_enable <= '0';
+            RW_valid <= 'X'; -- write to valid
+            write_valid <= 'X'; 
+                        load_chip <= '0';
+
+
+            RW_tag <= 'X';
+            wait for 10 ns;
+            clk <= '1';
+            decoder_enable <= '1';
             write_cache <= X"0F"; -- going to write 0F to cell at (00,00)
             RW_cache <= '0'; -- writing to cache
             RW_valid <= '1'; -- need to read valid to check for hit/miss
@@ -268,6 +300,7 @@ architecture test of write_tb is
             wait for 10 ns;
             clk <= '0'; -- on negative edge the above value write_cache get loaded into registers
             -- while on negative level, hit/miss is calculated
+                        load_chip <= '1';
             wait for 10 ns;
             
             clk <= '1';
@@ -275,30 +308,40 @@ architecture test of write_tb is
             -- on this positive level, a write happens to the cache cell 
             
             decoder_enable <= '0';
+                        block_offset <= "XX";
+                        byte_offset <= "XX";
             clk <= '0';
+                        load_chip <= '0';
             -- disable decoder on negative edge
             wait for 10 ns;
             
             -- now lets check to see if it was successfully written
-            RW_cache <= '1'; -- read from that same cache cell
             write_cache <= "XXXXXXXX"; -- dont care about this anymore
             clk <= '1';
             wait for 10 ns;
+            RW_cache<='1';
             decoder_enable <= '1'; -- enable decoder before operation
-
+                    block_offset <= "01";
+                    byte_offset <= "01";
             clk <= '0';
             -- this is the start of the operation. in the sim window, the new XXXX for write_cache latches on this negative edge
             -- BUSY would go high on this negative edge
+            
+                        load_chip <= '1';
             wait for 10 ns;
---            decoder_enable <= '1';
             clk <= '1'; -- hit/miss latches to a register on this positive edge
             -- data gets read from the cache, is not available yet. will be latched to an output register on the next negative edge
             wait for 10 ns;
             
             decoder_enable <= '0';
+            RW_cache <= 'X'; -- RW_cache no longer matters once busy goes low
             clk <= '0';
             -- data from cache latches to an output register and should be available starting from this negative edge
+            -- OUTPUT_ENABLE for the chip should go high here
             -- BUSY would go low on this negative edge
+                        load_chip <= '0';
+                        block_offset <= "XX";
+                        byte_offset <= "XX";
             wait for 10 ns;
             
             clk <= '1';
@@ -307,8 +350,6 @@ architecture test of write_tb is
             clk <= '0';
             -- BUSY would go low on this negative edge
             wait for 10 ns;
-            
-
 
             wait;
         end process;

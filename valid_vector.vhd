@@ -7,6 +7,8 @@ use IEEE.STD_LOGIC_1164.all;
 
 entity valid_vector is
     port (
+        vdd         : in  STD_LOGIC; -- Power supply
+        gnd         : in  STD_LOGIC; -- Ground
         write_data  : in  STD_LOGIC; -- Shared write data for demux
         reset       : in  STD_LOGIC; -- Shared reset signal for all cells
         chip_enable : in  STD_LOGIC_VECTOR(3 downto 0); -- 4-bit chip enable (1 bit per cell)
@@ -20,6 +22,8 @@ architecture Structural of valid_vector is
     -- Declare the valid_cell component
     component valid_cell is
         port (
+            vdd         : in  STD_LOGIC;
+            gnd         : in  STD_LOGIC;
             write_data  : in  STD_LOGIC;
             reset       : in  STD_LOGIC;
             chip_enable : in  STD_LOGIC;
@@ -86,6 +90,8 @@ begin
     -- Instantiate each valid_cell and connect signals as required
     cell_0: component valid_cell
     port map (
+        vdd => vdd,
+        gnd => gnd,
         write_data  => demux_out_0,                        -- Demux output for cell 0
         reset       => reset,                              -- Shared reset signal
         chip_enable => chip_enable(0),                     -- Unique chip enable for cell 0
@@ -95,6 +101,8 @@ begin
 
     cell_1: component valid_cell
     port map (
+        vdd => vdd,
+        gnd => gnd,
         write_data  => demux_out_1,                        -- Demux output for cell 1
         reset       => reset,                              -- Shared reset signal
         chip_enable => chip_enable(1),                     -- Unique chip enable for cell 1
@@ -104,6 +112,8 @@ begin
 
     cell_2: component valid_cell
     port map (
+        vdd => vdd,
+        gnd => gnd,
         write_data  => demux_out_2,                        -- Demux output for cell 2
         reset       => reset,                              -- Shared reset signal
         chip_enable => chip_enable(2),                     -- Unique chip enable for cell 2
@@ -113,6 +123,8 @@ begin
 
     cell_3: component valid_cell
     port map (
+        vdd => vdd,
+        gnd => gnd,
         write_data  => demux_out_3,                        -- Demux output for cell 3
         reset       => reset,                              -- Shared reset signal
         chip_enable => chip_enable(3),                     -- Unique chip enable for cell 3
@@ -121,5 +133,4 @@ begin
     );
     
     read_data <= outline;
---    read_data <= '1';
 end architecture Structural;

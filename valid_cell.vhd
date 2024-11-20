@@ -4,6 +4,8 @@ use IEEE.std_logic_1164.all;
 
 entity valid_cell is
     port (
+        vdd         : in  std_logic;
+        gnd         : in  std_logic;
         write_data  : in  std_logic; -- Write data input
         reset       : in  std_logic; -- Reset signal
         chip_enable : in  std_logic; -- Chip enable signal
@@ -37,8 +39,6 @@ architecture Structural of valid_cell is
     signal mux_write_data_out  : std_logic;        -- Output of the mux for write_data
     signal mux_chip_enable_out : std_logic;        -- Output of the mux for chip_enable
     signal mux_rw_out          : std_logic;        -- Output of the mux for RW
-    signal high_wire           : std_logic := '1';
-    signal low_wire            : std_logic := '0'; -- Initial high and low wires
     signal outline : std_logic;
 
 begin
@@ -47,7 +47,7 @@ begin
     mux_write_data: component mux_2x1
     port map (
         A           => write_data,                 -- When reset = 0, pass write_data
-        B           => low_wire,                   -- When reset = 1, pass 0
+        B           => gnd,                   -- When reset = 1, pass 0
         sel         => reset,                      -- sel is controlled by reset
         output      => mux_write_data_out          -- Output of the mux
     );
@@ -56,7 +56,7 @@ begin
     mux_chip_enable: component mux_2x1
     port map (
         A           => chip_enable,                -- When reset = 0, pass chip_enable
-        B           => high_wire,                  -- When reset = 1, pass 1
+        B           => vdd,                  -- When reset = 1, pass 1
         sel         => reset,                      -- sel is controlled by reset
         output      => mux_chip_enable_out         -- Output of the mux
     );
@@ -65,7 +65,7 @@ begin
     mux_rw: component mux_2x1
     port map (
         A           => RW,                         -- When reset = 0, pass RW
-        B           => low_wire,                   -- When reset = 1, pass 0
+        B           => gnd,                   -- When reset = 1, pass 0
         sel         => reset,                      -- sel is controlled by reset
         output      => mux_rw_out                  -- Output of the mux
     );
