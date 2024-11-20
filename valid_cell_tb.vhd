@@ -53,10 +53,21 @@ begin
     stimulus_process: process
     begin
         -- Test Case 1: Apply reset = 1 (Expect read_data = 0)
-        reset       <= '1';
-        write_data  <= '1';
+        reset       <= '0';
+        write_data  <= 'X';
+        chip_enable <= '0';
+        RW          <= 'X';
+        wait for 10 ns;
+        reset <= '1';
+        wait for 10 ns;
+        print_output;
+        
+        reset <= '0';
+        wait for 10 ns;
+        print_output;
+        
+        RW <= '1';
         chip_enable <= '1';
-        RW          <= '1';
         wait for 10 ns;
         print_output;
 

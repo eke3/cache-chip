@@ -50,6 +50,7 @@ architecture Structural of mux_4x1 is
     signal and_out0, and_out1, and_out2, and_out3 : STD_LOGIC;
     -- Intermediate signal for inverted sel bit
     signal sel_not0, sel_not1                     : STD_LOGIC;
+    signal outline :std_logic;
 
 
     for sel_inverter0, sel_inverter1: inverter use entity work.inverter(structural);
@@ -111,7 +112,9 @@ begin
         B      => and_out1,
         C      => and_out2,
         D      => and_out3,
-        output => F
+        output => outline
     );
+    
+    F <= outline;
 
 end architecture Structural;
