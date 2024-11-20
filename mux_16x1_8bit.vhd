@@ -3,231 +3,83 @@ use IEEE.STD_LOGIC_1164.all;
 
 entity mux_16x1_8bit is
     port (
-        read_data0  : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 0
-        read_data1  : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 1
-        read_data2  : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 2
-        read_data3  : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 3
-        read_data4  : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 4
-        read_data5  : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 5
-        read_data6  : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 6
-        read_data7  : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 7
-        read_data8  : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 8
-        read_data9  : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 9
-        read_data10 : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 10
-        read_data11 : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 11
-        read_data12 : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 12
-        read_data13 : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 13
-        read_data14 : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 14
-        read_data15 : in  STD_LOGIC_VECTOR(7 downto 0); -- 8-bit Input 15
-        sel         : in  STD_LOGIC_VECTOR(3 downto 0); -- 4-bit select signal
-        F           : out STD_LOGIC_VECTOR(7 downto 0)   -- 8-bit Output
+        inputs : in  STD_LOGIC_VECTOR(127 downto 0);  -- 16 inputs, each 8-bit wide
+        sel    : in  STD_LOGIC_VECTOR(15 downto 0);   -- 16-bit 1-hot select signal
+        sel_4bit: in std_logic_vector(3 downto 0);
+        output : out STD_LOGIC_VECTOR(7 downto 0)     -- 8-bit output
     );
 end entity mux_16x1_8bit;
 
 architecture Structural of mux_16x1_8bit is
-    -- Declare the mux_16x1 component for 1-bit selections
-    component mux_16x1 is
-        port (
-            read_data0  : in  STD_LOGIC; -- Input 0
-            read_data1  : in  STD_LOGIC; -- Input 1
-            read_data2  : in  STD_LOGIC; -- Input 2
-            read_data3  : in  STD_LOGIC; -- Input 3
-            read_data4  : in  STD_LOGIC; -- Input 4
-            read_data5  : in  STD_LOGIC; -- Input 5
-            read_data6  : in  STD_LOGIC; -- Input 6
-            read_data7  : in  STD_LOGIC; -- Input 7
-            read_data8  : in  STD_LOGIC; -- Input 8
-            read_data9  : in  STD_LOGIC; -- Input 9
-            read_data10 : in  STD_LOGIC; -- Input 10
-            read_data11 : in  STD_LOGIC; -- Input 11
-            read_data12 : in  STD_LOGIC; -- Input 12
-            read_data13 : in  STD_LOGIC; -- Input 13
-            read_data14 : in  STD_LOGIC; -- Input 14
-            read_data15 : in  STD_LOGIC; -- Input 15
-            sel         : in  STD_LOGIC_VECTOR(3 downto 0); -- 4-bit select signal
-            F           : out STD_LOGIC -- Output
+
+    -- Declare the 2x1 8-bit multiplexer component
+    component mux_16x1
+    port (
+        inputs : in  STD_LOGIC_VECTOR(15 downto 0);  -- 16-bit input vector
+        sel    : in  STD_LOGIC_VECTOR(3 downto 0);   -- 4-bit select signal
+        sel_one_hot: in std_logic_vector(15 downto 0);
+        output : out STD_LOGIC                        -- Output of the multiplexer
+    );
+    end component;
+
+    component concatenator_8bit
+        port(
+            in0 : in std_logic;  -- First 2-bit input
+            in1 : in std_logic;  -- Second 2-bit input
+            in2 : in std_logic;  -- First 2-bit input
+            in3 : in std_logic;  -- Second 2-bit input
+            in4 : in std_logic;  -- First 2-bit input
+            in5 : in std_logic;  -- Second 2-bit input
+            in6 : in std_logic;  -- First 2-bit input
+            in7 : in std_logic;  -- Second 2-bit input
+            in8 : in std_logic;  -- First 2-bit input
+            in9 : in std_logic;  -- Second 2-bit input
+            in10 : in std_logic;  -- First 2-bit input
+            in11 : in std_logic;  -- Second 2-bit input
+            in12 : in std_logic;  -- First 2-bit input
+            in13 : in std_logic;  -- Second 2-bit input
+            in14 : in std_logic;  -- First 2-bit input
+            in15 : in std_logic;  -- Second 2-bit input
+    
+            output  : out std_logic_vector(15 downto 0)  -- Concatenated 4-bit output
         );
     end component;
 
+    signal bits: std_logic_vector(127 downto 0);
 
 begin
 
-    -- Instantiate 8 1-bit muxes for each bit of the 8-bit wide output
-    mux_bit_0: mux_16x1
-    port map (
-        read_data0  => read_data0(0),
-        read_data1  => read_data1(0),
-        read_data2  => read_data2(0),
-        read_data3  => read_data3(0),
-        read_data4  => read_data4(0),
-        read_data5  => read_data5(0),
-        read_data6  => read_data6(0),
-        read_data7  => read_data7(0),
-        read_data8  => read_data8(0),
-        read_data9  => read_data9(0),
-        read_data10 => read_data10(0),
-        read_data11 => read_data11(0),
-        read_data12 => read_data12(0),
-        read_data13 => read_data13(0),
-        read_data14 => read_data14(0),
-        read_data15 => read_data15(0),
-        sel         => sel,
-        F           => F(0)
-    );
+   gen_1: for i in 0 to 7 generate
+   concat: entity work.concatenator_8bit
+   port map (
+    in0 => inputs(i),
+    in1 => inputs(i+8),
+    in2 => inputs(i+16),  -- First 2-bit input
+    in3 => inputs(i+24), -- Second 2-bit input
+    in4 => inputs(i+32),  -- First 2-bit input
+    in5 => inputs(i+40),  -- Second 2-bit input
+    in6 => inputs(i+48),  -- First 2-bit input
+    in7 => inputs(i+56),  -- Second 2-bit input
+    in8 => inputs(i+64),  -- First 2-bit input
+    in9 => inputs(i+72),  -- Second 2-bit input
+    in10 => inputs(i+80),  -- First 2-bit input
+    in11 => inputs(i+88),  -- Second 2-bit input
+    in12 => inputs(i+96),  -- First 2-bit input
+    in13 => inputs(i+104),  -- Second 2-bit input
+    in14 => inputs(i+112), -- First 2-bit input
+    in15 => inputs(i+120), -- Second 2-bit input
+    output => bits((16*(i+1)-1) downto (16*i))  -- Concatenated 4-bit output
+   );
+    end generate;
 
-    mux_bit_1: mux_16x1
-    port map (
-        read_data0  => read_data0(1),
-        read_data1  => read_data1(1),
-        read_data2  => read_data2(1),
-        read_data3  => read_data3(1),
-        read_data4  => read_data4(1),
-        read_data5  => read_data5(1),
-        read_data6  => read_data6(1),
-        read_data7  => read_data7(1),
-        read_data8  => read_data8(1),
-        read_data9  => read_data9(1),
-        read_data10 => read_data10(1),
-        read_data11 => read_data11(1),
-        read_data12 => read_data12(1),
-        read_data13 => read_data13(1),
-        read_data14 => read_data14(1),
-        read_data15 => read_data15(1),
-        sel         => sel,
-        F           => F(1)
+    gen_2: for i in 0 to 7 generate
+    select_out: entity work.mux_16x1
+    port map(
+        inputs => bits(127-(16*i) downto 127-(16*i)-15),
+        sel => sel_4bit,
+        sel_one_hot => sel,
+        output => output(7-i)
     );
-
-    mux_bit_2: mux_16x1
-    port map (
-        read_data0  => read_data0(2),
-        read_data1  => read_data1(2),
-        read_data2  => read_data2(2),
-        read_data3  => read_data3(2),
-        read_data4  => read_data4(2),
-        read_data5  => read_data5(2),
-        read_data6  => read_data6(2),
-        read_data7  => read_data7(2),
-        read_data8  => read_data8(2),
-        read_data9  => read_data9(2),
-        read_data10 => read_data10(2),
-        read_data11 => read_data11(2),
-        read_data12 => read_data12(2),
-        read_data13 => read_data13(2),
-        read_data14 => read_data14(2),
-        read_data15 => read_data15(2),
-        sel         => sel,
-        F           => F(2)
-    );
-
-    mux_bit_3: mux_16x1
-    port map (
-        read_data0  => read_data0(3),
-        read_data1  => read_data1(3),
-        read_data2  => read_data2(3),
-        read_data3  => read_data3(3),
-        read_data4  => read_data4(3),
-        read_data5  => read_data5(3),
-        read_data6  => read_data6(3),
-        read_data7  => read_data7(3),
-        read_data8  => read_data8(3),
-        read_data9  => read_data9(3),
-        read_data10 => read_data10(3),
-        read_data11 => read_data11(3),
-        read_data12 => read_data12(3),
-        read_data13 => read_data13(3),
-        read_data14 => read_data14(3),
-        read_data15 => read_data15(3),
-        sel         => sel,
-        F           => F(3)
-    );
-
-    mux_bit_4: mux_16x1
-    port map (
-        read_data0  => read_data0(4),
-        read_data1  => read_data1(4),
-        read_data2  => read_data2(4),
-        read_data3  => read_data3(4),
-        read_data4  => read_data4(4),
-        read_data5  => read_data5(4),
-        read_data6  => read_data6(4),
-        read_data7  => read_data7(4),
-        read_data8  => read_data8(4),
-        read_data9  => read_data9(4),
-        read_data10 => read_data10(4),
-        read_data11 => read_data11(4),
-        read_data12 => read_data12(4),
-        read_data13 => read_data13(4),
-        read_data14 => read_data14(4),
-        read_data15 => read_data15(4),
-        sel         => sel,
-        F           => F(4)
-    );
-
-    mux_bit_5: mux_16x1
-    port map (
-        read_data0  => read_data0(5),
-        read_data1  => read_data1(5),
-        read_data2  => read_data2(5),
-        read_data3  => read_data3(5),
-        read_data4  => read_data4(5),
-        read_data5  => read_data5(5),
-        read_data6  => read_data6(5),
-        read_data7  => read_data7(5),
-        read_data8  => read_data8(5),
-        read_data9  => read_data9(5),
-        read_data10 => read_data10(5),
-        read_data11 => read_data11(5),
-        read_data12 => read_data12(5),
-        read_data13 => read_data13(5),
-        read_data14 => read_data14(5),
-        read_data15 => read_data15(5),
-        sel         => sel,
-        F           => F(5)
-    );
-
-    mux_bit_6: mux_16x1
-    port map (
-        read_data0  => read_data0(6),
-        read_data1  => read_data1(6),
-        read_data2  => read_data2(6),
-        read_data3  => read_data3(6),
-        read_data4  => read_data4(6),
-        read_data5  => read_data5(6),
-        read_data6  => read_data6(6),
-        read_data7  => read_data7(6),
-        read_data8  => read_data8(6),
-        read_data9  => read_data9(6),
-        read_data10 => read_data10(6),
-        read_data11 => read_data11(6),
-        read_data12 => read_data12(6),
-        read_data13 => read_data13(6),
-        read_data14 => read_data14(6),
-        read_data15 => read_data15(6),
-        sel         => sel,
-        F           => F(6)
-    );
-
-    mux_bit_7: mux_16x1
-    port map (
-        read_data0  => read_data0(7),
-        read_data1  => read_data1(7),
-        read_data2  => read_data2(7),
-        read_data3  => read_data3(7),
-        read_data4  => read_data4(7),
-        read_data5  => read_data5(7),
-        read_data6  => read_data6(7),
-        read_data7  => read_data7(7),
-        read_data8  => read_data8(7),
-        read_data9  => read_data9(7),
-        read_data10 => read_data10(7),
-        read_data11 => read_data11(7),
-        read_data12 => read_data12(7),
-        read_data13 => read_data13(7),
-        read_data14 => read_data14(7),
-        read_data15 => read_data15(7),
-        sel         => sel,
-        F           => F(7)
-    );
-
+    end generate;
 
 end architecture Structural;

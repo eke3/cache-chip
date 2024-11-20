@@ -150,7 +150,6 @@ architecture structural of chip is
     -- intermediate signals
     signal not_clk : std_logic;
     signal write_data_to_valid : std_logic;
-    signal write_data_to_cache : std_logic_vector(7 downto 0);
     signal busy : std_logic;
     signal tag_block_write_data_latching_clock : std_logic; 
     signal latched_tag : std_logic_vector(1 downto 0);
@@ -185,13 +184,13 @@ begin
             output => write_data_to_valid -- this goes to the write_valid input of the timed_cache
         );
 
-    cache_write_data_mux : mux_2x1_8bit
-        port map (
-            A => cpu_data,
-            B => mem_data,
-            sel => , -- *** NEED A STATE MACHINE SIGNAL THAT TELLS THE CACHE WHETHER IT IS WRITING DATA FROM THE CPU OR THE MEMORY [0 for cpu, 1 for memory] ***
-            output => write_data_to_cache -- this goes to the write_data input of the timed_cache
-        );
+--    cache_write_data_mux : mux_2x1_8bit
+--        port map (
+--            A => cpu_data,
+--            B => mem_data,
+--            sel => , -- *** NEED A STATE MACHINE SIGNAL THAT TELLS THE CACHE WHETHER IT IS WRITING DATA FROM THE CPU OR THE MEMORY [0 for cpu, 1 for memory] ***
+--            output => write_data_to_cache -- this goes to the write_data input of the timed_cache
+--        );
     
     tag_register : dff_negedge_2bit
         port map (
@@ -219,7 +218,7 @@ begin
 
     cache_write_data_register : dff_negedge_8bit
         port map (
-            d => write_data_to_cache,
+            d => cpu_data, -- comes from cpu_data input from cpu
             clk => tag_block_write_data_latching_clock, -- this comes from state machine BUSY signal
             q => latched_cache_write_data, -- this goes to the write_cache input of the timed_cache
             qbar => open
@@ -252,8 +251,5 @@ begin
             q => cpu_data, -- this goes to the cpu_data output of the chip
             qbar => open
     );
-
-
-
 
 end architecture structural;

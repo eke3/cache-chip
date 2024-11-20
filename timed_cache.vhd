@@ -236,7 +236,9 @@ architecture Structural of timed_cache is
             -- Now connect everything to the cache array
     
             cache: component block_cache
-                port map (mem_data => mem_data, mem_addr => mem_addr, hit_miss => hit_miss_reg, R_W => RW_cache, byte_offset => byte_decoder_reg, block_offset => block_decoder_reg, cpu_data => data_reg, read_data => read_cache);
+                port map (mem_data => mem_data, 
+--                mem_addr => mem_addr,
+                 hit_miss => hit_miss_reg, R_W => RW_cache, byte_offset => byte_decoder_reg, block_offset => block_decoder_reg, cpu_data => data_reg, read_data => read_cache);
             
             -- register for read data
             

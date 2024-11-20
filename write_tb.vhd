@@ -121,7 +121,7 @@ architecture test of write_tb is
 
     component block_cache is
         port(   mem_data    : in std_logic_vector(7 downto 0);
-                mem_addr    : out std_logic_vector(5 downto 0);
+--                mem_addr    : out std_logic_vector(5 downto 0);
                 hit_miss    : in std_logic;
                 R_W         : in std_logic;
                 byte_offset : in std_logic_vector(3 downto 0);
@@ -248,7 +248,9 @@ architecture test of write_tb is
         -- Now connect everything to the cache array
 
         cache: component block_cache
-            port map (mem_data => mem_data, mem_addr => mem_addr, hit_miss => hit_miss_reg, R_W => RW_cache, byte_offset => byte_decoder_reg, block_offset => block_decoder_reg, cpu_data => data_reg2, read_data => read_cache);
+            port map (mem_data => mem_data,
+--             mem_addr => mem_addr,
+              hit_miss => hit_miss_reg, R_W => RW_cache, byte_offset => byte_decoder_reg, block_offset => block_decoder_reg, cpu_data => data_reg2, read_data => read_cache);
            
         -- register for read data
         
