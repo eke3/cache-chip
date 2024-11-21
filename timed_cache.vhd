@@ -21,6 +21,7 @@ entity timed_cache is
         valid_WE : in std_logic; -- from state machine
         tag_WE   : in std_logic; -- from state machine
         RW_cache      : in  std_logic; -- from state machine
+        --RW_busy       : in std_logic;
         decoder_enable: in  std_logic; -- from state machine
         mem_data      : in  std_logic_vector(7 downto 0); -- from memory
         mem_addr      : out std_logic_vector(5 downto 0); -- to memory
@@ -158,6 +159,14 @@ architecture Structural of timed_cache is
                 output : out STD_LOGIC
             );
         end component and_2x1;
+        
+        component or_2x1 is
+            port (
+                A : in  STD_LOGIC;
+                B : in  STD_LOGIC;
+                output : out STD_LOGIC
+            );
+        end component or_2x1;
 
         component inverter is
             port (
@@ -165,7 +174,23 @@ architecture Structural of timed_cache is
                 output : out STD_LOGIC
             );
         end component inverter;
-    
+        
+        component timed_cache_readmiss_counter is
+            port(
+            input: in std_logic;
+            clk: in std_logic;
+            output: out std_logic
+            );
+        end component;
+             
+        component mux_2x1
+            port (
+                A      : in  STD_LOGIC; -- Input 0
+                B      : in  STD_LOGIC; -- Input 1
+                sel    : in  STD_LOGIC; -- sel signal
+                output : out STD_LOGIC -- Output of the multiplexer
+            );
+        end component;
     
         -- Intermediate signals
         signal read_valid : std_logic;
@@ -177,6 +202,7 @@ architecture Structural of timed_cache is
         signal byte_decoder_reg, block_decoder_reg : std_logic_vector(3 downto 0);
         signal RW_valid : std_logic;
         signal RW_tag : std_logic;
+        signal miss_inv, read_miss, hit_miss_temp1, hit_miss_temp2, hit_miss_inv, miss, read_miss_inv: std_logic;
             
         begin
             rw_valid_inv : component inverter
@@ -216,10 +242,10 @@ architecture Structural of timed_cache is
                 port map ( d => block_decoder_out, clk => clk, q => block_decoder_reg, qbar => open );
     
             tag_vec: component tag_vector
-                port map ( write_data => tag, chip_enable => block_decoder_out, RW => RW_tag, sel => block_offset, read_data => read_tag );
+                port map ( write_data => tag, chip_enable => block_decoder_out, RW => RW_cache, sel => block_offset, read_data => read_tag );
     
             valid_vec: component valid_vector
-                port map ( vdd => vdd, gnd => gnd, write_data => write_valid, reset => reset, chip_enable => block_decoder_out, RW => RW_valid, sel => block_offset, read_data => read_valid );
+                port map ( vdd => vdd, gnd => gnd, write_data => write_valid, reset => reset, chip_enable => block_decoder_out, RW => RW_cache, sel => block_offset, read_data => read_valid );
     
             tag_cmp: component tag_comparator_2x1
                 port map ( A => tag, B => read_tag, output => cmp_tag );
@@ -232,8 +258,23 @@ architecture Structural of timed_cache is
             
             hit_miss_ff: component dff_posedge
                 port map ( d => hit_miss, clk => clk, q => hit_miss_reg, qbar => open );
-    
-            -- Now connect everything to the cache array
+
+            hit_miss_count: component timed_cache_readmiss_counter
+                port map(
+                    input => hit_miss,
+                    clk => clk,
+                    output => hit_miss_temp2
+                );
+                
+            --readmiss_mux: component mux_2x1
+            --    port map(
+            --        hit_miss_temp1,
+            --        hit_miss_temp2,
+            --        RW_cache,
+            --        hit_miss_reg
+             --   );
+                
+        -- Now connect everything to the cache array
     
             cache: component block_cache
                 port map (mem_data => mem_data, 

@@ -14,7 +14,7 @@ architecture behavior of tb_state_machine is
             reset_in: in std_logic;
             hit_miss: in std_logic;
             R_W: in std_logic;
-            cpu_addr: in std_logic_vector(7 downto 0);
+            cpu_addr: in std_logic_vector(5 downto 0);
             --mem_addr_ready: in std_logic;
             cache_RW: out std_logic;
             valid_WE: out std_logic;
@@ -33,7 +33,7 @@ architecture behavior of tb_state_machine is
     signal tb_start             : std_logic := '0';
     signal tb_hit_miss          : std_logic := '0';
     signal tb_R_W               : std_logic := '0';
-    signal tb_cpu_addr          : std_logic_vector(7 downto 0) := (others => '0');
+    signal tb_cpu_addr          : std_logic_vector(5 downto 0) := (others => '0');
     signal tb_mem_addr_ready    : std_logic := '0';
     signal tb_cache_RW          : std_logic;
     signal tb_valid_RW          : std_logic;
@@ -92,10 +92,19 @@ begin
         tb_mem_addr_ready <= '0';
         wait for 10 ns;
 
+         -- read miss
+        tb_start <= '1';
+        tb_R_W <= '1';
+        tb_hit_miss <= '0';
+        tb_cpu_addr <= "001100";
+        wait for 20 ns; tb_start <='0';
+        wait for 10 ns; tb_mem_addr_ready <= '1';
+        wait for 500 ns;
+
         -- Test Case 1: write hit
         tb_start <= '1';
         tb_R_W <= '0';
-        tb_cpu_addr <= "10101010";
+        tb_cpu_addr <= "101010";
         tb_hit_miss <= '1';
         wait for 20 ns; tb_start <='0';
         wait for 100 ns;
@@ -103,7 +112,7 @@ begin
         -- Test Case 2: read hit
         tb_start <= '1';
         tb_R_W <= '1';
-        tb_cpu_addr <= "10101010";
+        tb_cpu_addr <= "101010";
         wait for 20 ns; tb_start <='0';
         wait for 100 ns;
 
@@ -111,7 +120,7 @@ begin
         tb_start <= '1';
         tb_R_W <= '0';
         tb_hit_miss <= '0';
-        tb_cpu_addr <= "11001100";
+        tb_cpu_addr <= "001100";
         wait for 20 ns; tb_start <='0';
         wait for 100 ns;
 
@@ -120,7 +129,7 @@ begin
         tb_start <= '1';
         tb_R_W <= '0';
         tb_hit_miss <= '0';
-        tb_cpu_addr <= "11001100";
+        tb_cpu_addr <= "001100";
         wait for 20 ns; tb_start <='0';
         wait for 100 ns;
 
@@ -128,7 +137,7 @@ begin
         tb_start <= '1';
         tb_R_W <= '1';
         tb_hit_miss <= '0';
-        tb_cpu_addr <= "11001100";
+        tb_cpu_addr <= "001100";
         wait for 20 ns; tb_start <='0';
         wait for 10 ns; tb_mem_addr_ready <= '1';
         wait for 500 ns;

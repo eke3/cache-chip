@@ -173,6 +173,8 @@ begin
         R_W => R_W,
         enable_cache_write => cache_RW
     );
+    
+    
 
     gen_cell_5: for i in 0 to 3 generate
         block_cell_1: entity work.cache_cell_8bit

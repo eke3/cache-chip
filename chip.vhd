@@ -37,6 +37,7 @@ architecture structural of chip is
             cache_RW: out std_logic;
             valid_WE: out std_logic;
             tag_WE: out std_logic;
+            --busy_RW: out std_logic;
             decoder_enable: out std_logic;
             mem_addr_out_enable: out std_logic;
             mem_data_read_enable: out std_logic;
@@ -61,6 +62,7 @@ architecture structural of chip is
             valid_WE : in std_logic; -- from state machine valid_WE signal
             tag_WE   : in std_logic; -- from state machine tag_WE signal
             RW_cache      : in  std_logic; -- from state machine cache_RW signal
+            --RW_busy         : in std_logic;
             decoder_enable: in  std_logic; -- from state machine BUSY signal
             mem_data      : in  std_logic_vector(7 downto 0); -- from memory
             -- Outputs
@@ -188,7 +190,7 @@ architecture structural of chip is
     signal mem_byte_offset: std_logic_vector(1 downto 0);
 
     signal hit_miss_sig, valid_WE_sig, tag_WE_sig, mem_read_data_enable_sig, cache_RW_sig, decoder_en_sig: std_logic;
-
+    signal busy_RW_sig: std_logic;
 begin
     
     -- port mapping
@@ -302,6 +304,7 @@ begin
             tag           => latched_tag,
             valid_WE      => valid_WE_sig,
             tag_WE        => tag_WE_sig,
+            --RW_busy     => busy_RW_sig,
             RW_cache      => cache_RW_sig,
             decoder_enable=> decoder_en_sig,
             mem_data      => mem_data,
@@ -325,6 +328,7 @@ begin
             cache_RW        => cache_RW_sig,
             valid_WE        => valid_WE_sig,
             tag_WE          => tag_WE_sig,
+            --busy_RW => busy_RW_sig,
             decoder_enable  => decoder_en_sig,
             mem_addr_out_enable    => memory_output_enable,
             mem_data_read_enable   => mem_read_data_enable_sig,
@@ -332,6 +336,8 @@ begin
             busy            => busy_sig,
             output_enable   => read_data_output_enable
         );
+        
+    busy <= busy_sig;
        
 
 end architecture structural;

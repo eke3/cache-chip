@@ -27,6 +27,7 @@ entity state_machine is
         cache_RW: out std_logic;
         valid_WE: out std_logic;
         tag_WE: out std_logic;
+        --busy_RW: out std_logic;
         decoder_enable: out std_logic;
         mem_addr_out_enable: out std_logic;
         mem_data_read_enable: out std_logic;
@@ -138,7 +139,7 @@ architecture structural of state_machine is
             Q  : inout std_logic; -- Output Q
             Qn : inout std_logic  -- Complement of Q
         );
-    end component;
+    end component;  
 
     component shift_register_bit_7
         port(
@@ -172,7 +173,7 @@ architecture structural of state_machine is
     
     signal mem_addr_out_enable_sig, shift_7_enable: std_logic;
     
-    signal mem_addr_ready: std_logic;
+    signal mem_addr_ready, latch_hit_miss, decoder_enable_sig, output_enable_sig: std_logic;
     
 begin
     --and_1: and_2x1 port map(
@@ -180,7 +181,7 @@ begin
     --    not_clk,
     --    decoder_enable
     --);
-
+    
     mux_1: mux_2x1 port map(
         '0',
         R_W,
@@ -246,13 +247,19 @@ begin
     or_2x1_3: or_2x1 port map(
         output_enable_temp_2,
         output_enable_temp_3,
-        output_enable
+        output_enable_sig
     );
     
     sr_latch_2: sr_latch port map(
         read_miss,
         busy_sig_inv,
         mem_addr_ready
+    );
+    
+    sr_latch_3: sr_latch port map(
+        start,
+        reset,
+        decoder_enable_sig
     );
     
     --sr_latch_3: sr_latch port map(
@@ -372,6 +379,7 @@ begin
 
     busy <= busy_sig;
     decoder_enable <= busy_sig;
+    output_enable <= output_enable_sig;
     tag_WE <= mem_addr_ready;
     valid_WE <= mem_addr_ready;
     mem_addr_out_enable <= mem_addr_out_enable_sig;

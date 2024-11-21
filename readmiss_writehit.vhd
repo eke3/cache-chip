@@ -24,15 +24,6 @@ architecture structural of readmiss_writehit is
         );
     end component;
 
-    component inverter
-        port(
-            input  : in  STD_LOGIC;
-            output : out STD_LOGIC
-        );
-    end component;
-
-    for inv_1, inv_2: inverter use entity work.inverter(structural);
-
     for xnor_1: xnor_2x1 use entity work.xnor_2x1(structural);
     
     signal hit_miss_inv, out_inv: std_logic;
@@ -40,10 +31,6 @@ architecture structural of readmiss_writehit is
 begin
     --and_1: and_2x1 port map (enable_cache_write, R_W, check_read);
 
-    xnor_1: xnor_2x1 port map (hit_miss_inv, R_W, out_inv);
-
-    inv_1: inverter port map (hit_miss, hit_miss_inv);
-    
-    inv_2: inverter port map (out_inv, enable_cache_write);
+    xnor_1: xnor_2x1 port map (hit_miss, R_W, enable_cache_write);
 
 end structural;
