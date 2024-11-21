@@ -62,7 +62,7 @@ architecture structural of shift_register_bit_8 is
     signal count_1, count_2, count_3, count_4, count_5, count_6, count_7, output_sig: std_logic;
 
     signal addr_0, addr_1, addr_2, addr_3, input_sig: std_logic;
-    signal addr_0_t, addr_1_t, addr_2_t, count_2_inv, count_4_inv, count_6_inv: std_logic; 
+    signal addr_0_t, addr_1_t, addr_2_t, count_3_inv, count_5_inv, count_7_inv: std_logic; 
 
 begin
 
@@ -116,25 +116,25 @@ begin
     
     or_1: or_2x1 port map(
         count_1,
-        '0',
+        count_2,
         addr_0_t
     );
     
     or_2: or_2x1 port map(
-        count_2,
         count_3,
+        count_4,
         addr_1_t
     );
     
     or_3: or_2x1 port map(
-        count_4,
         count_5,
+        count_6,
         addr_2_t
     );
     
     or_4: or_2x1 port map(
-        count_6,
         count_7,
+        output_sig,
         addr_3
     );
     
@@ -146,35 +146,35 @@ begin
     
     and_2: and_2x1 port map(
         addr_0_t,
-        count_2_inv,
+        count_3_inv,
         addr_0
     );
     
     and_3: and_2x1 port map(
         addr_1_t,
-        count_4_inv,
+        count_5_inv,
         addr_1
     );
     
     and_4: and_2x1 port map(
         addr_2_t,
-        count_6_inv,
+        count_7_inv,
         addr_2
     );  
     
     inv_1: inverter port map(
-        count_2,
-        count_2_inv
+        count_3,
+        count_3_inv
     );
     
     inv_2: inverter port map(
-        count_4,
-        count_4_inv
+        count_5,
+        count_5_inv
     );  
     
     inv_3:inverter port map(
-        count_6,
-        count_6_inv
+        count_7,
+        count_7_inv
     );
         
     addr_en_encode(0) <= addr_0;

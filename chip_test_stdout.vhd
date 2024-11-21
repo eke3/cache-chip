@@ -103,7 +103,7 @@ begin
     clk_count <= clk_count + 1;
     wait for 10 ns;
     start <= '0';
-    wait for 75 ns;
+    wait for 85 ns;
     mem_data <= "11111010";
     wait for 20 ns;
     print_output;
