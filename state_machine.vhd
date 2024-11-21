@@ -173,7 +173,7 @@ architecture structural of state_machine is
     
     signal mem_addr_out_enable_sig, shift_7_enable: std_logic;
     
-    signal mem_addr_ready, latch_hit_miss, decoder_enable_sig, output_enable_sig: std_logic;
+    signal mem_addr_ready, latch_hit_miss, decoder_enable_sig, output_enable_sig, mem_data_read_enable_temp, mem_data_read_enable_sig, busy_inv: std_logic;
     
 begin
     --and_1: and_2x1 port map(
@@ -368,7 +368,18 @@ begin
     shift_reg_7: shift_register_bit_7 port map(
         shift_7_enable,
         clk,
-        mem_data_read_enable
+        mem_data_read_enable_temp
+    );
+    
+    sr_latch_4: sr_latch port map(
+        mem_data_read_enable_temp,
+        busy_inv,
+        mem_data_read_enable_sig
+    );
+    
+    inv_5: inverter port map(
+        busy_sig,
+        busy_inv
     );
 
     or_3: or_2x1 port map(
@@ -383,5 +394,6 @@ begin
     tag_WE <= mem_addr_ready;
     valid_WE <= mem_addr_ready;
     mem_addr_out_enable <= mem_addr_out_enable_sig;
+    mem_data_read_enable <= mem_data_read_enable_sig;
     
 end structural;
