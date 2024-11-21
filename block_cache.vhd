@@ -168,7 +168,7 @@ begin
                 );
     end generate gen_cell_4;
     
-    enable_cache_write: entity work.readmiss_writehit
+    enable_cache_write: component readmiss_writehit
         port map(
             hit_miss => hit_miss,
             R_W => R_W,
@@ -217,7 +217,7 @@ begin
             );
     end generate gen_cell_8;
 
-    demux: entity work.demux_1x16_8bit port map(
+    demux: component demux_1x16_8bit port map(
         out_data,
         comb_addr,
         demux_out(127 downto 120),
@@ -238,7 +238,7 @@ begin
         demux_out(7 downto 0)   
     );
 
-    data_input_selector_1: entity work.data_input_selector port map(
+    data_input_selector_1: component data_input_selector port map(
         cpu_data,
         mem_data,
         hit_miss,
@@ -246,24 +246,24 @@ begin
         out_data
     );
 
-    mux: entity work.mux_16x1_8bit port map(
+    mux: component mux_16x1_8bit port map(
         read_array, -- 16 inputs, each 8-bit wide
         CE,   -- 4-bit select signal
         comb_addr,
         read_data     -- 8-bit output
     );
 
-    convert_1: entity work.one_hot_to_binary port map(
+    convert_1: component one_hot_to_binary port map(
         block_offset,
         block_off_bin
     );
 
-    convert_2: entity work.one_hot_to_binary port map(
+    convert_2: component one_hot_to_binary port map(
         byte_offset,
         byte_off_bin
     );
 
-    concatenator_1: entity work.concatenator port map(
+    concatenator_1: component concatenator port map(
         block_off_bin,
         byte_off_bin,
         comb_addr
