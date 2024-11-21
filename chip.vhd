@@ -176,7 +176,7 @@ architecture structural of chip is
 
     -- intermediate signals
     signal not_clk : std_logic;
-    signal write_data_to_valid : std_logic;
+    -- signal write_data_to_valid : std_logic;
     signal busy_sig : std_logic;
     signal tag_block_write_data_latching_clock : std_logic; 
     signal latched_tag : std_logic_vector(1 downto 0);
@@ -206,13 +206,13 @@ begin
             output => tag_block_write_data_latching_clock -- this is the clock for latching data to the chip when state machineBUSY goes high
     );
     
-    valid_write_data_mux : mux_2x1 
-        port map (
-            A => vdd,
-            B => gnd,
-            sel => reset,
-            output => write_data_to_valid -- this goes to the write_valid input of the timed_cache
-        );
+    -- valid_write_data_mux : mux_2x1 
+    --     port map (
+    --         A => vdd,
+    --         B => gnd,
+    --         sel => reset,
+    --         output => write_data_to_valid -- this goes to the write_valid input of the timed_cache
+    --     );
 
 --    cache_write_data_mux : mux_2x1_8bit
 --        port map (
@@ -300,7 +300,7 @@ begin
             write_cache   => latched_cache_write_data,
             block_offset  => latched_block_offset,
             byte_offset   => latched_byte_offset,
-            write_valid   => write_data_to_valid,
+            write_valid   => vdd,
             tag           => latched_tag,
             valid_WE      => valid_WE_sig,
             tag_WE        => tag_WE_sig,
