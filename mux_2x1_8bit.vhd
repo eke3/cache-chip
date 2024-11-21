@@ -47,12 +47,7 @@ architecture Structural of mux_2x1_8bit is
     signal sel_not            : STD_LOGIC;
 
     -- Instantiate the components
-    for sel_inverter: inverter use entity work.inverter(structural);
-
-begin
-
-    -- Instantiate the inverter to generate sel_not signal
-    sel_inverter: component inverter
+    sel_inverter: entity work.inverter(structural)
     port map (
         input  => sel,
         output => sel_not
@@ -60,7 +55,7 @@ begin
 
     -- Instantiate the and_2x1 gates for each bit of the 8-bit input
     gen_and_gate0: for i in 0 to 7 generate
-        and_gate0: entity work.and_2x1
+        and_gate0: entity work.and_2x1(structural)
         port map (
             A      => A(i),
             B      => sel_not,
@@ -69,7 +64,7 @@ begin
     end generate gen_and_gate0;
 
     gen_and_gate1: for i in 0 to 7 generate
-        and_gate1: entity work.and_2x1
+        and_gate1: entity work.and_2x1(structural)
         port map (
             A      => B(i),
             B      => sel,
@@ -79,7 +74,7 @@ begin
 
     -- Instantiate the or_2x1 gate to combine the outputs of the and gates for each bit
     gen_or_gate: for i in 0 to 7 generate
-        or_gate: entity work.or_2x1
+        or_gate: entity work.or_2x1(structural)
         port map (
             A      => and_out0(i),
             B      => and_out1(i),
@@ -88,3 +83,4 @@ begin
     end generate gen_or_gate;
 
 end architecture Structural;
+

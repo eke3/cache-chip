@@ -29,7 +29,7 @@ architecture Structural of and_3x1 is
 
 begin
     -- Instantiate the first and_2x1 gate to AND inputs A and B
-    and_gate1: component and_2x1
+    and_gate1: entity work.and_2x1
     port map (
         A      => A,
         B      => B,
@@ -37,7 +37,7 @@ begin
     );
 
     -- Instantiate the second and_2x1 gate to AND intermediate with C
-    and_gate2: component and_2x1
+    and_gate2: entity work.and_2x1
     port map (
         A      => intermediate,
         B      => C,
@@ -45,3 +45,4 @@ begin
     );
 
 end architecture Structural;
+

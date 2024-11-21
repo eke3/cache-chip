@@ -21,42 +21,42 @@ architecture structural of dff_negedge_6bit is
                qbar: out std_logic);
     end component dff_negedge;
 begin
-    dff_negedge_0: dff_negedge
+    dff_negedge_0: entity work.dff_negedge(structural)
         port map (
             d => d(0),
             clk => clk,
             q => q(0),
             qbar => qbar(0)
         );
-    dff_negedge_1: dff_negedge
+    dff_negedge_1: entity work.dff_negedge(structural)
         port map (
             d => d(1),
             clk => clk,
             q => q(1),
             qbar => qbar(1)
         );
-    dff_negedge_2: dff_negedge
+    dff_negedge_2: entity work.dff_negedge(structural)
         port map (
             d => d(2),
             clk => clk,
             q => q(2),
             qbar => qbar(2)
         );
-    dff_negedge_3: dff_negedge
+    dff_negedge_3: entity work.dff_negedge(structural)
         port map (
             d => d(3),
             clk => clk,
             q => q(3),
             qbar => qbar(3)
         );
-    dff_negedge_4: dff_negedge
+    dff_negedge_4: entity work.dff_negedge(structural)
         port map (
             d => d(4),
             clk => clk,
             q => q(4),
             qbar => qbar(4)
         );
-    dff_negedge_5: dff_negedge
+    dff_negedge_5: entity work.dff_negedge(structural)
         port map (
             d => d(5),
             clk => clk,

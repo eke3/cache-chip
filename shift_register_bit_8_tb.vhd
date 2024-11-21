@@ -27,7 +27,7 @@ architecture test of tb_shift_register_bit_8 is
 
 begin
     -- Instantiate the Unit Under Test (UUT)
-    uut: shift_register_bit_8
+    uut: entity work.shift_register_bit_8(structural)
         port map(
             input          => input_sig,
             clk            => clk,
@@ -81,3 +81,4 @@ begin
     end process;
 
 end architecture test;
+

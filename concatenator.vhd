@@ -25,25 +25,25 @@ architecture structural of concatenator is
     
 begin
     -- Instantiate buffer components for each bit
-    buffer_bit_0 : buffer_1bit
+    buffer_bit_0 : entity work.buffer_1bit
         port map (
             in_bit  => input_a(0),
             out_bit => bit_0
         );
 
-    buffer_bit_1 : buffer_1bit
+    buffer_bit_1 : entity work.buffer_1bit
         port map (
             in_bit  => input_a(1),
             out_bit => bit_1
         );
 
-    buffer_bit_2 : buffer_1bit
+    buffer_bit_2 : entity work.buffer_1bit
         port map (
             in_bit  => input_b(0),
             out_bit => bit_2
         );
 
-    buffer_bit_3 : buffer_1bit
+    buffer_bit_3 : entity work.buffer_1bit
         port map (
             in_bit  => input_b(1),
             out_bit => bit_3

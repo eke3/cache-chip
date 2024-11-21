@@ -182,36 +182,36 @@ begin
     --    decoder_enable
     --);
     
-    mux_1: mux_2x1 port map(
+    mux_1: entity work.mux_2x1(structural) port map(
         '0',
         R_W,
         busy_sig,
         cache_RW
     );
 
-    and3_1: and_3x1 port map(
+    and3_1: entity work.and_3x1(structural) port map(
         valid_ready,
         hit_miss_inv,
         R_W,
         mem_addr_out_enable_sig
     );
 
-    inverter_1: inverter port map(
+    inverter_1: entity work.inverter(structural) port map(
         hit_miss,
         hit_miss_inv
     );
 
-    inverter_2: inverter port map(
+    inverter_2: entity work.inverter(structural) port map(
         clk,
         not_clk
     );
 
-    inverter_3: inverter port map(
+    inverter_3: entity work.inverter(structural) port map(
         R_W,
         RW_inv
     );
 
-    and4_2: and_4x1 port map(
+    and4_2: entity work.and_4x1(structural) port map(
         R_W,
         valid_ready,
         hit_miss,
@@ -219,56 +219,56 @@ begin
         temp_oe_1
     );
 
-    and3_2: and_3x1 port map(
+    and3_2: entity work.and_3x1(structural) port map(
         R_W,
         hit_miss_inv,
         read_miss_count,
         temp_oe_2
     );
 
-    or_1: or_2x1 port map(
+    or_1: entity work.or_2x1(structural) port map(
         temp_oe_1,
         temp_oe_2,
         output_enable_temp
     );
 
-    and_2: and_2x1 port map(
+    and_2: entity work.and_2x1(structural) port map(
         output_enable_temp,
         not_clk,
         output_enable_temp_2
     );
     
-    shift_reg_2_4: shift_register_bit_2 port map(
+    shift_reg_2_4: entity work.shift_register_bit_2(structural) port map(
         output_enable_temp_2,
         not_clk,
         output_enable_temp_3
     );
     
-    or_2x1_3: or_2x1 port map(
+    or_2x1_3: entity work.or_2x1(structural) port map(
         output_enable_temp_2,
         output_enable_temp_3,
         output_enable_sig
     );
     
-    sr_latch_2: sr_latch port map(
+    sr_latch_2: entity work.sr_latch(structural) port map(
         read_miss,
         busy_sig_inv,
         mem_addr_ready
     );
     
-    sr_latch_3: sr_latch port map(
+    sr_latch_3: entity work.sr_latch(structural) port map(
         start,
         reset,
         decoder_enable_sig
     );
     
-    --sr_latch_3: sr_latch port map(
+    --sr_latch_3: entity work.sr_latch(structural) port map(
     --    read_miss,
     --    busy_sig_inv,
     --    tag_WE_sig
     --);
 
-    and4_1: and_4x1 port map(
+    and4_1: entity work.and_4x1(structural) port map(
         hit_miss_inv,
         R_W,
         busy_sig,
@@ -276,25 +276,25 @@ begin
         read_miss
     );
 
-    and_5: and_2x1 port map(
+    and_5: entity work.and_2x1(structural) port map(
         start,
         not_clk,
         set_temp
     );
     
-    and_6: and_2x1 port map(
+    and_6: entity work.and_2x1(structural) port map(
         start, 
         clk,
         reset_criteria
     );
 
-  --  or_2: or_2x1 port map(
+  --  or_2: entity work.or_2x1(structural) port map(
   --      output_enable_temp,
   --      timers,
   --      reset
   --  );
 
-    or4_1: or_4x1 port map(
+    or4_1: entity work.or_4x1(structural) port map(
         reset_criteria,
         read_miss_count,
         read_hit_count,
@@ -302,70 +302,70 @@ begin
         reset
     );
 
-    --shift_reg_2_1: shift_register_bit_2 port map(
+    --shift_reg_2_1: entity work.shift_register_bit_2(structural) port map(
     --    read_hit_trigger,
     --    clk,
     --    read_hit_count
     --);
     
-    and_7: and_2x1 port map(
+    and_7: entity work.and_2x1(structural) port map(
         RW_inv,
         valid_ready,
         write_count_criteria
     );
     
-    shift_reg_2_0: shift_register_bit_2 port map(
+    shift_reg_2_0: entity work.shift_register_bit_2(structural) port map(
         write_count_criteria,
         clk,
         write_count -- will be U until propogated out (bcuz counter)
     );
 
-    shift_reg_19: shift_register_bit_19 port map(
+    shift_reg_19: entity work.shift_register_bit_19(structural) port map(
         read_miss_trigger,
         clk,        
         read_miss_count     -- omg also needs to be propogated out, so must wait hella
     );
 
-    and3_3: and_3x1 port map(
+    and3_3: entity work.and_3x1(structural) port map(
         valid_ready,
         hit_miss_inv,
         R_W,
         read_miss_trigger
     );
 
-    and3_4: and_3x1 port map(
+    and3_4: entity work.and_3x1(structural) port map(
         valid_ready,
         hit_miss,
         R_W,
         read_hit_count
     );
 
-    sr_latch_1: sr_latch port map(
+    sr_latch_1: entity work.sr_latch(structural) port map(
         set,
         reset,
         busy_sig,
         busy_sig_inv
     );
 
-    shift_reg_3_2: shift_register_bit_3 port map(
+    shift_reg_3_2: entity work.shift_register_bit_3(structural) port map(
         start,
         clk,
         valid_ready
     );
     
-    shift_reg_3_3: shift_register_bit_3 port map(
+    shift_reg_3_3: entity work.shift_register_bit_3(structural) port map(
         set_temp,
         not_clk,
         set_temp_2
     );
     
-    or_2x1_2: or_2x1 port map(
+    or_2x1_2: entity work.or_2x1(structural) port map(
         set_temp,
         set_temp_2,
         set
     );
 
-    shift_reg_7: shift_register_bit_7 port map(
+    shift_reg_7: entity work.shift_register_bit_7(structural) port map(
         shift_7_enable,
         clk,
         mem_data_read_enable_temp
@@ -382,7 +382,7 @@ begin
         busy_inv
     );
 
-    or_3: or_2x1 port map(
+    or_3: entity work.or_2x1(structural) port map(
        mem_addr_out_enable_sig,
        reset_in,
        shift_7_enable

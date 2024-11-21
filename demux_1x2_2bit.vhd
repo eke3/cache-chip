@@ -31,7 +31,7 @@ architecture Structural of demux_1x2_2bit is
 
 begin
     -- Instantiate demux_1x2 for each bit of data_in
-    demux_bit_0: component demux_1x2
+    demux_bit_0: entity work.demux_1x2
     port map (
         data_in    => data_in(0),       -- 1st bit of the 2-bit data_in
         sel        => sel,              -- 1-bit selector
@@ -39,7 +39,7 @@ begin
         data_out_2 => demux_out_1(0)    -- Output for selection "1"
     );
 
-    demux_bit_1: component demux_1x2
+    demux_bit_1: entity work.demux_1x2
     port map (
         data_in    => data_in(1),       -- 2nd bit of the 2-bit data_in
         sel        => sel,              -- 1-bit selector
@@ -52,3 +52,4 @@ begin
     data_out_2 <= demux_out_1;          -- Combine bit 0 and bit 1 for output 2
 
 end architecture Structural;
+

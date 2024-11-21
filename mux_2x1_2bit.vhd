@@ -29,7 +29,7 @@ architecture Structural of mux_2x1_2bit is
 begin
 
     -- Instantiate the first mux_2x1 for the lower bit
-    mux_2x1_inst0: mux_2x1
+    mux_2x1_inst0: entity work.mux_2x1(structural)
     port map (
         A      => A(0),
         B      => B(0),
@@ -38,7 +38,7 @@ begin
     );
 
     -- Instantiate the second mux_2x1 for the higher bit
-    mux_2x1_inst1: mux_2x1
+    mux_2x1_inst1: entity work.mux_2x1(structural)
     port map (
         A      => A(1),
         B      => B(1),
@@ -49,3 +49,4 @@ begin
     output <= out_wire;
 
 end architecture Structural;
+

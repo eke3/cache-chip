@@ -20,7 +20,7 @@ architecture Test of and_2x1_tb is
     signal output : std_logic;
 begin
     -- Instantiate the and_2x1 component
-    and_2x1_inst : and_2x1
+    and_2x1_inst : entity work.and_2x1
         port map (
             A      => A,
             B      => B,

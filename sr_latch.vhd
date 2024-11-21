@@ -28,7 +28,7 @@ architecture structural of sr_latch is
 begin
 
     -- First NOR gate for Q
-    nor1: nor_2x1
+    nor1: entity work.nor_2x1(structural)
         port map (
             A      => R,
             B      => Qn,
@@ -36,7 +36,7 @@ begin
         );
 
     -- Second NOR gate for Qn
-    nor2: nor_2x1
+    nor2: entity work.nor_2x1(structural)
         port map (
             A      => S,
             B      => Q,

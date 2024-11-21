@@ -38,12 +38,9 @@ architecture Structural of and_4x1 is
     -- Intermediate signals
     signal and_abc : STD_LOGIC; -- Intermediate signal for A, B, and C AND
 
-    for and3: and_3x1 use entity work.and_3x1(structural);
-    for and2: and_2x1 use entity work.and_2x1(structural);
-
 begin
     -- Instantiate the and_3x1 gate to AND A, B, and C
-    and3: component and_3x1
+    and3: entity work.and_3x1(structural)
     port map (
         A      => A,
         B      => B,
@@ -52,7 +49,7 @@ begin
     );
 
     -- Instantiate the and_2x1 gate to AND the result of A, B, and C with D
-    and2: component and_2x1
+    and2: entity work.and_2x1(structural)
     port map (
         A      => and_abc,
         B      => D,
@@ -60,3 +57,4 @@ begin
     );
 
 end architecture Structural;
+

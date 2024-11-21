@@ -60,14 +60,14 @@ architecture structural of shift_byte_mem_data is
     signal binary_byte_offset: std_logic_vector(1 downto 0);
 
 begin
-    shift_reg_8_1: shift_register_bit_8 port map(
+    shift_reg_8_1: entity work.shift_register_bit_8(structural) port map(
         go,
         clk,
         enable_out,
         encoded_byte_offset
     );
 
-    demux: demux_1x4_8bit port map(
+    demux: entity work.demux_1x4_8bit(structural) port map(
         mem_byte,
         binary_byte_offset,
         byte_00,
@@ -76,12 +76,12 @@ begin
         byte_11
     );
 
-    converter: one_hot_to_binary port map(
+    converter: entity work.one_hot_to_binary(structural) port map(
         encoded_byte_offset,
         binary_byte_offset
     );
     
-    or_1: or_2x1 port map(
+    or_1: entity work.or_2x1(structural) port map(
         enable,
         reset,
         go
@@ -90,3 +90,4 @@ begin
     byte_offset <= binary_byte_offset;
     
 end structural;
+

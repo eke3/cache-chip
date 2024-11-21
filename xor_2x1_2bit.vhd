@@ -21,6 +21,6 @@ architecture structural of xor_2x1_2bit is
         );
     end component xor_2x1;
 begin
-    xor0: xor_2x1 port map (A => A(0), B => B(0), output => output(0));
-    xor1: xor_2x1 port map (A => A(1), B => B(1), output => output(1));
+    xor0: entity work.xor_2x1(structural) port map (A => A(0), B => B(0), output => output(0));
+    xor1: entity work.xor_2x1(structural) port map (A => A(1), B => B(1), output => output(1));
 end structural;

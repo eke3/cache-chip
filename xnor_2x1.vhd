@@ -35,7 +35,7 @@ architecture structural of xnor_2x1 is
 begin
 
     -- Instantiate the XOR gate to calculate A xor B
-    xor_gate: xor_2x1
+    xor_gate: entity work.xor_2x1(structural)
         port map (
             A      => A,
             B      => B,
@@ -43,7 +43,7 @@ begin
         );
 
     -- Instantiate the NOT gate to invert the XOR result
-    not_gate: inverter
+    not_gate: entity work.inverter(structural)
         port map (
             input  => xor_out,
             output => output

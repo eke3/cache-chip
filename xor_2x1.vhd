@@ -47,20 +47,20 @@ architecture structural of xor_2x1 is
 begin
 
     -- Invert the inputs A and B
-    not_A_gate: inverter
+    not_A_gate: entity work.inverter(structural)
         port map (
             input  => A,
             output => not_A
         );
 
-    not_B_gate: inverter
+    not_B_gate: entity work.inverter(structural)
         port map (
             input  => B,
             output => not_B
         );
 
     -- First AND gate: A AND NOT B
-    and1_gate: and_2x1
+    and1_gate: entity work.and_2x1(structural)
         port map (
             A      => A,
             B      => not_B,
@@ -68,7 +68,7 @@ begin
         );
 
     -- Second AND gate: NOT A AND B
-    and2_gate: and_2x1
+    and2_gate: entity work.and_2x1(structural)
         port map (
             A      => not_A,
             B      => B,
@@ -76,7 +76,7 @@ begin
         );
 
     -- OR gate: (A AND NOT B) OR (NOT A AND B)
-    or_gate: or_2x1
+    or_gate: entity work.or_2x1(structural)
         port map (
             A      => and1_out,
             B      => and2_out,
@@ -84,3 +84,4 @@ begin
         );
 
 end architecture structural;
+

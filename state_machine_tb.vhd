@@ -51,7 +51,7 @@ architecture behavior of tb_state_machine is
 begin
 
     -- Instantiate the state_machine
-    uut: state_machine port map (
+    uut: entity work.state_machine(Structural) port map (
             clk => tb_clk,
             start => tb_start,
             reset_in => tb_reset_in,
@@ -149,3 +149,4 @@ begin
     end process stimulus_process;
 
 end architecture behavior;
+

@@ -19,7 +19,7 @@ architecture structural of dff_negedge_4bit is
     end component dff_negedge;
 
 begin
-    bit0: component dff_negedge
+    bit0: entity work.dff_negedge(structural)
         port map (
             d   => d(0),
             clk => clk,
@@ -27,7 +27,7 @@ begin
             qbar=> qbar(0)
         );
 
-    bit1: component dff_negedge
+    bit1: entity work.dff_negedge(structural)
         port map (
             d   => d(1),
             clk => clk,
@@ -35,7 +35,7 @@ begin
             qbar=> qbar(1)
         );
 
-    bit2: component dff_negedge
+    bit2: entity work.dff_negedge(structural)
         port map (
             d   => d(2),
             clk => clk,
@@ -43,7 +43,7 @@ begin
             qbar=> qbar(2)
         );
 
-    bit3: component dff_negedge
+    bit3: entity work.dff_negedge(structural)
         port map (
             d   => d(3),
             clk => clk,
@@ -52,3 +52,4 @@ begin
         );
 
 end architecture structural;
+

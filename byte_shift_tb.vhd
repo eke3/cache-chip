@@ -70,11 +70,11 @@ architecture Test of byte_shift_tb is
     signal new_byte : std_logic_vector(1 downto 0);
 
     begin
-        clk_inverter : inverter port map(input => clk, output => not_clk);
-        nand_inst: nand_2x1 port map(A => not_clk, B => shifter_enable, output => nand_out);
-        data_select : mux_2x1 port map(A => low_wire, B => high_wire, sel => load_shifter, output => mux_out);
-        shifter : shift_register_4bit port map(d => mux_out, clk => nand_out, reset => reset, q => shifter_out);
-        mux : mux_4x1_one_hot_2bit port map(A => byte1, B => byte2, C => byte3, D => byte4, sel => shifter_out, F => new_byte);
+        clk_inverter : entity work.inverter port map(input => clk, output => not_clk);
+        nand_inst: entity work.nand_2x1 port map(A => not_clk, B => shifter_enable, output => nand_out);
+        data_select : entity work.mux_2x1 port map(A => low_wire, B => high_wire, sel => load_shifter, output => mux_out);
+        shifter : entity work.shift_register_4bit port map(d => mux_out, clk => nand_out, reset => reset, q => shifter_out);
+        mux : entity work.mux_4x1_one_hot_2bit port map(A => byte1, B => byte2, C => byte3, D => byte4, sel => shifter_out, F => new_byte);
 
         process
         begin

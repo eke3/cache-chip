@@ -36,7 +36,7 @@ architecture test of tb_shift_byte_mem_data is
 
 begin
     -- Instantiate the Unit Under Test (UUT)
-    uut: shift_byte_mem_data
+    uut: entity work.shift_byte_mem_data(structural)
         port map(
             enable   => enable,
             mem_byte => mem_byte,

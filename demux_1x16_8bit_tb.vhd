@@ -53,7 +53,7 @@ architecture behavior of demux_1x16_8bit_tb is
 
 begin
     -- Instantiate the Unit Under Test (UUT)
-    uut: demux_1x16_8bit
+    uut: entity work.demux_1x16_8bit(structural)
         port map (
             data_in     => data_in,
             sel         => sel,
@@ -147,3 +147,4 @@ begin
     end process stimulus_process;
 
 end architecture behavior;
+

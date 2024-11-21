@@ -27,7 +27,7 @@ architecture behavior of data_input_selector_tb is
 begin
 
     -- Instantiate the Unit Under Test (UUT)
-    uut: data_input_selector
+    uut: entity work.data_input_selector
         port map(
             cpu_data => cpu_data,
             mem_data => mem_data,
@@ -77,3 +77,4 @@ begin
     end process;
 
 end architecture behavior;
+

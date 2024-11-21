@@ -26,7 +26,7 @@ begin
     -- Convert one-hot input to binary output
 
     -- Binary bit 1 (MSB): '1' if one_hot(2) or one_hot(3) is active
-    or_gate_msb: or_2x1
+    or_gate_msb: entity work.or_2x1(structural)
         port map (
             A      => one_hot(2),
             B      => one_hot(3),
@@ -34,7 +34,7 @@ begin
         );
 
     -- Binary bit 0 (LSB): '1' if one_hot(1) or one_hot(3) is active
-    or_gate_lsb: or_2x1
+    or_gate_lsb: entity work.or_2x1(structural)
         port map (
             A      => one_hot(1),
             B      => one_hot(3),
@@ -42,3 +42,4 @@ begin
         );
 
 end architecture structural;
+

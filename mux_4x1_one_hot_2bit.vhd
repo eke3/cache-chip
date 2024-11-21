@@ -30,7 +30,7 @@ architecture structural of mux_4x1_one_hot_2bit is
     signal result : std_logic_vector(1 downto 0);
 
 begin
-    mux_4x1_one_hot_inst: mux_4x1_one_hot
+    mux_4x1_one_hot_inst: entity work.mux_4x1_one_hot(structural)
         port map (
             A => A(0),
             B => B(0),
@@ -40,7 +40,7 @@ begin
             F => result(0)
         );
 
-    mux_4x1_one_hot_inst2: mux_4x1_one_hot
+    mux_4x1_one_hot_inst2: entity work.mux_4x1_one_hot(structural)
         port map (
             A => A(1),
             B => B(1),

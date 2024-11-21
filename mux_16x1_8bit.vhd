@@ -50,7 +50,7 @@ architecture Structural of mux_16x1_8bit is
 begin
 
    gen_1: for i in 0 to 7 generate
-   concat: entity work.concatenator_8bit
+   concat: entity work.concatenator_8bit(structural)
    port map (
     in0 => inputs(i),
     in1 => inputs(i+8),
@@ -73,7 +73,7 @@ begin
     end generate;
 
     gen_2: for i in 0 to 7 generate
-    select_out: entity work.mux_16x1
+    select_out: entity work.mux_16x1(structural)
     port map(
         inputs => bits(127-(16*i) downto 127-(16*i)-15),
         sel => sel_4bit,
@@ -83,3 +83,4 @@ begin
     end generate;
 
 end architecture Structural;
+

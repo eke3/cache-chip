@@ -29,43 +29,43 @@ architecture structural of shift_register_bit_7 is
     
 begin
 
-    dff_1: dff port map(
+    dff_1: entity work.dff(structural) port map(
         input,
         clk,
         count_1
     );
 
-    dff_2: dff port map(
+    dff_2: entity work.dff(structural) port map(
         count_1,
         clk,
         count_2
     );
 
-    dff_3: dff port map(
+    dff_3: entity work.dff(structural) port map(
         count_2,
         clk,
         count_3
     );
 
-    dff_4: dff port map(
+    dff_4: entity work.dff(structural) port map(
         count_3,
         clk,
         count_4
     );
 
-    dff_5: dff port map(
+    dff_5: entity work.dff(structural) port map(
         count_4,
         clk,
         count_5
     );
 
-    dff_6: dff port map(
+    dff_6: entity work.dff(structural) port map(
         count_5,
         clk,
         count_6
     );
 
-    dff_7: dff port map(
+    dff_7: entity work.dff(structural) port map(
         count_6,
         clk,
         output

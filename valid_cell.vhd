@@ -44,7 +44,7 @@ architecture Structural of valid_cell is
 begin
 
     -- Instantiate mux for write_data (pass 0 if reset = 1, otherwise pass write_data)
-    mux_write_data: component mux_2x1
+    mux_write_data: entity work.mux_2x1(structural)
     port map (
         A           => write_data,                 -- When reset = 0, pass write_data
         B           => gnd,                   -- When reset = 1, pass 0
@@ -53,7 +53,7 @@ begin
     );
 
     -- Instantiate mux for chip_enable (pass 1 if reset = 1, otherwise pass chip_enable)
-    mux_chip_enable: component mux_2x1
+    mux_chip_enable: entity work.mux_2x1(structural)
     port map (
         A           => chip_enable,                -- When reset = 0, pass chip_enable
         B           => vdd,                  -- When reset = 1, pass 1
@@ -62,7 +62,7 @@ begin
     );
 
     -- Instantiate mux for RW (pass 0 if reset = 1, otherwise pass RW)
-    mux_rw: component mux_2x1
+    mux_rw: entity work.mux_2x1(structural)
     port map (
         A           => RW,                         -- When reset = 0, pass RW
         B           => gnd,                   -- When reset = 1, pass 0
@@ -71,7 +71,7 @@ begin
     );
 
     -- Instantiate the cache_cell component
-    cache_cell_inst: component cache_cell
+    cache_cell_inst: entity work.cache_cell(structural)
     port map (
         write_data  => mux_write_data_out,         -- Connected to mux output
         chip_enable => mux_chip_enable_out,        -- Connected to mux output
@@ -82,3 +82,4 @@ begin
     read_data <= outline;
 
 end architecture Structural;
+

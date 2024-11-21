@@ -35,59 +35,59 @@ architecture Structural of decoder_2x4 is
 begin
 
     -- Instantiate components
-    NOT1: component inverter
+    NOT1: entity work.inverter
     port map (
         input  => A(1),
         output => not_A1
     );
-    NOT0: component inverter
+    NOT0: entity work.inverter
     port map (
         input  => A(0),
         output => not_A0
     );
-    AND1: component and_2x1
+    AND1: entity work.and_2x1
     port map (
         A      => A(1),
         B      => A(0),
         output => g
     );
-    AND2: component and_2x1
+    AND2: entity work.and_2x1
     port map (
         A      => A(1),
         B      => not_A0,
         output => h
     );
-    AND3: component and_2x1
+    AND3: entity work.and_2x1
     port map (
         A      => not_A1,
         B      => A(0),
         output => i
     );
-    AND4: component and_2x1
+    AND4: entity work.and_2x1
     port map (
         A      => not_A1,
         B      => not_A0,
         output => j
     );
-    AND5: component and_2x1
+    AND5: entity work.and_2x1
     port map (
         A      => g,
         B      => E,
         output => Y(3)
     );
-    AND6: component and_2x1
+    AND6: entity work.and_2x1
     port map (
         A      => h,
         B      => E,
         output => Y(2)
     );
-    AND7: component and_2x1
+    AND7: entity work.and_2x1
     port map (
         A      => i,
         B      => E,
         output => Y(1)
     );
-    AND8: component and_2x1
+    AND8: entity work.and_2x1
     port map (
         A      => j,
         B      => E,
@@ -95,3 +95,4 @@ begin
     );
 
 end architecture Structural;
+

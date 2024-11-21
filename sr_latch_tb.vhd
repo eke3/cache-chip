@@ -23,7 +23,7 @@ architecture behavior of tb_sr_latch is
 
 begin
     -- Instantiate the sr_latch
-    uut: sr_latch
+    uut: entity work.sr_latch(structural)
         port map (
             S  => tb_S,
             R  => tb_R,
@@ -65,3 +65,4 @@ begin
     end process stimulus_process;
 
 end architecture behavior;
+

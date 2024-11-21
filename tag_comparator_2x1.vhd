@@ -36,7 +36,7 @@ architecture Structural of tag_comparator_2x1 is
 
 begin
     -- Compare the most significant bit (A(1) and B(1))
-    U1: component valid_comparator_2x1
+    U1: entity work.valid_comparator_2x1(structural)
     port map (
         A      => A(1),
         B      => B(1),
@@ -44,7 +44,7 @@ begin
     );
 
     -- Compare the least significant bit (A(0) and B(0))
-    U2: component valid_comparator_2x1
+    U2: entity work.valid_comparator_2x1(structural)
     port map (
         A      => A(0),
         B      => B(0),
@@ -52,7 +52,7 @@ begin
     );
 
     -- AND the results to check if both bits are equal
-    U3: component and_2x1
+    U3: entity work.and_2x1(structural)
     port map (
         A      => bit1_equal,
         B      => bit0_equal,
@@ -60,3 +60,4 @@ begin
     );
 
 end architecture Structural;
+

@@ -46,28 +46,28 @@ architecture structural of shift_register_4bit is
 
 begin
 
-    mux1 : component mux_2x1
+    mux1 : entity work.mux_2x1(structural)
         port map (
             A      => low_wire,
             B      => d,
             sel    => not_reset,
             output => ff1_mux_in
         );
-    mux2 : component mux_2x1
+    mux2 : entity work.mux_2x1(structural)
         port map (
             A      => low_wire,
             B      => ff1_out,
             sel    => not_reset,
             output => ff2_mux_in
         );
-    mux3 : component mux_2x1
+    mux3 : entity work.mux_2x1(structural)
         port map (
             A      => low_wire,
             B      => ff2_out,
             sel    => not_reset,
             output => ff3_mux_in
         );
-    mux4 : component mux_2x1
+    mux4 : entity work.mux_2x1(structural)
         port map (
             A      => low_wire,
             B      => ff3_out,
@@ -75,34 +75,34 @@ begin
             output => ff4_mux_in
         );
     
-    reset_inverter : component inverter
+    reset_inverter : entity work.inverter(structural)
         port map (
             input  => reset,
             output => not_reset
         );
 
-    ff1: component dff_negedge
+    ff1: entity work.dff_negedge(structural)
         port map (
             d    => ff1_mux_in,
             clk  => clk,
             q    => ff1_out,
             qbar => open
         );
-    ff2: component dff_negedge
+    ff2: entity work.dff_negedge(structural)
         port map (
             d    => ff2_mux_in,
             clk  => clk,
             q    => ff2_out,
             qbar => open
         );
-    ff3: component dff_negedge
+    ff3: entity work.dff_negedge(structural)
         port map (
             d    => ff3_mux_in,
             clk  => clk,
             q    => ff3_out,
             qbar => open
         );
-    ff4: component dff_negedge
+    ff4: entity work.dff_negedge(structural)
         port map (
             d    => ff4_mux_in,
             clk  => clk,

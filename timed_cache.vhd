@@ -205,68 +205,68 @@ architecture Structural of timed_cache is
         signal miss_inv, read_miss, hit_miss_temp1, hit_miss_temp2, hit_miss_inv, miss, read_miss_inv: std_logic;
             
         begin
-            rw_valid_inv : component inverter
+            rw_valid_inv : entity work.inverter(structural)
                 port map ( input => valid_WE, output => RW_valid );
     
-            rw_tag_inv : component inverter
+            rw_tag_inv : entity work.inverter(structural)
                 port map ( input => tag_WE, output => RW_tag );
 
-            data_ff: component dff_negedge_8bit
+            data_ff: entity work.dff_negedge_8bit(structural)
                 port map ( d => write_cache, clk => clk, q => data_reg, qbar => open );
     
-            -- byte_ff: component dff_negedge_2bit
+            -- byte_ff: entity work.dff_negedge_2bit(structural)
             --     port map ( d => byte_offset, clk => clk, q => byte_reg1, qbar => open );
     
-            -- block_ff: component dff_negedge_2bit
+            -- block_ff: entity work.dff_negedge_2bit(structural)
             --     port map ( d => block_offset, clk => clk, q => block_reg1, qbar => open );
     
-            -- tag_ff: component dff_negedge_2bit
+            -- tag_ff: entity work.dff_negedge_2bit(structural)
             --     port map ( d => tag, clk => clk, q => tag_reg, qbar => open );
     
-            -- valid_ff: component dff_negedge
+            -- valid_ff: entity work.dff_negedge(structural)
             --     port map ( d => write_valid, clk => clk, q => valid_reg, qbar => open );
     
-            -- data_ff2: component dff_posedge_8bit
+            -- data_ff2: entity work.dff_posedge_8bit(structural)
             --     port map ( d => data_reg1, clk => clk, q => data_reg2, qbar => open );
     
-            block_decoder: component decoder_2x4
+            block_decoder: entity work.decoder_2x4(structural)
                 port map ( A => block_offset, E => decoder_enable, Y => block_decoder_out );
     
-            byte_decoder: component decoder_2x4
+            byte_decoder: entity work.decoder_2x4(structural)
                 port map ( A => byte_offset, E => decoder_enable, Y => byte_decoder_out );
             
-            byte_decoder_ff: component dff_posedge_4bit
+            byte_decoder_ff: entity work.dff_posedge_4bit(structural)
                 port map ( d => byte_decoder_out, clk => clk, q => byte_decoder_reg, qbar => open );
     
-            block_decoder_ff: component dff_posedge_4bit
+            block_decoder_ff: entity work.dff_posedge_4bit(structural)
                 port map ( d => block_decoder_out, clk => clk, q => block_decoder_reg, qbar => open );
     
-            tag_vec: component tag_vector
+            tag_vec: entity work.tag_vector(structural)
                 port map ( write_data => tag, chip_enable => block_decoder_out, RW => RW_cache, sel => block_offset, read_data => read_tag );
     
-            valid_vec: component valid_vector
+            valid_vec: entity work.valid_vector(structural)
                 port map ( vdd => vdd, gnd => gnd, write_data => write_valid, reset => reset, chip_enable => block_decoder_out, RW => RW_cache, sel => block_offset, read_data => read_valid );
     
-            tag_cmp: component tag_comparator_2x1
+            tag_cmp: entity work.tag_comparator_2x1(structural)
                 port map ( A => tag, B => read_tag, output => cmp_tag );
     
-            valid_cmp: component valid_comparator_2x1
+            valid_cmp: entity work.valid_comparator_2x1(structural)
                 port map ( A => vdd, B => read_valid, output => cmp_valid );
     
-            hit_miss_cmp: component and_2x1
+            hit_miss_cmp: entity work.and_2x1(structural)
                 port map ( A => cmp_tag, B => cmp_valid, output => hit_miss );
             
-            hit_miss_ff: component dff_posedge
+            hit_miss_ff: entity work.dff_posedge(structural)
                 port map ( d => hit_miss, clk => clk, q => hit_miss_reg, qbar => open );
 
-            hit_miss_count: component timed_cache_readmiss_counter
+            hit_miss_count: entity work.timed_cache_readmiss_counter(structural)
                 port map(
                     input => hit_miss,
                     clk => clk,
                     output => hit_miss_temp2
                 );
                 
-            --readmiss_mux: component mux_2x1
+            --readmiss_mux: entity work.mux_2x1(structural)
             --    port map(
             --        hit_miss_temp1,
             --        hit_miss_temp2,
@@ -276,11 +276,10 @@ architecture Structural of timed_cache is
                 
         -- Now connect everything to the cache array
     
-            cache: component block_cache
+            cache: entity work.block_cache(structural)
                 port map (mem_data => mem_data, 
 --                mem_addr => mem_addr,
                  hit_miss => hit_miss_reg, R_W => RW_cache, byte_offset => byte_decoder_reg, block_offset => block_decoder_reg, cpu_data => data_reg, read_data => read_cache);
-            
             -- register for read data
             
             -- read_cache_ff: component dff_negedge_8bit 

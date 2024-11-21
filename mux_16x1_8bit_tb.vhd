@@ -35,7 +35,7 @@ architecture Test of mux_16x1_8bit_tb is
     signal F : STD_LOGIC_VECTOR(7 downto 0);
 begin
 
-    mux: mux_16x1_8bit
+    mux: entity work.mux_16x1_8bit(structural)
      port map(
         read_data0 => data0,
         read_data1 => data1,
@@ -98,3 +98,4 @@ begin
         wait;
     end process;
 end architecture Test;
+

@@ -25,7 +25,7 @@ architecture behavior of tb_shift_register_bit is
     
 begin
     -- Instantiate the shift_register_bit
-    uut: shift_register_bit_2
+    uut: entity work.shift_register_bit_2(structural)
         port map (
             input  => tb_input,
             clk    => tb_clk,
@@ -61,3 +61,4 @@ begin
 
     end process stimulus_process;
 end architecture behavior;
+
