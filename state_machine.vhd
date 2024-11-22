@@ -177,20 +177,10 @@ architecture structural of state_machine is
     
     signal mem_addr_ready, latch_hit_miss, decoder_enable_sig, output_enable_sig, mem_data_read_enable_temp, mem_data_read_enable_sig, busy_inv: std_logic;
     
-begin
-    --and_1: and_2x1 port map(
-    --    start,
-    --    not_clk,
-    --    decoder_enable
-    --);
+    signal read_miss_cache_read: std_logic;
     
-    --mux_1: entity work.mux_2x1(structural) port map(
-    --    '0',
-    --    R_W,
-    --    busy_sig,
-     --   cache_RW
-    --);
-
+begin
+    
     cache_RW <= R_W;
 
     and3_1: entity work.and_3x1(structural) port map(

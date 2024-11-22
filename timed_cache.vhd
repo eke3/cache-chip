@@ -20,6 +20,7 @@ entity timed_cache is
 --        RW_tag        : in  std_logic; -- from state machine
         valid_WE : in std_logic; -- from state machine
         tag_WE   : in std_logic; -- from state machine
+        output_enable: in std_logic;
         RW_cache      : in  std_logic; -- from state machine
         --RW_busy       : in std_logic;
         decoder_enable: in  std_logic; -- from state machine
@@ -202,7 +203,7 @@ architecture Structural of timed_cache is
         signal byte_decoder_reg, block_decoder_reg : std_logic_vector(3 downto 0);
         signal RW_valid : std_logic;
         signal RW_tag : std_logic;
-        signal miss_inv, read_miss, hit_miss_temp1, hit_miss_temp2, hit_miss_inv, miss, read_miss_inv: std_logic;
+        signal miss_inv, read_miss, hit_miss_temp1, hit_miss_temp2, hit_miss_inv, miss, read_miss_inv, hit_miss_sig: std_logic;
             
         begin
             rw_valid_inv : entity work.inverter(structural)
@@ -257,7 +258,7 @@ architecture Structural of timed_cache is
                 port map ( A => cmp_tag, B => cmp_valid, output => hit_miss );
             
             hit_miss_ff: entity work.dff_posedge(structural)
-                port map ( d => hit_miss, clk => clk, q => hit_miss_reg, qbar => open );
+                port map ( d => hit_miss_sig, clk => clk, q => hit_miss_reg, qbar => open );
 
             hit_miss_count: entity work.timed_cache_readmiss_counter(structural)
                 port map(
@@ -265,6 +266,13 @@ architecture Structural of timed_cache is
                     clk => clk,
                     output => hit_miss_temp2
                 );
+                
+            mux_1: mux_2x1 port map(
+                hit_miss,
+                '1',
+                output_enable,
+                hit_miss_sig  
+            );
                 
             --readmiss_mux: entity work.mux_2x1(structural)
             --    port map(

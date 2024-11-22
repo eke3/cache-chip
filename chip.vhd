@@ -62,6 +62,7 @@ architecture structural of chip is
             valid_WE : in std_logic; -- from state machine valid_WE signal
             tag_WE   : in std_logic; -- from state machine tag_WE signal
             RW_cache      : in  std_logic; -- from state machine cache_RW signal
+            output_enable: in std_logic;
             --RW_busy         : in std_logic;
             decoder_enable: in  std_logic; -- from state machine BUSY signal
             mem_data      : in  std_logic_vector(7 downto 0); -- from memory
@@ -322,6 +323,7 @@ begin
             tag_WE        => tag_WE_sig,
             --RW_busy     => busy_RW_sig,
             RW_cache      => cache_RW_sig,
+            output_enable => read_data_output_enable,
             decoder_enable=> decoder_en_sig,
             mem_data      => mem_data,
             -- Outputs
@@ -373,7 +375,7 @@ begin
         cpu_rd_wrn_sig
     );
     busy <= busy_sig;
-    latched_cache_write_data <= cpu_data;
+    --latched_cache_write_data <= cpu_data;
        
 
 end architecture structural;

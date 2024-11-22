@@ -26,11 +26,12 @@ architecture structural of readmiss_writehit is
 
     for xnor_1: xnor_2x1 use entity work.xnor_2x1(structural);
     
-    signal hit_miss_inv, out_inv: std_logic;
+    signal hit_miss_inv, out_inv, temp: std_logic;
 
 begin
     --and_1: and_2x1 port map (enable_cache_write, R_W, check_read);
 
-    xnor_1: xnor_2x1 port map (hit_miss, R_W, enable_cache_write);
+    xnor_1: xnor_2x1 port map (hit_miss, R_W, temp);
+    
 
 end structural;

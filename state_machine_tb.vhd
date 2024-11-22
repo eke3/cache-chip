@@ -90,7 +90,7 @@ begin
         tb_R_W <= '0';
         tb_cpu_addr <= (others => '0');
         tb_mem_addr_ready <= '0';
-        wait for 10 ns;
+        wait for 20 ns;
 
          -- read miss
         tb_start <= '1';

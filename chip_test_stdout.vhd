@@ -26,7 +26,7 @@ architecture test of chip_test is
     );
   end component;
 
-  --for c1 : chip use entity work.chip(structural);
+  for c1 : chip use entity work.chip(structural);
 
   signal Vdd, Gnd: std_logic := '1';
   signal cpu_data, mem_data: std_logic_vector(7 downto 0) := (others => 'Z');
@@ -76,7 +76,7 @@ begin
   Vdd <= '1';
   Gnd <= '0';
   clk <= clock;
-  --c1 : chip port map (cpu_add, cpu_data, cpu_rd_wrn, start, clk, reset, mem_data, Vdd, Gnd, busy, mem_en, mem_add);
+  c1 : chip port map (cpu_add, cpu_data, cpu_rd_wrn, start, clk, reset, mem_data, Vdd, Gnd, busy, mem_en, mem_add);
 
   -- Clock Generation
   clking: process
