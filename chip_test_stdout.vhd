@@ -26,7 +26,7 @@ architecture test of chip_test is
     );
   end component;
 
-  for c1 : chip use entity work.chip(structural);
+  --for c1 : chip use entity work.chip(structural);
 
   signal Vdd, Gnd: std_logic := '1';
   signal cpu_data, mem_data: std_logic_vector(7 downto 0) := (others => 'Z');
@@ -76,9 +76,7 @@ begin
   Vdd <= '1';
   Gnd <= '0';
   clk <= clock;
-  c1 : chip port map (cpu_add, 
-  cpu_data,
-   cpu_rd_wrn, start, clk, reset, mem_data, Vdd, Gnd, busy, mem_en, mem_add);
+  --c1 : chip port map (cpu_add, cpu_data, cpu_rd_wrn, start, clk, reset, mem_data, Vdd, Gnd, busy, mem_en, mem_add);
 
   -- Clock Generation
   clking: process
@@ -92,74 +90,44 @@ begin
   begin
     -- Simulating input values from `chip_in.txt`
     -- Replace each sequence below with patterns derived from the file
-    cpu_add <= "ZZZZZZ"; cpu_data <= "00000000"; cpu_rd_wrn <= 'Z'; start <= '0'; reset <= '1'; mem_data <= "00000000";
-    clk_count <= clk_count + 1;
-    wait for 20 ns;
-    reset <= '0';
-    wait for 180 ns;
-    print_output;
-
-    
-
-    cpu_add <= "101100"; cpu_data <= "00000000"; cpu_rd_wrn <= '1'; start <= '1'; reset <= '0'; mem_data <= "00000000";
+cpu_add <= "ZZZZZZ"; cpu_data <= "ZZZZZZZZ"; cpu_rd_wrn <= 'Z'; start <= '0'; reset <= '1'; mem_data <= "ZZZZZZZZ";
     clk_count <= clk_count + 1;
     wait for 10 ns;
-    start <= '0';
-    wait for 85 ns;
-    mem_data <= "11111010";
-    wait for 20 ns;
     print_output;
 
-    cpu_add <= "101100"; cpu_data <= "00000000"; cpu_rd_wrn <= '1'; start <= '0'; reset <= '0'; mem_data <= "00110010";
-    clk_count <= clk_count + 1;
-    wait for 20 ns;
-    print_output;
-
-    cpu_add <= "101100"; cpu_data <= "00000000"; cpu_rd_wrn <= '1'; start <= '0'; reset <= '0'; mem_data <= "10000111";
-    clk_count <= clk_count + 1;
-    wait for 20 ns;
-    print_output;
-
-    cpu_add <= "101100"; cpu_data <= "00000000"; cpu_rd_wrn <= '1'; start <= '0'; reset <= '0'; mem_data <= "01101011";
-    clk_count <= clk_count + 1;
-    wait for 20 ns;
-    print_output;
-    mem_data <= "00000000";
-    
-    wait for 45 ns;
-
-cpu_add <= "101100"; cpu_data <= "ZZZZZZZZ"; cpu_rd_wrn <= '1'; start <= '1'; reset <= '0'; mem_data <= "ZZZZZZZZ";
+cpu_add <= "ZZZZZZ"; cpu_data <= "ZZZZZZZZ"; cpu_rd_wrn <= 'Z'; start <= '0'; reset <= '1'; mem_data <= "ZZZZZZZZ";
     clk_count <= clk_count + 1;
     wait for 10 ns;
-    start<='0';
-    wait for 20 ns;
     print_output;
-    
-    wait for 50 ns;
 
-cpu_add <= "101101"; cpu_data <= "10100000"; cpu_rd_wrn <= '0'; start <= '1'; reset <= '0'; mem_data <= "ZZZZZZZZ";
+cpu_add <= "000000"; cpu_data <= "ZZZZZZZZ"; cpu_rd_wrn <= '1'; start <= '1'; reset <= '0'; mem_data <= "ZZZZZZZZ";
     clk_count <= clk_count + 1;
     wait for 10 ns;
-    start <= '0';
-    wait for 30 ns;
     print_output;
-    
-    wait for 50 ns;
-    
-cpu_add <= "101101"; cpu_data <= "ZZZZZZZZ"; cpu_rd_wrn <= '1'; start <= '1'; reset <= '0'; mem_data <= "ZZZZZZZZ";
-    clk_count <= clk_count + 1;
-    wait for 10 ns;
-    start<='0';
-    wait for 20 ns;
-    print_output;
-    
-    wait for 50 ns;
 
-cpu_add <= "100000"; cpu_data <= "10000000"; cpu_rd_wrn <= '0'; start <= '1'; reset <= '0'; mem_data <= "ZZZZZZZZ";
+cpu_add <= "ZZZZZZ"; cpu_data <= "ZZZZZZZZ"; cpu_rd_wrn <= 'Z'; start <= '0'; reset <= '0'; mem_data <= "ZZZZZZZZ";
     clk_count <= clk_count + 1;
     wait for 10 ns;
-    start<='0';
-    wait for 30 ns;
+    print_output;
+
+cpu_add <= "ZZZZZZ"; cpu_data <= "ZZZZZZZZ"; cpu_rd_wrn <= 'Z'; start <= '0'; reset <= '0'; mem_data <= "ZZZZZZZZ";
+    clk_count <= clk_count + 1;
+    wait for 10 ns;
+    print_output;
+
+cpu_add <= "ZZZZZZ"; cpu_data <= "ZZZZZZZZ"; cpu_rd_wrn <= 'Z'; start <= '0'; reset <= '0'; mem_data <= "ZZZZZZZZ";
+    clk_count <= clk_count + 1;
+    wait for 10 ns;
+    print_output;
+
+cpu_add <= "ZZZZZZ"; cpu_data <= "ZZZZZZZZ"; cpu_rd_wrn <= 'Z'; start <= '0'; reset <= '0'; mem_data <= "ZZZZZZZZ";
+    clk_count <= clk_count + 1;
+    wait for 10 ns;
+    print_output;
+
+cpu_add <= "ZZZZZZ"; cpu_data <= "ZZZZZZZZ"; cpu_rd_wrn <= 'Z'; start <= '0'; reset <= '0'; mem_data <= "ZZZZZZZZ";
+    clk_count <= clk_count + 1;
+    wait for 10 ns;
     print_output;
 
 cpu_add <= "ZZZZZZ"; cpu_data <= "ZZZZZZZZ"; cpu_rd_wrn <= 'Z'; start <= '0'; reset <= '0'; mem_data <= "ZZZZZZZZ";

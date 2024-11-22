@@ -173,7 +173,23 @@ architecture structural of chip is
         );
     end component dff_negedge_8bit;
     
-
+    component sr_latch
+        port(
+            S  : in  std_logic; -- Set input
+            R  : in  std_logic; -- Reset input
+            Q  : inout std_logic; -- Output Q
+            Qn : inout std_logic  -- Complement of Q
+        );
+    
+    end component;  
+    
+    component and_2x1
+        port(
+            A: in std_logic;
+            B: in std_logic;
+            output: out std_logic
+        );
+    end component;  
     -- intermediate signals
     signal not_clk : std_logic;
     -- signal write_data_to_valid : std_logic;
@@ -190,7 +206,7 @@ architecture structural of chip is
     signal mem_byte_offset: std_logic_vector(1 downto 0);
 
     signal hit_miss_sig, valid_WE_sig, tag_WE_sig, mem_read_data_enable_sig, cache_RW_sig, decoder_en_sig: std_logic;
-    signal busy_RW_sig: std_logic;
+    signal busy_RW_sig, R_W, start_trigger, cpu_rd_wrn_sig: std_logic;
 begin
     
     -- port mapping
@@ -205,7 +221,7 @@ begin
             input => busy_sig, -- this comes from state machine busy signal
             output => tag_block_write_data_latching_clock -- this is the clock for latching data to the chip when state machineBUSY goes high
     );
-    
+
     -- valid_write_data_mux : mux_2x1 
     --     port map (
     --         A => vdd,
@@ -246,13 +262,13 @@ begin
             output => latched_byte_offset
     );
 
-    cache_write_data_register : dff_negedge_8bit
-        port map (
-            d => cpu_data, -- comes from cpu_data input from cpu
-            clk => tag_block_write_data_latching_clock, -- this comes from state machine BUSY signal
-            q => latched_cache_write_data, -- this goes to the write_cache input of the timed_cache
-            qbar => open
-    );
+    --cache_write_data_register : dff_negedge_8bit
+    --    port map (
+    --        d => cpu_data, -- comes from cpu_data input from cpu
+    --        clk => tag_block_write_data_latching_clock, -- this comes from state machine BUSY signal
+    --        q => latched_cache_write_data, -- this goes to the write_cache input of the timed_cache
+    --        qbar => open
+    --);
 
     memory_output_enable_inverter : inverter
         port map (
@@ -278,7 +294,7 @@ begin
         port map (
             d => read_data_from_cache, -- this comes from the read_data output of the timed_cache
             clk => read_data_output_enable_not,
-            q => cpu_data, -- this goes to the cpu_data output of the chip
+            q => open, -- this goes to the cpu_data output of the chip
             qbar => open
     );
     
@@ -320,7 +336,7 @@ begin
             clk             => clk,
             start           => start,
             hit_miss        => hit_miss_sig,
-            R_W             => cpu_rd_wrn,
+            R_W             => R_W,
             reset_in        => reset,
             cpu_addr        => cpu_addr,
             --mem_addr_ready  => 
@@ -337,7 +353,27 @@ begin
             output_enable   => read_data_output_enable
         );
         
+    sr_latch_RW: sr_latch port map(
+        cpu_rd_wrn_sig,
+        start_trigger,
+        R_W,
+        open
+        
+    ); 
+    
+    and_1: and_2x1 port map(
+        start,
+        clk,
+        start_trigger
+    );
+    
+    and_2: and_2x1 port map(
+        start,
+        cpu_rd_wrn,
+        cpu_rd_wrn_sig
+    );
     busy <= busy_sig;
+    latched_cache_write_data <= cpu_data;
        
 
 end architecture structural;

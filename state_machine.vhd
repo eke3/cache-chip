@@ -184,12 +184,14 @@ begin
     --    decoder_enable
     --);
     
-    mux_1: entity work.mux_2x1(structural) port map(
-        '0',
-        R_W,
-        busy_sig,
-        cache_RW
-    );
+    --mux_1: entity work.mux_2x1(structural) port map(
+    --    '0',
+    --    R_W,
+    --    busy_sig,
+     --   cache_RW
+    --);
+
+    cache_RW <= R_W;
 
     and3_1: entity work.and_3x1(structural) port map(
         valid_ready,
