@@ -84,7 +84,7 @@ begin
         tb_reset_in <= '1';
         wait for 10 ns;
         tb_reset_in <= '0';
-        wait for 470 ns;
+        wait for 460 ns;
         tb_start <= '0';
         tb_hit_miss <= '0';
         tb_R_W <= '0';
@@ -149,4 +149,3 @@ begin
     end process stimulus_process;
 
 end architecture behavior;
-
