@@ -97,23 +97,23 @@ begin
         tb_R_W <= '1';
         tb_hit_miss <= '0';
         tb_cpu_addr <= "001100";
-        wait for 20 ns; tb_start <='0';
+        wait for 20 ns; tb_start <='0'; tb_R_W <='0';
         wait for 10 ns; tb_mem_addr_ready <= '1';
-        wait for 500 ns;
+        wait for 510 ns;
 
         -- Test Case 1: write hit
         tb_start <= '1';
         tb_R_W <= '0';
         tb_cpu_addr <= "101010";
         tb_hit_miss <= '1';
-        wait for 20 ns; tb_start <='0';
+        wait for 20 ns; tb_start <='0'; tb_R_W <='0';
         wait for 100 ns;
 
         -- Test Case 2: read hit
         tb_start <= '1';
         tb_R_W <= '1';
         tb_cpu_addr <= "101010";
-        wait for 20 ns; tb_start <='0';
+        wait for 20 ns; tb_start <='0'; tb_R_W <='0';
         wait for 100 ns;
 
         -- test case: write miss
@@ -121,7 +121,7 @@ begin
         tb_R_W <= '0';
         tb_hit_miss <= '0';
         tb_cpu_addr <= "001100";
-        wait for 20 ns; tb_start <='0';
+        wait for 20 ns; tb_start <='0'; tb_R_W <='0';
         wait for 100 ns;
 
         tb_mem_addr_ready <= '0';
@@ -130,7 +130,7 @@ begin
         tb_R_W <= '0';
         tb_hit_miss <= '0';
         tb_cpu_addr <= "001100";
-        wait for 20 ns; tb_start <='0';
+        wait for 20 ns; tb_start <='0'; tb_R_W <='0';
         wait for 100 ns;
 
          -- read miss
@@ -138,7 +138,7 @@ begin
         tb_R_W <= '1';
         tb_hit_miss <= '0';
         tb_cpu_addr <= "001100";
-        wait for 20 ns; tb_start <='0';
+        wait for 20 ns; tb_start <='0'; tb_R_W <='0';
         wait for 10 ns; tb_mem_addr_ready <= '1';
         wait for 500 ns;
 

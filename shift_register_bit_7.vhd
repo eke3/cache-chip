@@ -25,7 +25,7 @@ architecture structural of shift_register_bit_7 is
         );
     end component;
     
-    signal count_1, count_2, count_3, count_4, count_5, count_6: std_logic;
+    signal count_1, count_2, count_3, count_4, count_5, count_6, count_7: std_logic;
     
 begin
 
@@ -67,6 +67,12 @@ begin
 
     dff_7: entity work.dff(structural) port map(
         count_6,
+        clk,
+        count_7
+    );
+    
+    dff_8: entity work.dff(structural) port map(
+        count_7,
         clk,
         output
     );

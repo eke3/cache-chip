@@ -22,12 +22,10 @@ entity state_machine is
         hit_miss: in std_logic;
         R_W: in std_logic;
         cpu_addr: in std_logic_vector(5 downto 0);
-        --mem_addr_ready: in std_logic;
 
         cache_RW: out std_logic;
         valid_WE: out std_logic;
         tag_WE: out std_logic;
-        --busy_RW: out std_logic;
         decoder_enable: out std_logic;
         mem_addr_out_enable: out std_logic;
         mem_data_read_enable: out std_logic;
@@ -177,16 +175,33 @@ architecture structural of state_machine is
     
     signal mem_addr_ready, latch_hit_miss, decoder_enable_sig, output_enable_sig, mem_data_read_enable_temp, mem_data_read_enable_sig, busy_inv: std_logic;
     
-    signal read_miss_cache_read: std_logic;
+    signal read_miss_cache_read, RW_temp_1, RW_temp_2, R_W_sig, R_W_inv, mem_data_read_disable: std_logic;
     
 begin
-    
-    cache_RW <= R_W;
 
+    and_for_RW: entity work.and_2x1(structural) port map(
+        start,
+        R_W,
+        RW_temp_1
+    );
+    
+    and_for_RW_2: entity work.and_2x1(structural) port map(
+        start,
+        R_W_inv,
+        RW_temp_2
+    );
+    
+    hold_RW_SR_latch: entity work.sr_latch(structural) port map(
+        RW_temp_1,
+        RW_temp_2,
+        R_W_sig
+    );
+    
+    
     and3_1: entity work.and_3x1(structural) port map(
         valid_ready,
         hit_miss_inv,
-        R_W,
+        R_W_sig,
         mem_addr_out_enable_sig
     );
 
@@ -199,14 +214,21 @@ begin
         clk,
         not_clk
     );
-
-    inverter_3: entity work.inverter(structural) port map(
+    
+    --inverter for chip RW
+    inverter_RW_in: entity work.inverter(structural) port map(
         R_W,
+        R_W_inv
+    );
+
+    -- inverter for latched RW
+    inverter_3: entity work.inverter(structural) port map(
+        R_W_sig,
         RW_inv
     );
 
     and4_2: entity work.and_4x1(structural) port map(
-        R_W,
+        R_W_sig,
         valid_ready,
         hit_miss,
         read_hit_count,
@@ -214,7 +236,7 @@ begin
     );
 
     and3_2: entity work.and_3x1(structural) port map(
-        R_W,
+        R_W_sig,
         hit_miss_inv,
         read_miss_count,
         temp_oe_2
@@ -255,16 +277,10 @@ begin
         reset,
         decoder_enable_sig
     );
-    
-    --sr_latch_3: entity work.sr_latch(structural) port map(
-    --    read_miss,
-    --    busy_sig_inv,
-    --    tag_WE_sig
-    --);
 
     and4_1: entity work.and_4x1(structural) port map(
         hit_miss_inv,
-        R_W,
+        R_W_sig,
         busy_sig,
         valid_ready,
         read_miss
@@ -282,12 +298,6 @@ begin
         reset_criteria
     );
 
-  --  or_2: entity work.or_2x1(structural) port map(
-  --      output_enable_temp,
-  --      timers,
-  --      reset
-  --  );
-
     or4_1: entity work.or_4x1(structural) port map(
         reset_criteria,
         read_miss_count,
@@ -296,11 +306,6 @@ begin
         reset
     );
 
-    --shift_reg_2_1: entity work.shift_register_bit_2(structural) port map(
-    --    read_hit_trigger,
-    --    clk,
-    --    read_hit_count
-    --);
     
     and_7: entity work.and_2x1(structural) port map(
         RW_inv,
@@ -323,14 +328,14 @@ begin
     and3_3: entity work.and_3x1(structural) port map(
         valid_ready,
         hit_miss_inv,
-        R_W,
+        R_W_sig,
         read_miss_trigger
     );
 
     and3_4: entity work.and_3x1(structural) port map(
         valid_ready,
         hit_miss,
-        R_W,
+        R_W_sig,
         read_hit_count
     );
 
@@ -367,13 +372,19 @@ begin
     
     sr_latch_4: entity work.sr_latch(structural) port map(
         mem_data_read_enable_temp,
-        busy_inv,
+        mem_data_read_disable,
         mem_data_read_enable_sig
     );
     
     inv_5: entity work.inverter(structural) port map(
         busy_sig,
         busy_inv
+    );
+    
+    shift_reg_7_2: entity work.shift_register_bit_7(structural) port map(
+        mem_data_read_enable_temp,
+        clk,
+        mem_data_read_disable
     );
 
     or_3: entity work.or_2x1(structural) port map(

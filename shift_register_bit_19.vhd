@@ -25,7 +25,7 @@ architecture structural of shift_register_bit_19 is
         );
     end component;
 
-    for dff_1, dff_2, dff_3, dff_4, dff_5, dff_6, dff_7, dff_8, dff_9, dff_10, dff_11, dff_12, dff_13, dff_14, dff_15, dff_16, dff_17, dff_18: dff use entity work.dff(structural);
+    for dff_1, dff_2, dff_3, dff_4, dff_5, dff_6, dff_7, dff_8, dff_9, dff_10, dff_11, dff_12, dff_13, dff_14, dff_15, dff_16, dff_17: dff use entity work.dff(structural);
 
     signal count_1, count_2, count_3, count_4, count_5, count_6, count_7, count_8, count_9, count_10, count_11, count_12, count_13, count_14, count_15, count_16, count_17: std_logic;
 
@@ -130,13 +130,8 @@ begin
     dff_17: dff port map(
         count_16,
         clk,
-        count_17
-    );
-
-    dff_18: dff port map(
-        count_17,
-        clk,
         output
     );
+
 
 end structural;
