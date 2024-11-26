@@ -179,25 +179,30 @@ architecture structural of state_machine is
     
 begin
 
+    cache_RW <= R_W_sig;
+    
+    -- and gate for setting the R_W sr latch
     and_for_RW: entity work.and_2x1(structural) port map(
         start,
         R_W,
         RW_temp_1
     );
     
+    -- and gate for resetting the R_W sr latch
     and_for_RW_2: entity work.and_2x1(structural) port map(
         start,
         R_W_inv,
         RW_temp_2
     );
     
+    -- SR latch for hold chip R_W signal
     hold_RW_SR_latch: entity work.sr_latch(structural) port map(
         RW_temp_1,
         RW_temp_2,
         R_W_sig
     );
     
-    
+    -- and gate for enabling the send of the memory address
     and3_1: entity work.and_3x1(structural) port map(
         valid_ready,
         hit_miss_inv,
@@ -205,17 +210,19 @@ begin
         mem_addr_out_enable_sig
     );
 
+    -- inverts hit_miss signal for logical uses
     inverter_1: entity work.inverter(structural) port map(
         hit_miss,
         hit_miss_inv
     );
 
+    -- inverts clk signal for logical uses
     inverter_2: entity work.inverter(structural) port map(
         clk,
         not_clk
     );
     
-    --inverter for chip RW
+    --inverter for chip RW (used in SR latch for hold chip RW signal)
     inverter_RW_in: entity work.inverter(structural) port map(
         R_W,
         R_W_inv
@@ -226,7 +233,9 @@ begin
         R_W_sig,
         RW_inv
     );
-
+    
+    -- checks for read_hit and if timer expired to determine if
+    -- output enable should go high
     and4_2: entity work.and_4x1(structural) port map(
         R_W_sig,
         valid_ready,
@@ -235,19 +244,23 @@ begin
         temp_oe_1
     );
 
+    -- checks for read_miss and if timer expired to determine if
+    -- output enable should go high
     and3_2: entity work.and_3x1(structural) port map(
         R_W_sig,
         hit_miss_inv,
         read_miss_count,
         temp_oe_2
     );
-
+    
+    -- the following nonsense with the output enables just makes sure
+    -- it holds for the proper amount of time, feel free to make it better
     or_1: entity work.or_2x1(structural) port map(
         temp_oe_1,
         temp_oe_2,
         output_enable_temp
     );
-
+    
     and_2: entity work.and_2x1(structural) port map(
         output_enable_temp,
         not_clk,
@@ -266,18 +279,21 @@ begin
         output_enable_sig
     );
     
+    -- checks for a read miss to trigger write enables for valid and tag
     sr_latch_2: entity work.sr_latch(structural) port map(
         read_miss,
         busy_sig_inv,
         mem_addr_ready
     );
     
+    -- sr latch to trigger and hold decoder enable, triggered by high start bit
     sr_latch_3: entity work.sr_latch(structural) port map(
         start,
         reset,
         decoder_enable_sig
     );
 
+    -- and gate checks for a valid read miss
     and4_1: entity work.and_4x1(structural) port map(
         hit_miss_inv,
         R_W_sig,
@@ -286,18 +302,22 @@ begin
         read_miss
     );
 
+    -- sets up temp logic for set of busy signal SR latch
     and_5: entity work.and_2x1(structural) port map(
         start,
         not_clk,
         set_temp
     );
     
+    -- sets up temp logic for reset of busy signal SR latch
     and_6: entity work.and_2x1(structural) port map(
         start, 
         clk,
         reset_criteria
     );
-
+    
+    -- or gate to determine if the function has completed (according to necessary
+    -- timing) and sets reset high for busy signal SR_latch
     or4_1: entity work.or_4x1(structural) port map(
         reset_criteria,
         read_miss_count,
@@ -306,32 +326,41 @@ begin
         reset
     );
 
-    
+    -- criteria needed to trigger timer for a write operation
     and_7: entity work.and_2x1(structural) port map(
         RW_inv,
         valid_ready,
         write_count_criteria
     );
     
+    -- shift register timer for a write operation. Used to hold busy signal high
+    -- for the correct amount of clock signals
     shift_reg_2_0: entity work.shift_register_bit_2(structural) port map(
         write_count_criteria,
         clk,
         write_count -- will be U until propogated out (bcuz counter)
     );
 
+    -- shift register timer for a read miss operation. Used to hold busy signal high
+    -- for the correct amount of clock signals
     shift_reg_19: entity work.shift_register_bit_19(structural) port map(
         read_miss_trigger,
         clk,        
         read_miss_count     -- omg also needs to be propogated out, so must wait hella
     );
 
+    -- logical crieteria to getermine if the read miss timer should be started.
+    -- checls for a valid miss and a read
     and3_3: entity work.and_3x1(structural) port map(
         valid_ready,
         hit_miss_inv,
         R_W_sig,
         read_miss_trigger
     );
-
+    
+    -- read hit only needs to go high for one clock cycle, so instead of using
+    -- a shift register, a simple and gate checks if a read hit has occured and 
+    -- sends a high signal for only one clock cycle
     and3_4: entity work.and_3x1(structural) port map(
         valid_ready,
         hit_miss,
@@ -339,6 +368,7 @@ begin
         read_hit_count
     );
 
+    -- SR latch for busy signal to stay high during 
     sr_latch_1: entity work.sr_latch(structural) port map(
         set,
         reset,
