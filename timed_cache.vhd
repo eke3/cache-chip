@@ -243,10 +243,10 @@ architecture Structural of timed_cache is
                 port map ( d => block_decoder_out, clk => clk, q => block_decoder_reg, qbar => open );
     
             tag_vec: entity work.tag_vector(structural)
-                port map ( write_data => tag, chip_enable => block_decoder_out, RW => RW_cache, sel => block_offset, read_data => read_tag );
+                port map ( write_data => tag, chip_enable => block_decoder_out, RW => RW_tag, sel => block_offset, read_data => read_tag );
     
             valid_vec: entity work.valid_vector(structural)
-                port map ( vdd => vdd, gnd => gnd, write_data => write_valid, reset => reset, chip_enable => block_decoder_out, RW => RW_cache, sel => block_offset, read_data => read_valid );
+                port map ( vdd => vdd, gnd => gnd, write_data => write_valid, reset => reset, chip_enable => block_decoder_out, RW => RW_valid, sel => block_offset, read_data => read_valid );
     
             tag_cmp: entity work.tag_comparator_2x1(structural)
                 port map ( A => tag, B => read_tag, output => cmp_tag );
