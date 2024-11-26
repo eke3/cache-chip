@@ -368,7 +368,7 @@ begin
         read_hit_count
     );
 
-    -- SR latch for busy signal to stay high during 
+    -- SR latch for busy signal to stay high during operations
     sr_latch_1: entity work.sr_latch(structural) port map(
         set,
         reset,
@@ -376,12 +376,14 @@ begin
         busy_sig_inv
     );
 
+    -- start and high clock indicates incoming signals are ready to use
     shift_reg_3_2: entity work.shift_register_bit_3(structural) port map(
         start,
         clk,
         valid_ready
     );
     
+    -- set_temp logic all just used to determine when to send busy signal high
     shift_reg_3_3: entity work.shift_register_bit_3(structural) port map(
         set_temp,
         not_clk,
@@ -394,29 +396,36 @@ begin
         set
     );
 
+    -- shift register to trigger memory data read enable after 8 clk cycles from 
+    -- mem_addr send enable
     shift_reg_7: entity work.shift_register_bit_7(structural) port map(
         shift_7_enable,
         clk,
         mem_data_read_enable_temp
     );
     
+    -- latch to hold mem data read high for the correct timing
     sr_latch_4: entity work.sr_latch(structural) port map(
         mem_data_read_enable_temp,
         mem_data_read_disable,
         mem_data_read_enable_sig
     );
     
+    -- inverts busy signal for logical use
     inv_5: entity work.inverter(structural) port map(
         busy_sig,
         busy_inv
     );
     
+    -- shift register to disable memory read enable signal after 8 clock cycles
     shift_reg_7_2: entity work.shift_register_bit_7(structural) port map(
         mem_data_read_enable_temp,
         clk,
         mem_data_read_disable
     );
 
+    -- triggers shift register to count out 8 cycles after memory address out 
+    -- enable goes high
     or_3: entity work.or_2x1(structural) port map(
        mem_addr_out_enable_sig,
        reset_in,
