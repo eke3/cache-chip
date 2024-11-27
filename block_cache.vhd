@@ -99,6 +99,22 @@ architecture structural of block_cache is
         );
     end component;
 
+    component nand_2x1
+        port (
+            A      : in  STD_LOGIC;
+            B      : in  STD_LOGIC;
+            output : out STD_LOGIC
+        );
+    end component;
+
+    component inverter
+        port (
+            input  : in  STD_LOGIC;
+            output : out STD_LOGIC
+        );
+    end component;
+    
+
     --for block_0000, block_0001, block_0010, block_0011, block_0100, block_0101, block_0110, block_0111, block_1000, block_1001, 
     --block_1010, block_1011, block_1100, block_1101, block_1110, block_1111: cache_cell_8bit use entity work.cache_cell_8bit(structural);
 
@@ -130,7 +146,22 @@ architecture structural of block_cache is
     
     signal cache_RW: std_logic;
 
+    signal RW_not, RW_nand_out: std_logic;
+
 begin
+
+    RW_inverter: entity work.inverter(structural)
+        port map (
+            input => R_W,
+            output => RW_not
+        );
+
+    RW_nand: entity work.nand_2x1(structural)
+    port map (
+        A => RW_not,
+        B => hit_miss,
+        output => RW_nand_out
+    );
 
     gen_cell_1: for i in 0 to 3 generate
         and_1: entity work.and_2x1
@@ -182,7 +213,7 @@ begin
         port map (
             write_data => demux_out(127-(8*i) downto 127-(8*i)-7),
             chip_enable => CE(15-((i)*1)), 
-            RW => R_W,
+            RW => RW_nand_out,
             read_data => read_array(127-(8*i) downto 127-(8*i)-7)
         );
     end generate gen_cell_5;
@@ -192,7 +223,7 @@ begin
         port map (
             write_data => demux_out(95-(8*i) downto 95-(8*i)-7),
             chip_enable => CE(11-((i)*1)), 
-            RW => R_W,
+            RW => RW_nand_out,
             read_data => read_array(95-(8*i) downto 95-(8*i)-7)
         );
     end generate gen_cell_6;
@@ -202,7 +233,7 @@ begin
         port map (
             write_data => demux_out(63-(8*i) downto 63-(8*i)-7),
             chip_enable => CE(7-((i)*1)), 
-            RW => R_W,
+            RW => RW_nand_out,
             read_data => read_array(63-(8*i) downto 63-(8*i)-7)
         );
     end generate gen_cell_7;
@@ -212,7 +243,7 @@ begin
         port map (
             write_data => demux_out(31-(8*i) downto 31-(8*i)-7),
             chip_enable => CE(3-((i)*1)), 
-            RW => R_W,
+            RW => RW_nand_out,
             read_data => read_array(31-(8*i) downto 31-(8*i)-7)
         );
     end generate gen_cell_8;
