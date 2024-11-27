@@ -438,8 +438,14 @@ begin
         tag_valid_WE
     );
 
+    decoder_enable_logic : entity work.or_2x1(structural) port map(
+        A => busy_sig,
+        B => output_enable_sig,
+        output => decoder_enable
+    );
+
     busy <= busy_sig;
-    decoder_enable <= busy_sig;
+    -- decoder_enable <= busy_sig;
     output_enable <= output_enable_sig;
     tag_WE <= tag_valid_WE;
     valid_WE <= tag_valid_WE;
