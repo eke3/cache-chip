@@ -9,6 +9,7 @@ entity data_input_selector is
         mem_data: in std_logic_vector(7 downto 0);
         hit_miss: in std_logic;
         R_W:      in std_logic;
+        read_miss : out std_logic;
         out_data: out std_logic_vector(7 downto 0)
     );
 end data_input_selector;
@@ -67,6 +68,8 @@ begin
    -- inv_2: inverter port map (R_W, RW_inv);
 
     mux: mux_2x1_8bit port map(cpu_data, mem_data, check_read, out_data);
+    
+    read_miss <= check_read;
 
 end architecture structural;
 

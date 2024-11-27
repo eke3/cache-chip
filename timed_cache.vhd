@@ -21,7 +21,8 @@ entity timed_cache is
         valid_WE : in std_logic; -- from state machine
         tag_WE   : in std_logic; -- from state machine
         output_enable: in std_logic;
-        RW_cache      : in  std_logic; -- from state machine
+        RW_cache      : in  std_logic; -- from reg
+        RW_cache_SM : in std_logic;
         --RW_busy       : in std_logic;
         decoder_enable: in  std_logic; -- from state machine
         mem_data      : in  std_logic_vector(7 downto 0); -- from memory
@@ -143,13 +144,15 @@ architecture Structural of timed_cache is
         end component valid_vector;
     
         component block_cache is
-            port(   mem_data    : in std_logic_vector(7 downto 0);
+            port(   clk         : in std_logic;
+                    mem_data    : in std_logic_vector(7 downto 0);
                     --mem_addr    : out std_logic_vector(5 downto 0);
                     hit_miss    : in std_logic;
                     R_W         : in std_logic;
                     byte_offset : in std_logic_vector(3 downto 0);
                     block_offset: in std_logic_vector(3 downto 0);
                     cpu_data    : in std_logic_vector(7 downto 0);
+                    decoder_enable : in std_logic;
                     read_data   : out std_logic_vector(7 downto 0));
         end component block_cache;
     
@@ -192,6 +195,15 @@ architecture Structural of timed_cache is
                 output : out STD_LOGIC -- Output of the multiplexer
             );
         end component;
+
+        component tx_8bit
+            port (
+                sel    : in  std_logic;                      -- Selector signal
+                selnot : in  std_logic;                      -- Inverted selector signal
+                input  : in  std_logic_vector(7 downto 0);   -- 8-bit input data
+                output : out std_logic_vector(7 downto 0)    -- 8-bit output data
+            );
+        end component;
     
         -- Intermediate signals
         signal read_valid : std_logic;
@@ -204,6 +216,7 @@ architecture Structural of timed_cache is
         signal RW_valid : std_logic;
         signal RW_tag : std_logic;
         signal miss_inv, read_miss, hit_miss_temp1, hit_miss_temp2, hit_miss_inv, miss, read_miss_inv, hit_miss_sig: std_logic;
+        signal read_cache_data : STD_LOGIC_VECTOR (7 downto 0);
             
         begin
             rw_valid_inv : entity work.inverter(structural)
@@ -273,6 +286,7 @@ architecture Structural of timed_cache is
                 output_enable,
                 hit_miss_sig  
             );
+
                 
             --readmiss_mux: entity work.mux_2x1(structural)
             --    port map(
@@ -285,14 +299,22 @@ architecture Structural of timed_cache is
         -- Now connect everything to the cache array
     
             cache: entity work.block_cache(structural)
-                port map (mem_data => mem_data, 
+                port map (clk => clk, mem_data => mem_data, 
 --                mem_addr => mem_addr,
-                 hit_miss => hit_miss_reg, R_W => RW_cache, byte_offset => byte_decoder_reg, block_offset => block_decoder_reg, cpu_data => data_reg, read_data => read_cache);
+                 hit_miss => hit_miss_reg, R_W => RW_cache_SM, byte_offset => byte_decoder_reg, block_offset => block_decoder_reg, cpu_data => data_reg, decoder_enable => decoder_enable, read_data => read_cache_data);
             -- register for read data
             
             -- read_cache_ff: component dff_negedge_8bit 
             --     port map ( d => read_cache, clk => clk, q => read_cache_reg, qbar => open );
 
+            -- read data output transmission gate
+            read_data_tx: entity work.tx_8bit(structural)
+                port map (
+                    sel => output_enable,
+                    selnot => (not output_enable),
+                    input => read_cache_data,
+                    output => read_cache
+                );
             hit_or_miss <= hit_miss_reg; -- output for state machine, tells it whether there was a hit or miss in the current operation
             mem_addr(5 downto 4) <= tag;
             mem_addr(3 downto 2) <= block_offset;

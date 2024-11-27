@@ -6,13 +6,15 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 
 entity block_cache is
-    port(   mem_data    : in std_logic_vector(7 downto 0);
+    port(   clk         : in std_logic;
+            mem_data    : in std_logic_vector(7 downto 0);
 --            mem_addr    : out std_logic_vector(5 downto 0);
             hit_miss    : in std_logic;
             R_W         : in std_logic;
             byte_offset : in std_logic_vector(3 downto 0);
             block_offset: in std_logic_vector(3 downto 0);
             cpu_data    : in std_logic_vector(7 downto 0);
+            decoder_enable : in std_logic;
             read_data   : out std_logic_vector(7 downto 0));
 end block_cache;
 
@@ -91,6 +93,14 @@ architecture structural of block_cache is
             output : out STD_LOGIC
         );
     end component;
+
+    component xor_2x1
+        port(
+            A      : in  STD_LOGIC;
+            B      : in  STD_LOGIC;
+            output : out STD_LOGIC
+    );
+    end component;
     
     component one_hot_to_binary
         port(
@@ -99,16 +109,23 @@ architecture structural of block_cache is
         );
     end component;
 
+    component dff_posedge is
+        port ( d   : in  std_logic;
+               clk : in  std_logic;
+               q   : out std_logic;
+               qbar: out std_logic);
+    end component dff_posedge;
+
     --for block_0000, block_0001, block_0010, block_0011, block_0100, block_0101, block_0110, block_0111, block_1000, block_1001, 
     --block_1010, block_1011, block_1100, block_1101, block_1110, block_1111: cache_cell_8bit use entity work.cache_cell_8bit(structural);
 
     for demux: demux_1x16_8bit use entity work.demux_1x16_8bit(structural);
 
-    for data_input_selector_1: data_input_selector use entity work.data_input_selector(structural);
+    -- for data_input_selector_1: data_input_selector use entity work.data_input_selector(structural);
 
-    for concatenator_1: concatenator use entity work.concatenator(structural);
+    -- for concatenator_1: concatenator use entity work.concatenator(structural);
 
-    for convert_1, convert_2: one_hot_to_binary use entity work.one_hot_to_binary(structural);
+    -- for convert_1, convert_2: one_hot_to_binary use entity work.one_hot_to_binary(structural);
 
     for enable_cache_write: readmiss_writehit use entity work.readmiss_writehit(structural);
 
@@ -129,6 +146,10 @@ architecture structural of block_cache is
     signal block_off_bin, byte_off_bin: std_logic_vector (1 downto 0);
     
     signal cache_RW: std_logic;
+
+    signal busy_reg_out, hm_reg_out : std_logic;
+    
+    signal is_readmiss: std_logic;
 
 begin
 
@@ -170,9 +191,9 @@ begin
     
     enable_cache_write: component readmiss_writehit
         port map(
-            hit_miss,
-            R_W,
-            cache_RW
+            hit_miss => hm_reg_out,
+            R_W => R_W,
+            enable_cache_write => cache_RW
         );
     
     
@@ -238,36 +259,58 @@ begin
         demux_out(7 downto 0)   
     );
 
-    data_input_selector_1: component data_input_selector port map(
-        cpu_data,
-        mem_data,
-        hit_miss,
-        R_W,
-        out_data
+    busy_reg: entity work.dff_negedge(structural)
+        port map(
+            d => decoder_enable,
+            clk => not clk,
+            q => busy_reg_out,
+            qbar => open
     );
 
-    mux: component mux_16x1_8bit port map(
-        read_array, -- 16 inputs, each 8-bit wide
-        CE,   -- 4-bit select signal
-        comb_addr,
-        read_data     -- 8-bit output
+    hm_reg: entity work.dff_negedge(structural)
+        port map(
+            d => hit_miss,
+            clk => not busy_reg_out,
+            q => hm_reg_out,
+            qbar => open
     );
 
-    convert_1: component one_hot_to_binary port map(
-        block_offset,
-        block_off_bin
-    );
+    data_input_selector_1: entity work.data_input_selector(structural)
+        port map(
+            cpu_data => cpu_data,
+            mem_data => mem_data,
+            hit_miss => hm_reg_out,
+            R_W => R_W,
+            read_miss => is_readmiss,
+            out_data => out_data
+        );
 
-    convert_2: component one_hot_to_binary port map(
-        byte_offset,
-        byte_off_bin
-    );
+    mux: entity work.mux_16x1_8bit(structural)
+        port map(
+            inputs => read_array,
+            sel => CE,
+            sel_4bit => comb_addr,
+            output => read_data
+        );
 
-    concatenator_1: component concatenator port map(
-        block_off_bin,
-        byte_off_bin,
-        comb_addr
-    );
+    convert_1: entity work.one_hot_to_binary(structural)
+        port map(
+            one_hot => block_offset,
+            binary => block_off_bin
+        );
+
+    convert_2: entity work.one_hot_to_binary(structural)
+        port map(
+            one_hot => byte_offset,
+            binary => byte_off_bin
+        );
+
+    concatenator_1: entity work.concatenator(structural)
+        port map(
+            input_a => block_off_bin,
+            input_b => byte_off_bin,
+            output => comb_addr
+        );
 
 end architecture structural;
 
