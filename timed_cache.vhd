@@ -24,6 +24,7 @@ entity timed_cache is
         RW_cache      : in  std_logic; -- from state machine
         --RW_busy       : in std_logic;
         decoder_enable: in  std_logic; -- from state machine
+        mem_addr_output_enable : in std_logic;
         -- mem_data      : in  std_logic_vector(7 downto 0); -- from memory
         mem_addr      : out std_logic_vector(5 downto 0); -- to memory
         read_cache    : out std_logic_vector(7 downto 0); -- to on-chip register, which will be released off chip by state machine's OUTPUT_ENABLE signal
@@ -201,6 +202,15 @@ architecture Structural of timed_cache is
                 output : out std_logic_vector(7 downto 0)    -- 8-bit output data
             );
         end component;
+
+        component tx_6bit
+            port(
+                sel    : in  std_logic;                      -- Selector signal
+                selnot : in  std_logic;                      -- Inverted selector signal
+                input  : in  std_logic_vector(5 downto 0);   -- 6-bit input data
+                output : out std_logic_vector(5 downto 0)    -- 6-bit output data
+            );
+        end component;
     
         -- Intermediate signals
         signal read_valid : std_logic;
@@ -214,6 +224,7 @@ architecture Structural of timed_cache is
         signal RW_tag : std_logic;
         signal miss_inv, read_miss, hit_miss_temp1, hit_miss_temp2, hit_miss_inv, miss, read_miss_inv, hit_miss_sig: std_logic;
         signal read_cache_data : STD_LOGIC_VECTOR (7 downto 0);
+        signal mem_addr_holder : std_logic_vector(5 downto 0);
             
         begin
             rw_valid_inv : entity work.inverter(structural)
@@ -312,9 +323,20 @@ architecture Structural of timed_cache is
                     input => read_cache_data,
                     output => read_cache
                 );
+
+            mem_addr_holder(5 downto 4) <= tag;
+            mem_addr_holder(3 downto 2) <= block_offset;
+            mem_addr_holder(1) <= gnd;
+            mem_addr_holder(0) <= gnd;
+
+            mem_addr_tx : entity work.tx_6bit(structural)
+                port map (
+                    sel => mem_addr_output_enable,
+                    selnot => (not mem_addr_output_enable),
+                    input => mem_addr_holder,
+                    output => mem_addr
+            );
+
             hit_or_miss <= hit_miss_reg; -- output for state machine, tells it whether there was a hit or miss in the current operation
-            mem_addr(5 downto 4) <= tag;
-            mem_addr(3 downto 2) <= block_offset;
-            mem_addr(1) <= gnd;
-            mem_addr(0) <= gnd;
+
 end architecture structural;

@@ -27,6 +27,7 @@ architecture Test of timed_cache_tb is
             RW_cache      : in  std_logic; -- from reg
             --RW_busy       : in std_logic;
             decoder_enable: in  std_logic; -- from state machine
+            mem_addr_output_enable : in std_logic;
             -- mem_data      : in  std_logic_vector(7 downto 0); -- from memory
             mem_addr      : out std_logic_vector(5 downto 0); -- to memory
             read_cache    : out std_logic_vector(7 downto 0); -- to on-chip register, which will be released off chip by state machine's OUTPUT_ENABLE signal
@@ -43,9 +44,10 @@ architecture Test of timed_cache_tb is
     signal write_cache : STD_LOGIC_VECTOR(7 downto 0);
     signal tag, block_offset, byte_offset : STD_LOGIC_VECTOR(1 downto 0);
     signal write_valid : STD_LOGIC;
+    signal START : STD_LOGIC;
 
     -- signals from state machine
-    signal valid_WE, tag_WE, output_enable, RW_cache, decoder_enable, RW_cache_SM : STD_LOGIC;
+    signal valid_WE, tag_WE, output_enable, RW_cache, decoder_enable, mem_addr_output_enable, BUSY : STD_LOGIC;
 
     -- status signal for state machine
     signal hit_or_miss : STD_LOGIC;
@@ -80,6 +82,7 @@ begin
         RW_cache      => RW_cache,
         --RW_busy       : in std_logic;
         decoder_enable => decoder_enable,
+        mem_addr_output_enable => mem_addr_output_enable,
         -- mem_data      => mem_data,
         mem_addr      => mem_addr,
         read_cache    => read_cache,
@@ -96,10 +99,12 @@ begin
     end process clk_gen;
 
     -- stimulus process
-    stim: process 
+    read_miss_test: process 
     begin
         -- initialize values
-        write_cache  <= X"AD";
+        START <= '0';
+        BUSY <= '0';
+        write_cache  <= "XXXXXXXX"; -- cpu data
         block_offset <= "XX";
         byte_offset <= "XX";
         write_valid <= '1'; -- always 1
@@ -109,22 +114,30 @@ begin
         output_enable <= 'X';
         RW_cache <= 'X';
         decoder_enable <= 'X';
-        -- mem_data <= "XXXXXXXX";
-        -- hold reset for 2 cycles
+        mem_addr_output_enable <= 'X';
 
+        -- hold reset for 2 cycles
         reset <= '1';
         wait for 40 ns;
-        
         reset <= '0';
-        -- in 30 (and 10) ns a negative edge comes
+        wait for 20 ns;
+        START <= '1';
         wait for 10 ns;
         -- on this positive edge start will go high, we start our operation on the subsequent negative edge
+        BUSY <= '1';
         tag <= "01"; block_offset <= "01"; byte_offset <= "01";
         valid_WE <= '0'; tag_WE <= '0';
-        decoder_enable <= '1'; -- BUSY signal goes high on the negative clock edge
-        output_enable <= '0';
+        decoder_enable <= '1'; -- signal goes high on the negative clock edge
+        output_enable <= '0'; mem_addr_output_enable <= '0';
         RW_cache <= '1'; -- try to read the cache 
-        wait for 160 ns;
+        wait for 10 ns;
+        START <= '0';
+        wait for 10 ns;
+        mem_addr_output_enable <= '1';
+        -- on first negative edge all values from cpu will latch to chip
+        wait for 20 ns;
+        mem_addr_output_enable <= '0';
+        wait for 120 ns;
 
         -- briefly enable writing to valid and tag
         valid_WE <= '1'; tag_WE <= '1';
@@ -133,7 +146,7 @@ begin
         -- start transmitting data to write
         
         -- *** cpu_data and mem_data consolidated into write_cache. needs external logic to choose which to write from (a mux select from state machine)***
-        write_cache <= X"AB";
+        write_cache <= X"AB"; -- mem_data
         RW_cache <= '0';
         byte_offset <= "00";
         wait for 40 ns;
@@ -148,25 +161,26 @@ begin
         wait for 40 ns;
         -- now finished writing, reads back the original request
 
-        RW_cache <= 'X';
-        decoder_enable <= '0';
+        RW_cache <= '1';
+        decoder_enable <= '1';
+        byte_offset <= "01"; -- ***re-selecting original byte might not be automated yet? if not, needs implementation outside the timed_cache block***
         write_cache <= "XXXXXXXX";
         wait for 20 ns;
 
         -- ***decoder_enable and RW switching during this operation should be controlled by state machine***
-        -- ***decoder_enable needs to go high at the end of this operation when we read back (so it cant just track BUSY)***
-        RW_cache <= '1';
-        byte_offset <= "01"; -- ***re-selecting original byte might not be automated yet? if not, needs implementation outside the timed_cache block***
+        -- ***decoder_enable needs to stay high through the end of read miss operation (so it cant just track BUSY)***
+        BUSY <= '0';
         decoder_enable <= '1';
         output_enable <= '1';
-        -- data becomes available on a positive edge. on the subsequent negative edge, OUTPUT_ENABLE goes high and it gets transmitted to the cpu
+        -- data becomes available on a positive edge. on the subsequent negative edge, OUTPUT_ENABLE goes high for 1 cycle and it gets transmitted to the cpu
         wait for 40 ns;
-
+        
         output_enable <= '0';
         decoder_enable <= '0';
         RW_cache <= 'X';
+        byte_offset <= "XX";
 
 
         wait;
-    end process stim;
+    end process read_miss_test;
 end architecture Test;
