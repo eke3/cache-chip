@@ -280,11 +280,11 @@ begin
     );
     
     -- checks for a read miss to trigger write enables for valid and tag
-    sr_latch_2: entity work.sr_latch(structural) port map(
-        read_miss,
-        busy_sig_inv,
-        mem_addr_ready
-    );
+  --  sr_latch_2: entity work.sr_latch(structural) port map(
+  --      read_miss,
+  --      busy_sig_inv,
+  --      mem_addr_ready
+  --  );
     
     -- sr latch to trigger and hold decoder enable, triggered by high start bit
     sr_latch_3: entity work.sr_latch(structural) port map(
@@ -435,8 +435,8 @@ begin
     busy <= busy_sig;
     decoder_enable <= busy_sig;
     output_enable <= output_enable_sig;
-    tag_WE <= mem_addr_ready;
-    valid_WE <= mem_addr_ready;
+    tag_WE <= mem_data_read_enable_sig;
+    valid_WE <= mem_data_read_enable_sig;
     mem_addr_out_enable <= mem_addr_out_enable_sig;
     mem_data_read_enable <= mem_data_read_enable_sig;
     
