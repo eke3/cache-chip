@@ -88,16 +88,20 @@ begin
   -- Internal Input Generation and Logging
   io_process: process
   begin
-  
-    wait for 200 ns;
+    reset <= '1';
+    start <= '1';
+    wait for 30 ns;
+    reset <= '0';
+    start <= '0';
+    wait for 170 ns;
     -- Simulating input values from `chip_in.txt`
     -- Replace each sequence below with patterns derived from the file
-cpu_add <= "ZZZZZZ"; cpu_data <= "ZZZZZZZZ"; cpu_rd_wrn <= 'Z'; start <= '0'; reset <= '1'; mem_data <= "ZZZZZZZZ";
+cpu_add <= "ZZZZZZ"; cpu_data <= "ZZZZZZZZ"; cpu_rd_wrn <= 'Z'; start <= '0'; reset <= '0'; mem_data <= "ZZZZZZZZ";
     clk_count <= clk_count + 1;
     wait for 10 ns;
     print_output;
 
-cpu_add <= "ZZZZZZ"; cpu_data <= "ZZZZZZZZ"; cpu_rd_wrn <= 'Z'; start <= '0'; reset <= '1'; mem_data <= "ZZZZZZZZ";
+cpu_add <= "ZZZZZZ"; cpu_data <= "ZZZZZZZZ"; cpu_rd_wrn <= 'Z'; start <= '0'; reset <= '0'; mem_data <= "ZZZZZZZZ";
     clk_count <= clk_count + 1;
     wait for 10 ns;
     print_output;
@@ -144,7 +148,7 @@ cpu_add <= "ZZZZZZ"; cpu_data <= "ZZZZZZZZ"; cpu_rd_wrn <= 'Z'; start <= '0'; re
 
 cpu_add <= "ZZZZZZ"; cpu_data <= "ZZZZZZZZ"; cpu_rd_wrn <= 'Z'; start <= '0'; reset <= '0'; mem_data <= "ZZZZZZZZ";
     clk_count <= clk_count + 1;
-    wait for 10 ns;
+    wait for 20 ns;
     print_output;
 
 cpu_add <= "ZZZZZZ"; cpu_data <= "ZZZZZZZZ"; cpu_rd_wrn <= 'Z'; start <= '0'; reset <= '0'; mem_data <= "00000000";

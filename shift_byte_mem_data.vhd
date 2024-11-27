@@ -54,6 +54,15 @@ architecture structural of shift_byte_mem_data is
         );
     end component;
     
+    component mux_2x1
+    port(
+        A      : in  STD_LOGIC; -- Input 0
+        B      : in  STD_LOGIC; -- Input 1
+        sel    : in  STD_LOGIC; -- sel signal
+        output : out STD_LOGIC -- Output of the multiplexer
+    );
+    end component;
+    
     signal enable_out, go: std_logic;
     signal temp_byte: std_logic_vector(7 downto 0);
     signal encoded_byte_offset: std_logic_vector(3 downto 0);
@@ -81,8 +90,9 @@ begin
         binary_byte_offset
     );
     
-    or_1: entity work.or_2x1(structural) port map(
+   mux_1: entity work.mux_2x1(structural) port map(
         enable,
+        '0',
         reset,
         go
     );

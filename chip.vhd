@@ -291,13 +291,21 @@ begin
             qbar => open
     );
 
-    read_data_to_cpu_register : dff_negedge_8bit
-        port map (
-            d => read_data_from_cache, -- this comes from the read_data output of the timed_cache
-            clk => read_data_output_enable_not,
-            q => open, -- this goes to the cpu_data output of the chip
-            qbar => open
-    );
+    ---read_data_to_cpu_register : dff_negedge_8bit
+    --    port map (
+    --        d => read_data_from_cache, -- this comes from the read_data output of the timed_cache
+    --        clk => read_data_output_enable_not,
+    --        q => open, -- this goes to the cpu_data output of the chip
+    --        qbar => open
+    --);
+    
+    cpu_data_out_mux: mux_2x1_8bit
+        port map(
+            "ZZZZZZZZ",
+            read_data_from_cache,
+            read_data_output_enable,
+            cpu_data
+        );
     
     shift_mem_data: shift_byte_mem_data
         port map(

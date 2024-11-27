@@ -82,9 +82,11 @@ begin
     begin
         -- Reset the system
         tb_reset_in <= '1';
-        wait for 10 ns;
+        tb_start <= '1';
+        wait for 30 ns;
         tb_reset_in <= '0';
-        wait for 460 ns;
+        tb_start <= '0';
+        wait for 440 ns;
         tb_start <= '0';
         tb_hit_miss <= '0';
         tb_R_W <= '0';
