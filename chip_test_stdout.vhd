@@ -88,6 +88,8 @@ begin
   -- Internal Input Generation and Logging
   io_process: process
   begin
+  
+    wait for 200 ns;
     -- Simulating input values from `chip_in.txt`
     -- Replace each sequence below with patterns derived from the file
 cpu_add <= "ZZZZZZ"; cpu_data <= "ZZZZZZZZ"; cpu_rd_wrn <= 'Z'; start <= '0'; reset <= '1'; mem_data <= "ZZZZZZZZ";
