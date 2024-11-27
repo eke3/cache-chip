@@ -170,9 +170,9 @@ begin
     
     enable_cache_write: component readmiss_writehit
         port map(
-            hit_miss => hit_miss,
-            R_W => R_W,
-            enable_cache_write => cache_RW
+            hit_miss,
+            R_W,
+            cache_RW
         );
     
     

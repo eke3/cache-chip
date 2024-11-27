@@ -44,14 +44,14 @@ begin
         block_offset<= "1000";
         
         -- Wait for a while and then change inputs to simulate different scenarios
-        wait for 10 ns;
+        wait for 20 ns;
         
         -- read hit
         hit_miss    <= '1'; 
         R_W         <= '1';  
         mem_data    <= "00010000";
         cpu_data    <= "00001100";
-        wait for 10 ns;
+        wait for 20 ns;
         
         cpu_data    <= "00000001";
         
@@ -59,7 +59,7 @@ begin
         hit_miss    <= '0';  -- Miss scenario
         R_W         <= '1';  -- Read operation
         
-        wait for 10 ns;
+        wait for 20 ns;
         
         -- read hit
         hit_miss    <= '1';  -- Miss scenario

@@ -23,6 +23,13 @@ architecture structural of readmiss_writehit is
             output : out STD_LOGIC  -- Output of the XNOR gate
         );
     end component;
+    
+    component inverter
+        port(
+        input: in std_logic;
+        output: out std_logic
+        );
+    end component;    
 
     for xnor_1: xnor_2x1 use entity work.xnor_2x1(structural);
     
@@ -31,7 +38,9 @@ architecture structural of readmiss_writehit is
 begin
     --and_1: and_2x1 port map (enable_cache_write, R_W, check_read);
 
-    xnor_1: xnor_2x1 port map (hit_miss, R_W, temp);
+    xnor_1: xnor_2x1 port map (hit_miss, R_W, enable_cache_write);
+    
+    --inverter_1: inverter port map (temp, enable_cache_write);
     
 
 end structural;
