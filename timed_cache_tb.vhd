@@ -272,7 +272,6 @@ begin
             read_hit_test;
 
 
-
         -- THIS BLOCK TESTS READ MISS AND READ HIT
             system_reset;
             wait for 10 ns;
@@ -284,6 +283,7 @@ begin
 
         -- THIS BLOCK TESTS WRITE HIT
             system_reset;
+            wait for 10 ns;
             read_miss_test;
             write_hit_test;
             -- should write to one of the cells written and validated by the read miss
