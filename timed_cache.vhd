@@ -21,11 +21,10 @@ entity timed_cache is
         valid_WE : in std_logic; -- from state machine
         tag_WE   : in std_logic; -- from state machine
         output_enable: in std_logic;
-        RW_cache      : in  std_logic; -- from reg
-        RW_cache_SM : in std_logic;
+        RW_cache      : in  std_logic; -- from state machine
         --RW_busy       : in std_logic;
         decoder_enable: in  std_logic; -- from state machine
-        mem_data      : in  std_logic_vector(7 downto 0); -- from memory
+        -- mem_data      : in  std_logic_vector(7 downto 0); -- from memory
         mem_addr      : out std_logic_vector(5 downto 0); -- to memory
         read_cache    : out std_logic_vector(7 downto 0); -- to on-chip register, which will be released off chip by state machine's OUTPUT_ENABLE signal
         hit_or_miss      : out std_logic
@@ -144,15 +143,13 @@ architecture Structural of timed_cache is
         end component valid_vector;
     
         component block_cache is
-            port(   clk         : in std_logic;
-                    mem_data    : in std_logic_vector(7 downto 0);
-                    --mem_addr    : out std_logic_vector(5 downto 0);
+            port(   write_cache    : in std_logic_vector(7 downto 0);
+                    -- mem_addr    : out std_logic_vector(5 downto 0);
                     hit_miss    : in std_logic;
                     R_W         : in std_logic;
                     byte_offset : in std_logic_vector(3 downto 0);
                     block_offset: in std_logic_vector(3 downto 0);
-                    cpu_data    : in std_logic_vector(7 downto 0);
-                    decoder_enable : in std_logic;
+                    -- cpu_data    : in std_logic_vector(7 downto 0);
                     read_data   : out std_logic_vector(7 downto 0));
         end component block_cache;
     
@@ -210,7 +207,7 @@ architecture Structural of timed_cache is
         signal read_tag : std_logic_vector(1 downto 0);
         signal cmp_tag, cmp_valid : std_logic;
         signal hit_miss, hit_miss_reg, valid_reg : std_logic;
-        signal data_reg : std_logic_vector(7 downto 0);
+        signal data_reg1, data_reg2 : std_logic_vector(7 downto 0);
         signal byte_decoder_out, block_decoder_out : std_logic_vector(3 downto 0);
         signal byte_decoder_reg, block_decoder_reg : std_logic_vector(3 downto 0);
         signal RW_valid : std_logic;
@@ -226,7 +223,7 @@ architecture Structural of timed_cache is
                 port map ( input => tag_WE, output => RW_tag );
 
             data_ff: entity work.dff_negedge_8bit(structural)
-                port map ( d => write_cache, clk => clk, q => data_reg, qbar => open );
+                port map ( d => write_cache, clk => clk, q => data_reg1, qbar => open );
     
             -- byte_ff: entity work.dff_negedge_2bit(structural)
             --     port map ( d => byte_offset, clk => clk, q => byte_reg1, qbar => open );
@@ -240,8 +237,8 @@ architecture Structural of timed_cache is
             -- valid_ff: entity work.dff_negedge(structural)
             --     port map ( d => write_valid, clk => clk, q => valid_reg, qbar => open );
     
-            -- data_ff2: entity work.dff_posedge_8bit(structural)
-            --     port map ( d => data_reg1, clk => clk, q => data_reg2, qbar => open );
+            data_ff2: entity work.dff_posedge_8bit(structural)
+                port map ( d => data_reg1, clk => clk, q => data_reg2, qbar => open );
     
             block_decoder: entity work.decoder_2x4(structural)
                 port map ( A => block_offset, E => decoder_enable, Y => block_decoder_out );
@@ -299,9 +296,9 @@ architecture Structural of timed_cache is
         -- Now connect everything to the cache array
     
             cache: entity work.block_cache(structural)
-                port map (clk => clk, mem_data => mem_data, 
+                port map (write_cache => data_reg2, 
 --                mem_addr => mem_addr,
-                 hit_miss => hit_miss_reg, R_W => RW_cache_SM, byte_offset => byte_decoder_reg, block_offset => block_decoder_reg, cpu_data => data_reg, decoder_enable => decoder_enable, read_data => read_cache_data);
+                 hit_miss => hit_miss_reg, R_W => RW_cache, byte_offset => byte_decoder_reg, block_offset => block_decoder_reg, read_data => read_cache_data);
             -- register for read data
             
             -- read_cache_ff: component dff_negedge_8bit 

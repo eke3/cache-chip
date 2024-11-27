@@ -25,10 +25,9 @@ architecture Test of timed_cache_tb is
             tag_WE   : in std_logic; -- from state machine
             output_enable: in std_logic;
             RW_cache      : in  std_logic; -- from reg
-            RW_cache_SM : in std_logic; -- from SM
             --RW_busy       : in std_logic;
             decoder_enable: in  std_logic; -- from state machine
-            mem_data      : in  std_logic_vector(7 downto 0); -- from memory
+            -- mem_data      : in  std_logic_vector(7 downto 0); -- from memory
             mem_addr      : out std_logic_vector(5 downto 0); -- to memory
             read_cache    : out std_logic_vector(7 downto 0); -- to on-chip register, which will be released off chip by state machine's OUTPUT_ENABLE signal
             hit_or_miss      : out std_logic
@@ -52,7 +51,7 @@ architecture Test of timed_cache_tb is
     signal hit_or_miss : STD_LOGIC;
 
     -- signal from memory
-    signal mem_data : STD_LOGIC_VECTOR(7 downto 0);
+    -- signal mem_data : STD_LOGIC_VECTOR(7 downto 0);
 
     -- output to memory
     signal mem_addr : STD_LOGIC_VECTOR(5 downto 0);
@@ -79,10 +78,9 @@ begin
         tag_WE   => tag_WE,
         output_enable => output_enable,
         RW_cache      => RW_cache,
-        RW_cache_SM => RW_cache_SM,
         --RW_busy       : in std_logic;
         decoder_enable => decoder_enable,
-        mem_data      => mem_data,
+        -- mem_data      => mem_data,
         mem_addr      => mem_addr,
         read_cache    => read_cache,
         hit_or_miss => hit_or_miss
@@ -111,7 +109,7 @@ begin
         output_enable <= 'X';
         RW_cache <= 'X';
         decoder_enable <= 'X';
-        mem_data <= "XXXXXXXX";
+        -- mem_data <= "XXXXXXXX";
         -- hold reset for 2 cycles
 
         reset <= '1';
@@ -125,8 +123,7 @@ begin
         valid_WE <= '0'; tag_WE <= '0';
         decoder_enable <= '1'; -- BUSY signal goes high on the negative clock edge
         output_enable <= '0';
---        RW_cache <= '1'; -- try to read the cache 
-        RW_cache_SM <= '1';
+        RW_cache <= '1'; -- try to read the cache 
         wait for 160 ns;
 
         -- briefly enable writing to valid and tag
@@ -134,31 +131,36 @@ begin
         wait for 20 ns;
         valid_WE <= '0'; tag_WE <= '0';
         -- start transmitting data to write
-        mem_data <= X"AB";
---        RW_cache <= '0';
+        
+        -- *** cpu_data and mem_data consolidated into write_cache. needs external logic to choose which to write from (a mux select from state machine)***
+        write_cache <= X"AB";
+        RW_cache <= '0';
         byte_offset <= "00";
         wait for 40 ns;
-        mem_data <= X"CD";
+        write_cache <= X"CD";
         byte_offset <= "01";
         wait for 40 ns;
-        mem_data <= X"EF";
+        write_cache <= X"EF";
         byte_offset <= "10";
         wait for 40 ns;
-        mem_data <= X"01";
+        write_cache <= X"01";
         byte_offset <= "11";
         wait for 40 ns;
-        -- now we have finished writing, we will now check to see if the write was successful
+        -- now finished writing, reads back the original request
 
---        RW_cache <= '1';
-        decoder_enable <= '1';
-        mem_data <= "XXXXXXXX";
-        wait for 100 ns;
+        RW_cache <= 'X';
+        decoder_enable <= '0';
+        write_cache <= "XXXXXXXX";
+        wait for 20 ns;
 
---        RW_cache <= '1';
-        byte_offset <= "01";
+        -- ***decoder_enable and RW switching during this operation should be controlled by state machine***
+        -- ***decoder_enable needs to go high at the end of this operation when we read back (so it cant just track BUSY)***
+        RW_cache <= '1';
+        byte_offset <= "01"; -- ***re-selecting original byte might not be automated yet? if not, needs implementation outside the timed_cache block***
         decoder_enable <= '1';
         output_enable <= '1';
-        wait for 20 ns;
+        -- data becomes available on a positive edge. on the subsequent negative edge, OUTPUT_ENABLE goes high and it gets transmitted to the cpu
+        wait for 40 ns;
 
         output_enable <= '0';
         decoder_enable <= '0';
