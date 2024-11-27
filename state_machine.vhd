@@ -169,7 +169,7 @@ architecture structural of state_machine is
 
     signal write_count_criteria, set_temp, set_temp_2, output_enable_temp_2, output_enable_temp_3, read_miss: std_logic;
     
-    signal tag_WE_sig, valid_WE_sig: std_logic;
+    signal tag_valid_WE, tag_valid_ready: std_logic;
     
     signal mem_addr_out_enable_sig, shift_7_enable: std_logic;
     
@@ -431,12 +431,18 @@ begin
        reset_in,
        shift_7_enable
     );
+    
+    shift_tag_valid: entity work.shift_register_bit_3 port map(
+        mem_addr_out_enable_sig,
+        clk,
+        tag_valid_WE
+    );
 
     busy <= busy_sig;
     decoder_enable <= busy_sig;
     output_enable <= output_enable_sig;
-    tag_WE <= mem_data_read_enable_sig;
-    valid_WE <= mem_data_read_enable_sig;
+    tag_WE <= tag_valid_WE;
+    valid_WE <= tag_valid_WE;
     mem_addr_out_enable <= mem_addr_out_enable_sig;
     mem_data_read_enable <= mem_data_read_enable_sig;
     
