@@ -72,8 +72,6 @@ architecture structural of chip is
           vdd           : in  std_logic; -- power supply
           gnd : in std_logic;
           shift_register_data : in std_logic_vector(7 downto 0);
-          cpu_byte : in std_logic_vector(1 downto 0);
-          mem_data_read_enable : in std_logic;
           byte_offset : out std_logic_vector(1 downto 0)
       );
   end component byte_selector;
@@ -128,10 +126,11 @@ architecture structural of chip is
       );
   end component inverter;
 
-  signal busy_out, mem_data_read_enable, valid_WE, tag_WE, output_enable, cache_RW, mem_addr_out_enable, hit_or_miss, not_clk, byte_reg_and_out, not_busy, byte_reg_nor_out, decoder_enable : std_logic;
-  signal tag_reg_data_out, block_reg_data_out, byte_reg_data_out, byte_selector_out : std_logic_vector(1 downto 0);
+  signal busy_out, mem_data_read_enable, valid_WE, tag_WE, output_enable, cache_RW, mem_addr_out_enable, hit_or_miss, not_clk, not_busy, decoder_enable : std_logic;
+  signal tag_reg_data_out, block_reg_data_out, byte_selector_out : std_logic_vector(1 downto 0);
   signal data_reg_mux_out, shift_reg_out, data_reg_out : std_logic_vector(7 downto 0);
   signal cpu_data_reg_out, mem_data_reg_out : std_logic_vector(7 downto 0);
+  signal cpu_byte_reg_data_out, mem_byte_reg_data_out, byte : std_logic_vector(1 downto 0);
 
 begin
     clk_inverter : entity work.inverter
@@ -139,12 +138,6 @@ begin
     
     busy_inverter : entity work.inverter
         port map(input => busy_out, output => not_busy);
-
-    byte_reg_and: entity work.and_2x1(structural)
-        port map ( A => not_clk, B => mem_data_read_enable, output => byte_reg_and_out );
-    
-    byte_reg_nor: entity work.nor_2x1(structural)
-        port map ( A => byte_reg_and_out, B => busy_out, output => byte_reg_nor_out );
     
     tag_reg : entity work.dff_negedge_2bit(structural)
         port map ( d => cpu_add(5 downto 4), clk => not_busy, q => tag_reg_data_out, qbar => open );
@@ -153,13 +146,16 @@ begin
         port map ( d => cpu_add(3 downto 2), clk => not_busy, q => block_reg_data_out, qbar => open );
 
     byte_selector_inst : entity work.byte_selector(structural)
-        port map ( vdd => vdd, gnd => gnd, shift_register_data => shift_reg_out, cpu_byte => cpu_add(1 downto 0), mem_data_read_enable => mem_data_read_enable, byte_offset => byte_selector_out );
+        port map ( vdd => vdd, gnd => gnd, shift_register_data => shift_reg_out, byte_offset => byte_selector_out );
     
-    byte_reg : entity work.dff_negedge_2bit(structural)
-        port map ( d => byte_selector_out, clk => byte_reg_nor_out, q => byte_reg_data_out, qbar => open );
+    mem_byte_reg : entity work.dff_negedge_2bit(structural)
+        port map ( d => byte_selector_out, clk => clk, q => mem_byte_reg_data_out, qbar => open );
+    
+    cpu_byte_reg : entity work.dff_negedge_2bit(structural)
+        port map ( d => cpu_add(1 downto 0), clk => not_busy, q => cpu_byte_reg_data_out, qbar => open );
 
-    -- data_reg_mux : entity work.mux_2x1_8bit(structural)
-    --     port map ( A => cpu_data, B => mem_data, sel => mem_data_read_enable, output => data_reg_mux_out );
+    byte_mux: entity work.mux_2x1_2bit(structural)
+        port map ( A => cpu_byte_reg_data_out, B => mem_byte_reg_data_out, sel => mem_data_read_enable, output => byte );
     
     cpu_data_reg : entity work.dff_negedge_8bit(structural)
         port map ( d => cpu_data, clk => not_busy, q => cpu_data_reg_out, qbar => open );
@@ -198,7 +194,7 @@ begin
             reset => reset,
             write_cache   => data_reg_out,
             block_offset  => block_reg_data_out,
-            byte_offset   => byte_reg_data_out,
+            byte_offset   => byte,
             tag     => tag_reg_data_out,
             valid_WE => valid_WE,
             tag_WE   => tag_WE,

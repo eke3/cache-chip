@@ -9,8 +9,6 @@ entity byte_selector is
         vdd : in std_logic;
         gnd : in std_logic;
         shift_register_data : in std_logic_vector(7 downto 0);
-        cpu_byte : in std_logic_vector(1 downto 0);
-        mem_data_read_enable : in std_logic;
         byte_offset : out std_logic_vector(1 downto 0)
     );
 end entity byte_selector;
@@ -38,7 +36,6 @@ architecture structural of byte_selector is
     signal s1, s2, s3, s4 : std_logic_vector(1 downto 0);
     signal mux1_out, mux2_out, mux3_out, mux4_out : std_logic_vector(1 downto 0);
     signal or_out : std_logic_vector(1 downto 0);
-    signal mux_out : std_logic_vector(1 downto 0);
 
     begin
         s1 <= gnd & gnd;
@@ -106,12 +103,5 @@ architecture structural of byte_selector is
             output => or_out
         );
         
-        mux: entity work.mux_2x1_2bit(Structural) port map(
-            A => cpu_byte,
-            B => or_out,
-            sel => mem_data_read_enable,
-            output => mux_out
-        );
-
-        byte_offset <= mux_out;
+        byte_offset <= or_out;
 end architecture structural;
