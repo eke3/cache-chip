@@ -25,7 +25,8 @@ architecture behavior of tb_state_machine is
             mem_data_read_enable: out std_logic;
             data_mux_enable: out std_logic;
             busy: out std_logic;
-            output_enable: out std_logic
+            output_enable: out std_logic;
+            shift_reg_out: out std_logic_vector(7 downto 0)
         );
     end component;
 
@@ -48,6 +49,7 @@ architecture behavior of tb_state_machine is
     signal tb_busy              : std_logic;
     signal tb_output_enable     : std_logic;
     signal tb_reset_in: std_logic;
+    signal tb_shift_reg_out: std_logic_vector(7 downto 0);
 
     -- Clock generation process
 
@@ -70,9 +72,10 @@ begin
             decoder_enable => tb_decoder_enable,
             mem_addr_out_enable => tb_mem_addr_out_enable,
             mem_data_read_enable => tb_mem_data_read_enable,
-            data_mux_enable => tb_data_mux_enable,
+--            data_mux_enable => tb_data_mux_enable,
             busy => tb_busy,
-            output_enable => tb_output_enable
+            output_enable => tb_output_enable,
+            shift_reg_out => tb_shift_reg_out
      );
 
     clk_gen: process

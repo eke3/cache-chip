@@ -10,7 +10,8 @@ entity shift_register_bit_7 is
     port(
         input: in std_logic;
         clk: in std_logic;
-        output: out std_logic
+        output: out std_logic;
+        full_output: out std_logic_vector(7 downto 0)
     );
 end entity shift_register_bit_7;
 
@@ -76,5 +77,15 @@ begin
         clk,
         output
     );
+
+    -- used for byte selection
+    full_output(0) <= input;
+    full_output(1) <= count_1;
+    full_output(2) <= count_2;
+    full_output(3) <= count_3;
+    full_output(4) <= count_4;
+    full_output(5) <= count_5;
+    full_output(6) <= count_6;
+    full_output(7) <= count_7;
 
 end structural;

@@ -32,7 +32,10 @@ entity state_machine is
         mem_data_read_enable: out std_logic;
         -- data_mux_enable: out std_logic;
         busy: out std_logic;
-        output_enable: out std_logic -- cpu data output enable
+        output_enable: out std_logic; -- cpu data output enable
+
+
+        shift_reg_out : out std_logic_vector(7 downto 0)
     );
 end state_machine;
 
@@ -410,7 +413,8 @@ begin
     shift_reg_7: entity work.shift_register_bit_7(structural) port map(
         shift_7_enable,
         clk,
-        mem_data_read_enable_temp
+        mem_data_read_enable_temp,
+        open
     );
     
     -- latch to hold mem data read high for the correct timing
@@ -430,7 +434,8 @@ begin
     shift_reg_7_2: entity work.shift_register_bit_7(structural) port map(
         mem_data_read_enable_temp,
         clk,
-        mem_data_read_disable
+        mem_data_read_disable,
+        shift_reg_out
     );
 
     -- triggers shift register to count out 8 cycles after memory address out 
