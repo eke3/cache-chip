@@ -9,6 +9,8 @@ architecture behavior of tb_state_machine is
     -- Component declaration for state_machine
     component state_machine is
         port(
+            vdd: in std_logic;
+            gnd: in std_logic;
             clk: in std_logic;
             start: in std_logic;
             reset_in: in std_logic;
@@ -29,6 +31,8 @@ architecture behavior of tb_state_machine is
     end component;
 
     -- Test bench signals
+    signal tb_vdd : std_logic := '1';
+    signal tb_gnd : std_logic := '0';
     signal tb_clk               : std_logic := '0';
     signal tb_start             : std_logic := '0';
     signal tb_hit_miss          : std_logic := '0';
@@ -52,6 +56,8 @@ begin
 
     -- Instantiate the state_machine
     uut: entity work.state_machine(Structural) port map (
+            vdd => tb_vdd,
+            gnd => tb_gnd,
             clk => tb_clk,
             start => tb_start,
             reset_in => tb_reset_in,

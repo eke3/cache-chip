@@ -16,6 +16,8 @@ use IEEE.std_logic_1164.all;
 -- mux send enable
 entity state_machine is
     port(
+        vdd : in std_logic;
+        gnd : in std_logic;
         clk: in std_logic;
         start: in std_logic;
         reset_in: in std_logic;
@@ -179,7 +181,15 @@ architecture structural of state_machine is
     
 begin
 
-    cache_RW <= R_W_sig;
+    -- Drives cache_RW low when writing bytes from memory.
+    rw_mux: entity work.mux_2x1(structural) port map(
+        A => R_W_sig,
+        B => gnd,
+        sel => mem_data_read_enable_sig,
+        output => cache_RW
+    );
+
+    -- cache_RW <= R_W_sig;
     
     -- and gate for setting the R_W sr latch
     and_for_RW: entity work.and_2x1(structural) port map(
