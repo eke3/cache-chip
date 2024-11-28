@@ -7,7 +7,7 @@ use IEEE.std_logic_1164.all;
 
 entity chip is 
 port (
-  cpu_addr   : in  std_logic_vector(5 downto 0);
+  cpu_add   : in  std_logic_vector(5 downto 0);
   cpu_data   : inout  std_logic_vector(7 downto 0);
   cpu_rd_wrn : in  std_logic;    
   start      : in  std_logic;
@@ -18,7 +18,7 @@ port (
   gnd        : in  std_logic;
   busy       : out std_logic;
   mem_en     : out std_logic;
-  mem_addr   : out std_logic_vector(5 downto 0));
+  mem_add   : out std_logic_vector(5 downto 0));
 end entity chip;
 
 architecture structural of chip is 
@@ -146,13 +146,13 @@ begin
         port map ( A => byte_reg_and_out, B => busy_out, output => byte_reg_nor_out );
     
     tag_reg : entity work.dff_negedge_2bit(structural)
-        port map ( d => cpu_addr(5 downto 4), clk => not_busy, q => tag_reg_data_out, qbar => open );
+        port map ( d => cpu_add(5 downto 4), clk => not_busy, q => tag_reg_data_out, qbar => open );
     
     block_reg : entity work.dff_negedge_2bit(structural)
-        port map ( d => cpu_addr(3 downto 2), clk => not_busy, q => block_reg_data_out, qbar => open );
+        port map ( d => cpu_add(3 downto 2), clk => not_busy, q => block_reg_data_out, qbar => open );
 
     byte_selector_inst : entity work.byte_selector(structural)
-        port map ( vdd => vdd, gnd => gnd, shift_register_data => shift_reg_out, cpu_byte => cpu_addr(1 downto 0), mem_data_read_enable => mem_data_read_enable, byte_offset => byte_selector_out );
+        port map ( vdd => vdd, gnd => gnd, shift_register_data => shift_reg_out, cpu_byte => cpu_add(1 downto 0), mem_data_read_enable => mem_data_read_enable, byte_offset => byte_selector_out );
     
     byte_reg : entity work.dff_negedge_2bit(structural)
         port map ( d => byte_selector_out, clk => byte_reg_nor_out, q => byte_reg_data_out, qbar => open );
@@ -199,7 +199,7 @@ begin
             RW_cache      => cache_RW,
             decoder_enable => decoder_enable,
             mem_addr_output_enable  => mem_addr_out_enable,
-            mem_addr      => mem_addr,
+            mem_addr      => mem_add,
             read_cache => cpu_data,
             hit_or_miss => hit_or_miss
     );

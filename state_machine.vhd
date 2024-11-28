@@ -33,8 +33,6 @@ entity state_machine is
         -- data_mux_enable: out std_logic;
         busy: out std_logic;
         output_enable: out std_logic; -- cpu data output enable
-
-
         shift_reg_out : out std_logic_vector(7 downto 0)
     );
 end state_machine;
@@ -147,7 +145,8 @@ architecture structural of state_machine is
         port(
             input: in std_logic;
             clk: in std_logic;
-            output: out std_logic
+            output: out std_logic;
+            full_output: out std_logic_vector(7 downto 0)
         );
     end component;
 
