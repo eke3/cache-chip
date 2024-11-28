@@ -46,7 +46,7 @@ architecture Structural of mux_16x1 is
     -- Intermediate signals for the 1-hot encoded AND gates
     signal and_out: STD_LOGIC_VECTOR(15 downto 0);  -- For each AND gate's output
     
-    for or_gate: or_16x1 use entity work.or_16x1(structural);
+    for or_gate: or_16x1 use entity work.or_16x1(Structural);
 
 begin
 

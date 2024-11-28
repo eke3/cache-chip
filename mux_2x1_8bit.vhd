@@ -1,5 +1,5 @@
 -- Entity: mux_2x1_8bit
--- Architecture: structural
+-- Architecture: Structural
 -- Author:
 
 library IEEE;
@@ -47,7 +47,7 @@ architecture Structural of mux_2x1_8bit is
     signal sel_not            : STD_LOGIC;
 
     -- Instantiate the components
-    for sel_inverter: inverter use entity work.inverter(structural);
+    for sel_inverter: inverter use entity work.inverter(Structural);
 
 begin
 

@@ -1,5 +1,5 @@
 -- Entity: demux_1x8
--- Architecture: structural
+-- Architecture: Structural
 -- Author:
 
 library IEEE;
@@ -42,8 +42,8 @@ architecture Structural of demux_1x8 is
     -- Intermediate signals for the inverted select bits
     signal sel_not0, sel_not1, sel_not2 : STD_LOGIC;
 
-    for inv0, inv1, inv2: inverter use entity work.inverter(structural);
-    for and0, and1, and2, and3, and4, and5, and6, and7: and_4x1 use entity work.and_4x1(structural);
+    for inv0, inv1, inv2: inverter use entity work.inverter(Structural);
+    for and0, and1, and2, and3, and4, and5, and6, and7: and_4x1 use entity work.and_4x1(Structural);
 
 begin
     -- Instantiate inverters for each bit of the selector `sel`

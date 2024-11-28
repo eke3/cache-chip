@@ -1,5 +1,5 @@
 -- Entity: positive level triggered D latch
--- Architecture : structural
+-- Architecture : Structural
 -- Author:
 --
 
@@ -17,7 +17,7 @@ entity Dlatch is
     );
 end entity Dlatch;
 
-architecture structural of Dlatch is
+architecture Structural of Dlatch is
 
 
 begin
@@ -31,4 +31,4 @@ begin
         end if;
     end process output;
 
-end architecture structural;
+end architecture Structural;

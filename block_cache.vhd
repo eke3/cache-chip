@@ -1,5 +1,5 @@
 -- Entity: block_cache
--- Architecture: structural
+-- Architecture: Structural
 -- Author:
 
 library IEEE;
@@ -16,7 +16,7 @@ entity block_cache is
             read_data   : out std_logic_vector(7 downto 0));
 end block_cache;
 
-architecture structural of block_cache is
+architecture Structural of block_cache is
 
     component readmiss_writehit 
     port(
@@ -113,50 +113,24 @@ architecture structural of block_cache is
             output : out STD_LOGIC
         );
     end component;
-    
-
-    --for block_0000, block_0001, block_0010, block_0011, block_0100, block_0101, block_0110, block_0111, block_1000, block_1001, 
-    --block_1010, block_1011, block_1100, block_1101, block_1110, block_1111: cache_cell_8bit use entity work.cache_cell_8bit(structural);
-
-    for demux: demux_1x16_8bit use entity work.demux_1x16_8bit(structural);
-
-    -- for data_input_selector_1: data_input_selector use entity work.data_input_selector(structural);
-
-    -- for concatenator_1: concatenator use entity work.concatenator(structural);
-
-    -- for convert_1, convert_2: one_hot_to_binary use entity work.one_hot_to_binary(structural);
-
-    -- for enable_cache_write: readmiss_writehit use entity work.readmiss_writehit(structural);
-
-    --signal block_off_0, block_off_1, byte_off_0, byte_off_1, sel_0, sel_1, sel_2, sel_3, sel_4, sel_5, sel_6, sel_7, sel_8, 
-    --sel_9, sel_10, sel_11, sel_12, sel_13, sel_14, sel_15 : std_logic;
-
-    -- signal out_data: std_logic_vector(7 downto 0);
 
     signal CE: std_logic_vector (15 downto 0);
-
     signal demux_out: std_logic_vector(127 downto 0);
-
-    --type logic_array is array (0 to 4) of std_logic_vector(7 downto 0);
     signal read_array: std_logic_vector(127 downto 0);
-
     signal comb_addr: std_logic_vector(3 downto 0);
-
     signal block_off_bin, byte_off_bin: std_logic_vector (1 downto 0);
-    
     signal cache_RW: std_logic;
-
     signal RW_not, RW_nand_out: std_logic;
 
 begin
 
-    RW_inverter: entity work.inverter(structural)
+    RW_inverter: entity work.inverter(Structural)
         port map (
             input => R_W,
             output => RW_not
         );
 
-    RW_nand: entity work.nand_2x1(structural)
+    RW_nand: entity work.nand_2x1(Structural)
     port map (
         A => RW_not,
         B => hit_miss,
@@ -199,15 +173,6 @@ begin
         );
     end generate gen_cell_4;
 
-    -- enable_cache_write: component readmiss_writehit
-    --     port map(
-    --         hit_miss => hit_miss,
-    --         R_W => R_W,
-    --         enable_cache_write => cache_RW
-    --     );
-    
-    
-
     gen_cell_5: for i in 0 to 3 generate
         block_cell_1: entity work.cache_cell_8bit
         port map (
@@ -248,7 +213,7 @@ begin
         );
     end generate gen_cell_8;
 
-    demux: component demux_1x16_8bit 
+    demux: entity work.demux_1x16_8bit(Structural)
     port map(
         data_in => write_cache,
         sel => comb_addr,
@@ -270,16 +235,7 @@ begin
         data_out_15 => demux_out(7 downto 0)   
     );
 
-    -- data_input_selector_1: entity work.data_input_selector(structural)
-    --     port map(
-    --         cpu_data => cpu_data,
-    --         mem_data => mem_data,
-    --         hit_miss => hit_miss,
-    --         R_W => R_W,
-    --         out_data => out_data
-    --     );
-
-    mux: entity work.mux_16x1_8bit(structural)
+    mux: entity work.mux_16x1_8bit(Structural)
         port map(
             inputs => read_array,
             sel => CE,
@@ -287,25 +243,25 @@ begin
             output => read_data
         );
 
-    convert_1: entity work.one_hot_to_binary(structural)
+    convert_1: entity work.one_hot_to_binary(Structural)
         port map(
             one_hot => block_offset,
             binary => block_off_bin
         );
 
-    convert_2: entity work.one_hot_to_binary(structural)
+    convert_2: entity work.one_hot_to_binary(Structural)
         port map(
             one_hot => byte_offset,
             binary => byte_off_bin
         );
 
-    concatenator_1: entity work.concatenator(structural)
+    concatenator_1: entity work.concatenator(Structural)
         port map(
             input_a => block_off_bin,
             input_b => byte_off_bin,
             output => comb_addr
         );
 
-end architecture structural;
+end architecture Structural;
 
 

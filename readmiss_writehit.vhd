@@ -1,5 +1,5 @@
 -- Entity: readmiss_writehit
--- Architecture: structural
+-- Architecture: Structural
 -- Author:
 
 library STD;
@@ -14,7 +14,7 @@ entity readmiss_writehit is
     );
 end readmiss_writehit;
 
-architecture structural of readmiss_writehit is
+architecture Structural of readmiss_writehit is
 
     component xnor_2x1
         port (
@@ -31,7 +31,7 @@ architecture structural of readmiss_writehit is
         );
     end component;    
 
-    for xnor_1: xnor_2x1 use entity work.xnor_2x1(structural);
+    for xnor_1: xnor_2x1 use entity work.xnor_2x1(Structural);
     
     signal hit_miss_inv, out_inv, temp: std_logic;
 
@@ -43,4 +43,4 @@ begin
     --inverter_1: inverter port map (temp, enable_cache_write);
     
 
-end structural;
+end Structural;

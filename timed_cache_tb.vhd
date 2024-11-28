@@ -57,7 +57,7 @@ architecture Test of timed_cache_tb is
 
 begin
 
-    cache: entity work.timed_cache(structural) port map (
+    cache: entity work.timed_cache(Structural) port map (
         vdd           => vdd,
         gnd           => gnd,
         clk           => clk,

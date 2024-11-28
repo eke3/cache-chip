@@ -9,7 +9,7 @@ entity dff_posedge_4bit is
          );
 end dff_posedge_4bit;
 
-architecture structural of dff_posedge_4bit is
+architecture Structural of dff_posedge_4bit is
     component dff_posedge is
         port ( d   : in  STD_LOGIC;
                clk : in  STD_LOGIC;
@@ -19,7 +19,7 @@ architecture structural of dff_posedge_4bit is
     end component dff_posedge;
 
 begin
-    bit0: entity work.dff_posedge(structural)
+    bit0: entity work.dff_posedge(Structural)
         port map (
             d    => d(0),
             clk  => clk,
@@ -27,7 +27,7 @@ begin
             qbar => qbar(0)
         );
 
-    bit1: entity work.dff_posedge(structural)
+    bit1: entity work.dff_posedge(Structural)
         port map (
             d    => d(1),
             clk  => clk,
@@ -35,7 +35,7 @@ begin
             qbar => qbar(1)
         );
 
-    bit2: entity work.dff_posedge(structural)
+    bit2: entity work.dff_posedge(Structural)
         port map (
             d    => d(2),
             clk  => clk,
@@ -43,7 +43,7 @@ begin
             qbar => qbar(2)
         );
 
-    bit3: entity work.dff_posedge(structural)
+    bit3: entity work.dff_posedge(Structural)
         port map (
             d    => d(3),
             clk  => clk,
@@ -51,5 +51,5 @@ begin
             qbar => qbar(3)
         );
 
-end structural;
+end Structural;
 

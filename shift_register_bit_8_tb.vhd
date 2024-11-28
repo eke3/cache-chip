@@ -5,10 +5,12 @@ entity tb_shift_register_bit_8 is
     -- Test bench has no ports
 end entity tb_shift_register_bit_8;
 
-architecture test of tb_shift_register_bit_8 is
+architecture Test of tb_shift_register_bit_8 is
     -- Component Declaration
     component shift_register_bit_8 is
         port(
+            vdd             : in  std_logic;
+            gnd             : in  std_logic;
             input           : in  std_logic;
             clk             : in  std_logic;
             output          : out std_logic;
@@ -17,6 +19,8 @@ architecture test of tb_shift_register_bit_8 is
     end component;
 
     -- Signals for Input and Output
+    signal vdd             : std_logic := '1';
+    signal gnd             : std_logic := '0';
     signal input_sig       : std_logic := '0';
     signal clk             : std_logic := '0'; -- Test bench clock
     signal output_sig      : std_logic;
@@ -27,8 +31,10 @@ architecture test of tb_shift_register_bit_8 is
 
 begin
     -- Instantiate the Unit Under Test (UUT)
-    uut: entity work.shift_register_bit_8(structural)
+    uut: entity work.shift_register_bit_8(Structural)
         port map(
+            vdd            => vdd,
+            gnd            => gnd,
             input          => input_sig,
             clk            => clk,
             output         => output_sig,
@@ -80,5 +86,5 @@ begin
         wait;
     end process;
 
-end architecture test;
+end architecture Test;
 

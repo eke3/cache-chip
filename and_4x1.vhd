@@ -1,5 +1,5 @@
 -- Entity: and_4x1
--- Architecture: structural
+-- Architecture: Structural
 -- Author:
 
 library STD;
@@ -40,7 +40,7 @@ architecture Structural of and_4x1 is
 
 begin
     -- Instantiate the and_3x1 gate to AND A, B, and C
-    and3: entity work.and_3x1(structural)
+    and3: entity work.and_3x1(Structural)
     port map (
         A      => A,
         B      => B,
@@ -49,7 +49,7 @@ begin
     );
 
     -- Instantiate the and_2x1 gate to AND the result of A, B, and C with D
-    and2: entity work.and_2x1(structural)
+    and2: entity work.and_2x1(Structural)
     port map (
         A      => and_abc,
         B      => D,

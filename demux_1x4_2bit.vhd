@@ -29,7 +29,7 @@ architecture Structural of demux_1x4_2bit is
         );
     end component demux_1x4;
 
-    for demux_0, demux_1: demux_1x4 use entity work.demux_1x4(structural);
+    for demux_0, demux_1: demux_1x4 use entity work.demux_1x4(Structural);
 
 begin
     demux_0: component demux_1x4

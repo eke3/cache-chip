@@ -194,68 +194,68 @@ architecture Structural of timed_cache is
             
         begin
             -- Input signal inverters
-            output_enable_inv : entity work.inverter(structural)
+            output_enable_inv : entity work.inverter(Structural)
                 port map ( input => output_enable, output => output_enable_not );
 
-            mem_addr_output_enable_inv : entity work.inverter(structural)
+            mem_addr_output_enable_inv : entity work.inverter(Structural)
                 port map ( input => mem_addr_output_enable, output => mem_addr_output_enable_not );
 
-            rw_valid_inv : entity work.inverter(structural)
+            rw_valid_inv : entity work.inverter(Structural)
                 port map ( input => valid_WE, output => RW_valid );
     
-            rw_tag_inv : entity work.inverter(structural)
+            rw_tag_inv : entity work.inverter(Structural)
                 port map ( input => tag_WE, output => RW_tag );
 
             -- First input data register.
-            data_ff: entity work.dff_negedge_8bit(structural)
+            data_ff: entity work.dff_negedge_8bit(Structural)
                 port map ( d => write_cache, clk => clk, q => data_reg1, qbar => open );
             
             -- Second Input data register.
-            data_ff2: entity work.dff_posedge_8bit(structural)
+            data_ff2: entity work.dff_posedge_8bit(Structural)
                 port map ( d => data_reg1, clk => clk, q => data_reg2, qbar => open );
             
             -- Block offset decoder.
-            block_decoder: entity work.decoder_2x4(structural)
+            block_decoder: entity work.decoder_2x4(Structural)
                 port map ( A => block_offset, E => decoder_enable, Y => block_decoder_out );
     
             -- Byte offset decoder.
-            byte_decoder: entity work.decoder_2x4(structural)
+            byte_decoder: entity work.decoder_2x4(Structural)
                 port map ( A => byte_offset, E => decoder_enable, Y => byte_decoder_out );
             
             -- Register holding decoded byte offset.
-            byte_decoder_ff: entity work.dff_posedge_4bit(structural)
+            byte_decoder_ff: entity work.dff_posedge_4bit(Structural)
                 port map ( d => byte_decoder_out, clk => clk, q => byte_decoder_reg, qbar => open );
     
             -- Register holding decoded block offset.
-            block_decoder_ff: entity work.dff_posedge_4bit(structural)
+            block_decoder_ff: entity work.dff_posedge_4bit(Structural)
                 port map ( d => block_decoder_out, clk => clk, q => block_decoder_reg, qbar => open );
             
             -- Vertical vector of four 2-bit tag cells.
-            tag_vec: entity work.tag_vector(structural)
+            tag_vec: entity work.tag_vector(Structural)
                 port map ( write_data => tag, chip_enable => block_decoder_out, RW => RW_tag, sel => block_offset, read_data => read_tag );
             
             -- Vertical vector of four 1-bit valid cells.
-            valid_vec: entity work.valid_vector(structural)
+            valid_vec: entity work.valid_vector(Structural)
                 port map ( vdd => vdd, gnd => gnd, write_data => vdd, reset => reset, chip_enable => block_decoder_out, RW => RW_valid, sel => block_offset, read_data => read_valid );
             
             -- 2-bit comparator for tags to check for hit/miss.
-            tag_cmp: entity work.tag_comparator_2x1(structural)
+            tag_cmp: entity work.tag_comparator_2x1(Structural)
                 port map ( A => tag, B => read_tag, output => cmp_tag );
     
             -- 1-bit comparator for valid bits to check for hit/miss.
-            valid_cmp: entity work.valid_comparator_2x1(structural)
+            valid_cmp: entity work.valid_comparator_2x1(Structural)
                 port map ( A => vdd, B => read_valid, output => cmp_valid );
             
             -- 1-bit AND gate to check for hit/miss using tag and valid match results.
-            hit_miss_cmp: entity work.and_2x1(structural)
+            hit_miss_cmp: entity work.and_2x1(Structural)
                 port map ( A => cmp_tag, B => cmp_valid, output => hit_miss );
             
             -- Register holding hit/miss signal.
-            hit_miss_ff: entity work.dff_posedge(structural)
+            hit_miss_ff: entity work.dff_posedge(Structural)
                 port map ( d => hit_miss, clk => clk, q => hit_miss_reg, qbar => open );
 
             -- 4x4 Cache array holding 8-bit data.
-            cache: entity work.block_cache(structural)
+            cache: entity work.block_cache(Structural)
                 port map (write_cache => data_reg2, hit_miss => hit_miss_reg, R_W => RW_cache, byte_offset => byte_decoder_reg, block_offset => block_decoder_reg, read_data => read_cache_data_tx_in);
             
             -- Build memory address that will be sent to memory during a read miss.
@@ -265,7 +265,7 @@ architecture Structural of timed_cache is
             mem_addr_tx_in(0) <= gnd;
 
             -- Transmission gate for memory address going to memory, gated by mem_addr_output_enable.
-            mem_addr_tx : entity work.tx_6bit(structural)
+            mem_addr_tx : entity work.tx_6bit(Structural)
                 port map (
                     sel => mem_addr_output_enable,
                     selnot => mem_addr_output_enable_not,
@@ -274,7 +274,7 @@ architecture Structural of timed_cache is
             );
 
             -- Transmission gate for read cache data going back to the CPU, gated by output_enable.
-            read_data_tx: entity work.tx_8bit(structural)
+            read_data_tx: entity work.tx_8bit(Structural)
             port map (
                 sel => output_enable,
                 selnot => output_enable_not,

@@ -1,6 +1,6 @@
 --
 -- Entity: negative edge triggered D flip-flop (dff)
--- Architecture : structural
+-- Architecture : Structural
 -- Author:
 --
 
@@ -17,7 +17,7 @@ entity dff is
     );
 end entity dff;
 
-architecture structural of dff is
+architecture Structural of dff is
 
 
 begin
@@ -31,4 +31,4 @@ begin
     end process output;
 
 
-end architecture structural;
+end architecture Structural;

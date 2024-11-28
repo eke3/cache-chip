@@ -9,8 +9,8 @@ entity one_hot_to_binary is
     );
 end entity one_hot_to_binary;
 
--- Architecture: structural
-architecture structural of one_hot_to_binary is
+-- Architecture: Structural
+architecture Structural of one_hot_to_binary is
 
     -- Component declarations for OR gates
     component or_2x1 is
@@ -26,7 +26,7 @@ begin
     -- Convert one-hot input to binary output
 
     -- Binary bit 1 (MSB): '1' if one_hot(2) or one_hot(3) is active
-    or_gate_msb: entity work.or_2x1(structural)
+    or_gate_msb: entity work.or_2x1(Structural)
         port map (
             A      => one_hot(2),
             B      => one_hot(3),
@@ -34,12 +34,12 @@ begin
         );
 
     -- Binary bit 0 (LSB): '1' if one_hot(1) or one_hot(3) is active
-    or_gate_lsb: entity work.or_2x1(structural)
+    or_gate_lsb: entity work.or_2x1(Structural)
         port map (
             A      => one_hot(1),
             B      => one_hot(3),
             output => binary(0)
         );
 
-end architecture structural;
+end architecture Structural;
 

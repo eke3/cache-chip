@@ -5,7 +5,7 @@ entity tb_cache_cell_8bit is
 -- Test bench has no ports
 end entity tb_cache_cell_8bit;
 
-architecture behavior of tb_cache_cell_8bit is
+architecture Test of tb_cache_cell_8bit is
     -- Component declaration for the Unit Under Test (UUT)
     component cache_cell_8bit
         port (
@@ -69,4 +69,4 @@ begin
         wait;
     end process;
 
-end architecture behavior;
+end architecture Test;

@@ -27,7 +27,7 @@ architecture Test of mux_4x1_one_hot_2bit_tb is
     signal output : std_logic_vector(1 downto 0);
 begin
     -- instantiate mux_4x1_one_hot_2bit
-    mux_4x1_one_hot_2bit0: entity work.mux_4x1_one_hot_2bit(structural)
+    mux_4x1_one_hot_2bit0: entity work.mux_4x1_one_hot_2bit(Structural)
         port map (
             A => A,
             B => B,

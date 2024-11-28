@@ -27,12 +27,12 @@ architecture Structural of demux_1x2_8bit is
     end component demux_1x2;
 
     -- For demux_1x2 instances, one for each bit of the 8-bit input
-    --    for demux_bit: demux_1x2 use entity work.demux_1x2(structural);
+    --    for demux_bit: demux_1x2 use entity work.demux_1x2(Structural);
 
 begin
     -- Instantiate eight instances of demux_1x2 for each bit of the 8-bit input
     gen_demux: for i in 0 to 7 generate
-        demux: entity work.demux_1x2(structural)
+        demux: entity work.demux_1x2(Structural)
         port map (
             data_in    => data_in(i),    -- Connect each bit of data_in to a demux_1x2
             sel        => sel,           -- Shared 1-bit selector

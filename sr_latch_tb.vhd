@@ -4,7 +4,7 @@ use IEEE.STD_LOGIC_1164.all;
 entity tb_sr_latch is
 end entity tb_sr_latch;
 
-architecture behavior of tb_sr_latch is
+architecture Test of tb_sr_latch is
     -- Component declaration for sr_latch
     component sr_latch
         port (
@@ -23,7 +23,7 @@ architecture behavior of tb_sr_latch is
 
 begin
     -- Instantiate the sr_latch
-    uut: entity work.sr_latch(structural)
+    uut: entity work.sr_latch(Structural)
         port map (
             S  => tb_S,
             R  => tb_R,
@@ -64,5 +64,5 @@ begin
         wait;
     end process stimulus_process;
 
-end architecture behavior;
+end architecture Test;
 

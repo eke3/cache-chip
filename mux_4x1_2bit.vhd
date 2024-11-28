@@ -1,5 +1,5 @@
 -- Entity: mux_4x1_2bit
--- Architecture: structural
+-- Architecture: Structural
 -- Author:
 
 library IEEE;
@@ -34,7 +34,7 @@ architecture Structural of mux_4x1_2bit is
 
 begin
     -- Instantiate the first mux_4x1 for the lower bit (bit 0)
-    mux_bit0: entity work.mux_4x1(structural)
+    mux_bit0: entity work.mux_4x1(Structural)
     port map (
         read_data0 => read_data0(0),
         read_data1 => read_data1(0),
@@ -45,7 +45,7 @@ begin
     );
 
     -- Instantiate the second mux_4x1 for the higher bit (bit 1)
-    mux_bit1: entity work.mux_4x1(structural)
+    mux_bit1: entity work.mux_4x1(Structural)
     port map (
         read_data0 => read_data0(1),
         read_data1 => read_data1(1),

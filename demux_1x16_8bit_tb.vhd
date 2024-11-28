@@ -5,7 +5,7 @@ entity demux_1x16_8bit_tb is
 -- No ports for a testbench
 end demux_1x16_8bit_tb;
 
-architecture behavior of demux_1x16_8bit_tb is
+architecture Test of demux_1x16_8bit_tb is
 
     -- Component declaration
     component demux_1x16_8bit
@@ -53,7 +53,7 @@ architecture behavior of demux_1x16_8bit_tb is
 
 begin
     -- Instantiate the Unit Under Test (UUT)
-    uut: entity work.demux_1x16_8bit(structural)
+    uut: entity work.demux_1x16_8bit(Structural)
         port map (
             data_in     => data_in,
             sel         => sel,
@@ -146,5 +146,5 @@ begin
         wait; -- Stop the process
     end process stimulus_process;
 
-end architecture behavior;
+end architecture Test;
 

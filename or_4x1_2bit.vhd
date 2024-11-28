@@ -1,5 +1,5 @@
 -- Entity: or_4x1_2bit
--- Architecture: structural
+-- Architecture: Structural
 
 library IEEE;
 use IEEE.std_logic_1164.all;
@@ -14,7 +14,7 @@ entity or_4x1_2bit is
     );
 end entity or_4x1_2bit;
 
-architecture structural of or_4x1_2bit is
+architecture Structural of or_4x1_2bit is
 
     component or_4x1 is
         port (
@@ -29,4 +29,4 @@ architecture structural of or_4x1_2bit is
 begin
     u1: entity work.or_4x1(Structural) port map(A(0), B(0), C(0), D(0), output(0));
     u2: entity work.or_4x1(Structural) port map(A(1), B(1), C(1), D(1), output(1));
-end architecture structural;
+end architecture Structural;

@@ -1,5 +1,5 @@
 -- Entity: cache_cell_8bit
--- Architecture: structural
+-- Architecture: Structural
 -- Author:
 
 library STD;
@@ -15,7 +15,7 @@ entity cache_cell_8bit is
     );
 end entity cache_cell_8bit;
 
-architecture structural of cache_cell_8bit is
+architecture Structural of cache_cell_8bit is
     component cache_cell is
         port (
             write_data  : in  std_logic;
@@ -25,7 +25,7 @@ architecture structural of cache_cell_8bit is
         );
     end component cache_cell;
 
-    for cache_0, cache_1, cache_2, cache_3, cache_4, cache_5, cache_6, cache_7: cache_cell use entity work.cache_cell(structural);
+    for cache_0, cache_1, cache_2, cache_3, cache_4, cache_5, cache_6, cache_7: cache_cell use entity work.cache_cell(Structural);
 
 begin
 
@@ -86,4 +86,4 @@ begin
         read_data(7)
     );
 
-end architecture structural;
+end architecture Structural;

@@ -40,14 +40,14 @@ architecture Test of long_latch_tb is
 
         begin
             -- instantiate inverter
-            inverter0: entity work.inverter(structural)
+            inverter0: entity work.inverter(Structural)
                 port map (
                     input  => clock,
                     output => not_clock
                 );
             
             -- instantiate nand gate
-            nand_gate: entity work.nand_2x1(structural)
+            nand_gate: entity work.nand_2x1(Structural)
                 port map (
                     A      => not_clock, 
                     B      => load_data,
@@ -55,7 +55,7 @@ architecture Test of long_latch_tb is
                 );
 
             -- instantiate latch
-            latch: entity work.dff_negedge(structural)
+            latch: entity work.dff_negedge(Structural)
                 port map (
                     d   => data_to_latch,
                     clk => nand_out,

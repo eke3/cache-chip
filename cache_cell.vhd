@@ -1,5 +1,5 @@
 -- Entity: cache_cell
--- Architecture: structural
+-- Architecture: Structural
 -- Author:
 
 library STD;
@@ -16,7 +16,7 @@ entity cache_cell is
 
 end entity cache_cell;
 
-architecture structural of cache_cell is
+architecture Structural of cache_cell is
     component Dlatch is
         port (
             d    : in  std_logic;
@@ -44,9 +44,9 @@ architecture structural of cache_cell is
         );
     end component tx;
 
-    for d_latch: Dlatch use entity work.Dlatch(structural);
-    for selector_inst: selector use entity work.selector(structural);
-    for tx_inst: tx use entity work.tx(structural);
+    for d_latch: Dlatch use entity work.Dlatch(Structural);
+    for selector_inst: selector use entity work.selector(Structural);
+    for tx_inst: tx use entity work.tx(Structural);
 
     signal q               : std_logic;
     signal write_enable, read_enable : std_logic;
@@ -75,4 +75,4 @@ begin
         output => read_data
     );
 
-end architecture structural;
+end architecture Structural;

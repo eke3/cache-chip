@@ -1,5 +1,5 @@
 -- Entity: negative edge triggered D flip-flop (dff)
--- Architecture : structural
+-- Architecture : Structural
 -- Author: 
 
 library STD;
@@ -13,7 +13,7 @@ entity dff_negedge is
          qbar: out std_logic); 
 end dff_negedge;                          
 
-architecture structural of dff_negedge is 
+architecture Structural of dff_negedge is 
 
 begin
   
@@ -25,4 +25,4 @@ begin
     qbar <= not d ;
   end process output;        
                     
-end structural; 
+end Structural; 

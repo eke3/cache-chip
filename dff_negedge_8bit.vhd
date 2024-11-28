@@ -9,7 +9,7 @@ entity dff_negedge_8bit is
          );
 end dff_negedge_8bit;
 
-architecture structural of dff_negedge_8bit is
+architecture Structural of dff_negedge_8bit is
     component dff_negedge is
         port ( d   : in  STD_LOGIC;
                clk : in  STD_LOGIC;
@@ -19,7 +19,7 @@ architecture structural of dff_negedge_8bit is
     end component dff_negedge;
 
 begin
-    bit0: entity work.dff_negedge(structural)
+    bit0: entity work.dff_negedge(Structural)
         port map (
             d   => d(0),
             clk => clk,
@@ -27,7 +27,7 @@ begin
             qbar=> qbar(0)
         );
 
-    bit1: entity work.dff_negedge(structural)
+    bit1: entity work.dff_negedge(Structural)
         port map (
             d   => d(1),
             clk => clk,
@@ -35,7 +35,7 @@ begin
             qbar=> qbar(1)
         );
 
-    bit2: entity work.dff_negedge(structural)
+    bit2: entity work.dff_negedge(Structural)
         port map (
             d   => d(2),
             clk => clk,
@@ -43,7 +43,7 @@ begin
             qbar=> qbar(2)
         );
 
-    bit3: entity work.dff_negedge(structural)
+    bit3: entity work.dff_negedge(Structural)
         port map (
             d   => d(3),
             clk => clk,
@@ -51,7 +51,7 @@ begin
             qbar=> qbar(3)
         );
 
-    bit4: entity work.dff_negedge(structural)
+    bit4: entity work.dff_negedge(Structural)
         port map (
             d   => d(4),
             clk => clk,
@@ -59,7 +59,7 @@ begin
             qbar=> qbar(4)
         );
 
-    bit5: entity work.dff_negedge(structural)
+    bit5: entity work.dff_negedge(Structural)
         port map (
             d   => d(5),
             clk => clk,
@@ -67,7 +67,7 @@ begin
             qbar=> qbar(5)
         );
 
-    bit6: entity work.dff_negedge(structural)
+    bit6: entity work.dff_negedge(Structural)
         port map (
             d   => d(6),
             clk => clk,
@@ -75,7 +75,7 @@ begin
             qbar=> qbar(6)
         );
 
-    bit7: entity work.dff_negedge(structural)
+    bit7: entity work.dff_negedge(Structural)
         port map (
             d   => d(7),
             clk => clk,
@@ -83,5 +83,5 @@ begin
             qbar=> qbar(7)
         );
 
-end structural;
+end Structural;
 

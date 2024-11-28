@@ -13,7 +13,7 @@ entity shift_register_4bit is
     );
 end entity shift_register_4bit;
 
-architecture structural of shift_register_4bit is
+architecture Structural of shift_register_4bit is
     component dff_negedge is
         port ( d   : in  std_logic;
                clk : in  std_logic;
@@ -46,28 +46,28 @@ architecture structural of shift_register_4bit is
 
 begin
 
-    mux1 : entity work.mux_2x1(structural)
+    mux1 : entity work.mux_2x1(Structural)
         port map (
             A      => low_wire,
             B      => d,
             sel    => not_reset,
             output => ff1_mux_in
         );
-    mux2 : entity work.mux_2x1(structural)
+    mux2 : entity work.mux_2x1(Structural)
         port map (
             A      => low_wire,
             B      => ff1_out,
             sel    => not_reset,
             output => ff2_mux_in
         );
-    mux3 : entity work.mux_2x1(structural)
+    mux3 : entity work.mux_2x1(Structural)
         port map (
             A      => low_wire,
             B      => ff2_out,
             sel    => not_reset,
             output => ff3_mux_in
         );
-    mux4 : entity work.mux_2x1(structural)
+    mux4 : entity work.mux_2x1(Structural)
         port map (
             A      => low_wire,
             B      => ff3_out,
@@ -75,34 +75,34 @@ begin
             output => ff4_mux_in
         );
     
-    reset_inverter : entity work.inverter(structural)
+    reset_inverter : entity work.inverter(Structural)
         port map (
             input  => reset,
             output => not_reset
         );
 
-    ff1: entity work.dff_negedge(structural)
+    ff1: entity work.dff_negedge(Structural)
         port map (
             d    => ff1_mux_in,
             clk  => clk,
             q    => ff1_out,
             qbar => open
         );
-    ff2: entity work.dff_negedge(structural)
+    ff2: entity work.dff_negedge(Structural)
         port map (
             d    => ff2_mux_in,
             clk  => clk,
             q    => ff2_out,
             qbar => open
         );
-    ff3: entity work.dff_negedge(structural)
+    ff3: entity work.dff_negedge(Structural)
         port map (
             d    => ff3_mux_in,
             clk  => clk,
             q    => ff3_out,
             qbar => open
         );
-    ff4: entity work.dff_negedge(structural)
+    ff4: entity work.dff_negedge(Structural)
         port map (
             d    => ff4_mux_in,
             clk  => clk,
@@ -115,4 +115,4 @@ begin
     q(1) <= ff3_out;
     q(0) <= ff4_out;
 
-end architecture structural;
+end architecture Structural;

@@ -78,8 +78,8 @@ architecture Structural of demux_1x16 is
     --signal out_6_2     : STD_LOGIC;                        -- Data routed to output 6 of the second demux_1x8
     --signal out_7_2     : STD_LOGIC;                        -- Data routed to output 7 of the second demux_1x8
 
-    for demux_1x2_inst: demux_1x2 use entity work.demux_1x2(structural);
-    for demux_1x8_inst_1, demux_1x8_inst_2: demux_1x8 use entity work.demux_1x8(structural);
+    for demux_1x2_inst: demux_1x2 use entity work.demux_1x2(Structural);
+    for demux_1x8_inst_1, demux_1x8_inst_2: demux_1x8 use entity work.demux_1x8(Structural);
 
 begin
     -- Instantiate the demux_1x2 to split data based on S3

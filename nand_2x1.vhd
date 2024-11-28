@@ -1,5 +1,5 @@
 -- Entity: nand_2x1
--- Architecture: structural
+-- Architecture: Structural
 
 library IEEE;
 use IEEE.std_logic_1164.all;
@@ -12,7 +12,7 @@ entity nand_2x1 is
     );
 end entity nand_2x1;
 
-architecture structural of nand_2x1 is
+architecture Structural of nand_2x1 is
     -- Declare the and_2x1 component
     component and_2x1 is
         port (
@@ -35,7 +35,7 @@ architecture structural of nand_2x1 is
 
 begin
     -- Instantiate the and_2x1 gate to calculate A and B
-    and_gate: entity work.and_2x1(structural)
+    and_gate: entity work.and_2x1(Structural)
         port map (
             A      => A,
             B      => B,
@@ -43,11 +43,11 @@ begin
         );
 
     -- Instantiate the inverter to invert the output of the and_2x1 gate
-    inv_gate: entity work.inverter(structural)
+    inv_gate: entity work.inverter(Structural)
         port map (
             input  => and_out,
             output => output
         );
 
-end architecture structural;
+end architecture Structural;
 

@@ -1,5 +1,5 @@
 -- Entity: mux_2x1_2bit
--- Architecture: structural
+-- Architecture: Structural
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
@@ -29,7 +29,7 @@ architecture Structural of mux_2x1_2bit is
 begin
 
     -- Instantiate the first mux_2x1 for the lower bit
-    mux_2x1_inst0: entity work.mux_2x1(structural)
+    mux_2x1_inst0: entity work.mux_2x1(Structural)
     port map (
         A      => A(0),
         B      => B(0),
@@ -38,7 +38,7 @@ begin
     );
 
     -- Instantiate the second mux_2x1 for the higher bit
-    mux_2x1_inst1: entity work.mux_2x1(structural)
+    mux_2x1_inst1: entity work.mux_2x1(Structural)
     port map (
         A      => A(1),
         B      => B(1),

@@ -1,5 +1,5 @@
 -- Entity: chip
--- Architecture: structural
+-- Architecture: Structural
 
 library STD;
 library IEEE;
@@ -21,7 +21,7 @@ port (
   mem_add   : out std_logic_vector(5 downto 0));
 end entity chip;
 
-architecture structural of chip is 
+architecture Structural of chip is 
 
   component state_machine
       port(
@@ -133,40 +133,40 @@ architecture structural of chip is
   signal cpu_byte_reg_data_out, mem_byte_reg_data_out, byte : std_logic_vector(1 downto 0);
 
 begin
-    clk_inverter : entity work.inverter
+    clk_inverter : entity work.inverter(Structural)
         port map(input => clk, output => not_clk);
     
-    busy_inverter : entity work.inverter
+    busy_inverter : entity work.inverter(Structural)
         port map(input => busy_out, output => not_busy);
     
-    tag_reg : entity work.dff_negedge_2bit(structural)
+    tag_reg : entity work.dff_negedge_2bit(Structural)
         port map ( d => cpu_add(5 downto 4), clk => not_busy, q => tag_reg_data_out, qbar => open );
     
-    block_reg : entity work.dff_negedge_2bit(structural)
+    block_reg : entity work.dff_negedge_2bit(Structural)
         port map ( d => cpu_add(3 downto 2), clk => not_busy, q => block_reg_data_out, qbar => open );
 
-    byte_selector_inst : entity work.byte_selector(structural)
+    byte_selector_inst : entity work.byte_selector(Structural)
         port map ( vdd => vdd, gnd => gnd, shift_register_data => shift_reg_out, byte_offset => byte_selector_out );
     
-    mem_byte_reg : entity work.dff_negedge_2bit(structural)
+    mem_byte_reg : entity work.dff_negedge_2bit(Structural)
         port map ( d => byte_selector_out, clk => clk, q => mem_byte_reg_data_out, qbar => open );
     
-    cpu_byte_reg : entity work.dff_negedge_2bit(structural)
+    cpu_byte_reg : entity work.dff_negedge_2bit(Structural)
         port map ( d => cpu_add(1 downto 0), clk => not_busy, q => cpu_byte_reg_data_out, qbar => open );
 
-    byte_mux: entity work.mux_2x1_2bit(structural)
+    byte_mux: entity work.mux_2x1_2bit(Structural)
         port map ( A => cpu_byte_reg_data_out, B => mem_byte_reg_data_out, sel => mem_data_read_enable, output => byte );
     
-    cpu_data_reg : entity work.dff_negedge_8bit(structural)
+    cpu_data_reg : entity work.dff_negedge_8bit(Structural)
         port map ( d => cpu_data, clk => not_busy, q => cpu_data_reg_out, qbar => open );
     
-    mem_data_reg : entity work.dff_negedge_8bit(structural)
+    mem_data_reg : entity work.dff_negedge_8bit(Structural)
         port map ( d => mem_data, clk => clk, q => mem_data_reg_out, qbar => open );
 
-    data_reg_mux: entity work.mux_2x1_8bit(structural)
+    data_reg_mux: entity work.mux_2x1_8bit(Structural)
         port map ( A => cpu_data_reg_out, B => mem_data_reg_out, sel => mem_data_read_enable, output => data_reg_out );
 
-    state_machine_inst : entity work.state_machine(structural)
+    state_machine_inst : entity work.state_machine(Structural)
         port map (
             vdd => vdd,
             gnd => gnd,
@@ -186,7 +186,7 @@ begin
             shift_reg_out => shift_reg_out
     );
 
-    cache: entity work.timed_cache(structural)
+    cache: entity work.timed_cache(Structural)
         port map (
             vdd => vdd,
             gnd => gnd,
@@ -210,4 +210,4 @@ begin
     busy <= busy_out;
     mem_en <= mem_addr_out_enable;
 
-end architecture structural;
+end architecture Structural;

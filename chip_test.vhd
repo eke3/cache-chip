@@ -13,7 +13,7 @@ entity chip_test is
   
 end chip_test;
   
-architecture test of chip_test is
+architecture Test of chip_test is
 
   component chip  
     port (
@@ -33,7 +33,7 @@ architecture test of chip_test is
 
 
   
-  for c1 : chip use entity work.chip(structural);
+  for c1 : chip use entity work.chip(Structural);
 
   signal Vdd, Gnd: std_logic;
   signal cpu_data, mem_data: std_logic_vector(7 downto 0);

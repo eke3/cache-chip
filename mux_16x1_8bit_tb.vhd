@@ -4,7 +4,7 @@ use IEEE.STD_LOGIC_1164.all;
 entity mux_16x1_8bit_tb is
 end entity mux_16x1_8bit_tb;
 
-architecture Behavioral of mux_16x1_8bit_tb is
+architecture Test of mux_16x1_8bit_tb is
     -- Component Declaration
     component mux_16x1_8bit
         port (
@@ -60,4 +60,4 @@ begin
 
         wait;
     end process;
-end architecture Behavioral;
+end architecture Test;

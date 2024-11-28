@@ -5,7 +5,7 @@ use IEEE.std_logic_1164.all;
 entity tb_shift_register_bit is
 end entity tb_shift_register_bit;
 
-architecture behavior of tb_shift_register_bit is
+architecture Test of tb_shift_register_bit is
     -- Component declaration
     component shift_register_bit_2
         port(
@@ -25,7 +25,7 @@ architecture behavior of tb_shift_register_bit is
     
 begin
     -- Instantiate the shift_register_bit
-    uut: entity work.shift_register_bit_2(structural)
+    uut: entity work.shift_register_bit_2(Structural)
         port map (
             input  => tb_input,
             clk    => tb_clk,
@@ -60,5 +60,5 @@ begin
         wait for clk_period;
 
     end process stimulus_process;
-end architecture behavior;
+end architecture Test;
 

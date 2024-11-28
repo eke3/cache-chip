@@ -5,10 +5,12 @@ entity tb_shift_byte_mem_data is
     -- Test bench has no ports
 end entity tb_shift_byte_mem_data;
 
-architecture test of tb_shift_byte_mem_data is
+architecture Test of tb_shift_byte_mem_data is
     -- Component Declaration
     component shift_byte_mem_data is
         port(
+            vdd      : in  std_logic;
+            gnd      : in  std_logic;
             enable   : in  std_logic;
             mem_byte : in  std_logic_vector(7 downto 0);
             clk      : in  std_logic;
@@ -21,6 +23,8 @@ architecture test of tb_shift_byte_mem_data is
     end component;
 
     -- Signals for Input and Output
+    signal vdd      : std_logic := '1';
+    signal gnd      : std_logic := '0';
     signal enable   : std_logic := '0';
     signal mem_byte : std_logic_vector(7 downto 0) := (others => '0');
     signal tb_clk   : std_logic := '0'; -- Test bench clock
@@ -36,8 +40,10 @@ architecture test of tb_shift_byte_mem_data is
 
 begin
     -- Instantiate the Unit Under Test (UUT)
-    uut: entity work.shift_byte_mem_data(structural)
+    uut: entity work.shift_byte_mem_data(Structural)
         port map(
+            vdd      => vdd,
+            gnd      => gnd,
             enable   => enable,
             mem_byte => mem_byte,
             clk      => clk,
@@ -97,4 +103,4 @@ begin
         wait;
     end process;
 
-end architecture test;
+end architecture Test;

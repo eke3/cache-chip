@@ -1,5 +1,5 @@
 -- Entity: tx -- transmission gate
--- Architecture : structural
+-- Architecture : Structural
 -- Author:
 --
 
@@ -16,7 +16,7 @@ entity tx is
     );
 end entity tx;
 
-architecture structural of tx is
+architecture Structural of tx is
 
 begin
 
@@ -29,4 +29,4 @@ begin
         end if;
     end process txprocess;
 
-end architecture structural;
+end architecture Structural;

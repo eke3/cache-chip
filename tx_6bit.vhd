@@ -1,5 +1,5 @@
 -- Entity: tx_6bit
--- Architecture: structural
+-- Architecture: Structural
 -- Author:
 
 library IEEE;
@@ -14,12 +14,12 @@ entity tx_6bit is
     );
 end entity tx_6bit;
 
-architecture structural of tx_6bit is
+architecture Structural of tx_6bit is
 
 begin
 
     gen_tx: for i in 0 to 5 generate
-        tx_instance: entity work.tx(structural)
+        tx_instance: entity work.tx(Structural)
         port map (
             sel    => sel,
             selnot => selnot,
@@ -28,4 +28,4 @@ begin
         );
     end generate gen_tx;
 
-end architecture structural;
+end architecture Structural;

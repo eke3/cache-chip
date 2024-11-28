@@ -1,5 +1,5 @@
 -- Entity: shift_register_bit_2
--- Architecture: structural
+-- Architecture: Structural
 -- Author:
 
 library STD;
@@ -14,27 +14,23 @@ entity shift_register_bit_2 is
     );
 end entity shift_register_bit_2;
 
-architecture structural of shift_register_bit_2 is
+architecture Structural of shift_register_bit_2 is
 
-    component dff
+    component dff_negedge is
         port(
             d    : in  std_logic;
             clk  : in  std_logic;
             q    : out std_logic;
             qbar : out std_logic
         );
-    end component;
-
-    for dff_1: dff use entity work.dff(structural);
-
-    --signal count_1: std_logic;
+    end component dff_negedge;
 
 begin
 
-    dff_1: dff port map(
+    dff_1: entity work.dff_negedge(Structural) port map(
         input,
         clk,
         output
     );
     
-end structural;
+end Structural;

@@ -4,7 +4,7 @@ use IEEE.STD_LOGIC_1164.all;
 entity tb_state_machine is
 end entity tb_state_machine;
 
-architecture behavior of tb_state_machine is
+architecture Test of tb_state_machine is
 
     -- Component declaration for state_machine
     component state_machine is
@@ -158,4 +158,4 @@ begin
         wait;
     end process stimulus_process;
 
-end architecture behavior;
+end architecture Test;

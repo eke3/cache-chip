@@ -1,5 +1,5 @@
 -- Entity: mux_2x1
--- Architecture: structural
+-- Architecture: Structural
 -- Author:
 
 library IEEE;
@@ -46,9 +46,9 @@ architecture Structural of mux_2x1 is
     -- Intermediate signal for inverted sel bit
     signal sel_not            : STD_LOGIC;
 
-    for sel_inverter: inverter use entity work.inverter(structural);
-    for and_gate0, and_gate1: and_2x1 use entity work.and_2x1(structural);
-    for or_gate: or_2x1 use entity work.or_2x1(structural);
+    for sel_inverter: inverter use entity work.inverter(Structural);
+    for and_gate0, and_gate1: and_2x1 use entity work.and_2x1(Structural);
+    for or_gate: or_2x1 use entity work.or_2x1(Structural);
 
 begin
 

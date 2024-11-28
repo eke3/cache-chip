@@ -9,8 +9,8 @@ entity nor_2x1 is
     );
 end entity nor_2x1;
 
-architecture structural of nor_2x1 is
+architecture Structural of nor_2x1 is
 begin
     -- Assign the NOR operation to the output
     output <= not (A or B);
-end architecture structural;
+end architecture Structural;

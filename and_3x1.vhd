@@ -1,5 +1,5 @@
 -- Entity: and_3x1
--- Architecture: structural
+-- Architecture: Structural
 -- Author:
 
 library IEEE;

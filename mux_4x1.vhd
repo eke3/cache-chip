@@ -1,5 +1,5 @@
 -- Entity: mux_4x1
--- Architecture: structural
+-- Architecture: Structural
 -- Author:
 
 library IEEE;
@@ -53,9 +53,9 @@ architecture Structural of mux_4x1 is
     signal outline :std_logic;
 
 
-    for sel_inverter0, sel_inverter1: inverter use entity work.inverter(structural);
-    for and_gate0, and_gate1, and_gate2, and_gate3: and_3x1 use entity work.and_3x1(structural);
-    for or_gate: or_4x1 use entity work.or_4x1(structural);
+    for sel_inverter0, sel_inverter1: inverter use entity work.inverter(Structural);
+    for and_gate0, and_gate1, and_gate2, and_gate3: and_3x1 use entity work.and_3x1(Structural);
+    for or_gate: or_4x1 use entity work.or_4x1(Structural);
 
 begin
 

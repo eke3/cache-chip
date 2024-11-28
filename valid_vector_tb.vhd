@@ -22,7 +22,7 @@ architecture Test of valid_vector_tb is
     signal read_data : std_logic;
 
 begin
-    uut: entity work.valid_vector(structural)
+    uut: entity work.valid_vector(Structural)
     port map (
         write_data  => write_data,
         reset       => reset,

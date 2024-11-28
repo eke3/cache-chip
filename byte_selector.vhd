@@ -1,5 +1,5 @@
 -- Entity: byte_selector
--- Architecture: structural
+-- Architecture: Structural
 
 library IEEE;
 use IEEE.std_logic_1164.all;
@@ -13,7 +13,7 @@ entity byte_selector is
     );
 end entity byte_selector;
 
-architecture structural of byte_selector is
+architecture Structural of byte_selector is
     component mux_2x1_2bit is
         port (
             A : in std_logic_vector(1 downto 0);
@@ -43,52 +43,52 @@ architecture structural of byte_selector is
         s3 <= vdd & gnd;
         s4 <= vdd & vdd;
 
-        or1: or_2x1 port map(
+        or1: entity work.or_2x1(Structural) port map(
             A => shift_register_data(0),
             B => shift_register_data(1),
             output => or1_out
         );
 
-        or2: or_2x1 port map(
+        or2: entity work.or_2x1(Structural) port map(
             A => shift_register_data(2),
             B => shift_register_data(3),
             output => or2_out
         );
 
-        or3: or_2x1 port map(
+        or3: entity work.or_2x1(Structural) port map(
             A => shift_register_data(4),
             B => shift_register_data(5),
             output => or3_out
         );
 
-        or4: or_2x1 port map(
+        or4: entity work.or_2x1(Structural) port map(
             A => shift_register_data(6),
             B => shift_register_data(7),
             output => or4_out
         );
 
-        mux1: mux_2x1_2bit port map(
+        mux1: entity work.mux_2x1_2bit(Structural) port map(
             A => s1,
             B => s1,
             sel => or1_out,
             output => mux1_out
         );
 
-        mux2: mux_2x1_2bit port map(
+        mux2: entity work.mux_2x1_2bit(Structural) port map(
             A => s1,
             B => s2,
             sel => or2_out,
             output => mux2_out
         );
 
-        mux3: mux_2x1_2bit port map(
+        mux3: entity work.mux_2x1_2bit(Structural) port map(
             A => s1,
             B => s3,
             sel => or3_out,
             output => mux3_out
         );
 
-        mux4: mux_2x1_2bit port map(
+        mux4: entity work.mux_2x1_2bit(Structural) port map(
             A => s1,
             B => s4,
             sel => or4_out,
@@ -104,4 +104,4 @@ architecture structural of byte_selector is
         );
         
         byte_offset <= or_out;
-end architecture structural;
+end architecture Structural;

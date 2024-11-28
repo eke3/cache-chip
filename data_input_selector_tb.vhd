@@ -4,7 +4,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity data_input_selector_tb is
 end entity;
 
-architecture behavior of data_input_selector_tb is
+architecture Test of data_input_selector_tb is
 
     -- Component Declaration for the Unit Under Test (UUT)
     component data_input_selector
@@ -76,5 +76,5 @@ begin
         wait;
     end process;
 
-end architecture behavior;
+end architecture Test;
 

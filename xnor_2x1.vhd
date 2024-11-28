@@ -10,8 +10,8 @@ entity xnor_2x1 is
     );
 end entity xnor_2x1;
 
--- Architecture: structural
-architecture structural of xnor_2x1 is
+-- Architecture: Structural
+architecture Structural of xnor_2x1 is
 
     -- Declare components for XOR and NOT gates
     component xor_2x1 is
@@ -35,7 +35,7 @@ architecture structural of xnor_2x1 is
 begin
 
     -- Instantiate the XOR gate to calculate A xor B
-    xor_gate: entity work.xor_2x1(structural)
+    xor_gate: entity work.xor_2x1(Structural)
         port map (
             A      => A,
             B      => B,
@@ -43,10 +43,10 @@ begin
         );
 
     -- Instantiate the NOT gate to invert the XOR result
-    not_gate: entity work.inverter(structural)
+    not_gate: entity work.inverter(Structural)
         port map (
             input  => xor_out,
             output => output
         );
 
-end architecture structural;
+end architecture Structural;

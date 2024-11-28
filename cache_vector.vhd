@@ -1,5 +1,5 @@
 -- Entity: cache_vector
--- Architecture: structural
+-- Architecture: Structural
 -- Author:
 
 library STD;
@@ -18,7 +18,7 @@ entity cache_vector is
     );
 end entity cache_vector;
 
-architecture structural of cache_vector is
+architecture Structural of cache_vector is
     component cache_cell is
         port (
             write_data  : in  std_logic; -- 1-bit write data
@@ -29,7 +29,7 @@ architecture structural of cache_vector is
     end component cache_cell;
 
     -- Instantiate four cache_cell components with unique chip_enable and read_data
-    for cache_0, cache_1, cache_2, cache_3: cache_cell use entity work.cache_cell(structural);
+    for cache_0, cache_1, cache_2, cache_3: cache_cell use entity work.cache_cell(Structural);
 
 begin
     -- Map each cache cell to its respective chip enable and read data output
@@ -65,4 +65,4 @@ begin
         read_data   => read_data_3       -- Unique read data output for cache cell 3
     );
 
-end architecture structural;
+end architecture Structural;

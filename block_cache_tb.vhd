@@ -8,22 +8,18 @@ architecture Test of block_cache_tb is
 
     -- Test signals
     signal mem_data    : std_logic_vector(7 downto 0);
---    signal mem_addr    : std_logic_vector(5 downto 0);
     signal hit_miss    : std_logic;
     signal R_W         : std_logic;
     signal byte_offset : std_logic_vector(3 downto 0);
     signal block_offset: std_logic_vector(3 downto 0);
     signal cpu_data    : std_logic_vector(7 downto 0);
     signal read_data   : std_logic_vector(7 downto 0);
-    --signal CE          : std_logic_vector(15 downto 0);
-    --signal demux_out   : std_logic_vector(15 downto 0);
 
 begin
 
     uut: entity work.block_cache
         port map (
             mem_data    => mem_data,
---            mem_addr    => mem_addr,
             hit_miss    => hit_miss,
             R_W         => R_W,
             byte_offset => byte_offset,

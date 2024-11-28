@@ -10,8 +10,8 @@ entity xor_2x1 is
     );
 end entity xor_2x1;
 
--- Architecture: structural
-architecture structural of xor_2x1 is
+-- Architecture: Structural
+architecture Structural of xor_2x1 is
 
     -- Declare components for AND, OR, and NOT gates
     component and_2x1 is
@@ -47,20 +47,20 @@ architecture structural of xor_2x1 is
 begin
 
     -- Invert the inputs A and B
-    not_A_gate: entity work.inverter(structural)
+    not_A_gate: entity work.inverter(Structural)
         port map (
             input  => A,
             output => not_A
         );
 
-    not_B_gate: entity work.inverter(structural)
+    not_B_gate: entity work.inverter(Structural)
         port map (
             input  => B,
             output => not_B
         );
 
     -- First AND gate: A AND NOT B
-    and1_gate: entity work.and_2x1(structural)
+    and1_gate: entity work.and_2x1(Structural)
         port map (
             A      => A,
             B      => not_B,
@@ -68,7 +68,7 @@ begin
         );
 
     -- Second AND gate: NOT A AND B
-    and2_gate: entity work.and_2x1(structural)
+    and2_gate: entity work.and_2x1(Structural)
         port map (
             A      => not_A,
             B      => B,
@@ -76,12 +76,12 @@ begin
         );
 
     -- OR gate: (A AND NOT B) OR (NOT A AND B)
-    or_gate: entity work.or_2x1(structural)
+    or_gate: entity work.or_2x1(Structural)
         port map (
             A      => and1_out,
             B      => and2_out,
             output => output
         );
 
-end architecture structural;
+end architecture Structural;
 

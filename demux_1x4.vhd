@@ -38,8 +38,8 @@ architecture Structural of demux_1x4 is
     signal sel_not0 : STD_LOGIC; -- NOT of sel(0)
     signal sel_not1 : STD_LOGIC; -- NOT of sel(1)
 
-    for inv0, inv1: inverter use entity work.inverter(structural);
-    for and_gate_0, and_gate_1, and_gate_2, and_gate_3: and_3x1 use entity work.and_3x1(structural);
+    for inv0, inv1: inverter use entity work.inverter(Structural);
+    for and_gate_0, and_gate_1, and_gate_2, and_gate_3: and_3x1 use entity work.and_3x1(Structural);
 
 begin
     -- Instantiate the two inverters for sel(0) and sel(1)

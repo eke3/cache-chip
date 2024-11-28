@@ -10,8 +10,8 @@ entity buffer_1bit is
 end entity buffer_1bit;
 
 -- Architecture for the 1-bit buffer
-architecture structural of buffer_1bit is
+architecture Structural of buffer_1bit is
 begin
     -- Simply pass the input to the output
     out_bit <= in_bit;
-end architecture structural;
+end architecture Structural;

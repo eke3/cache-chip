@@ -1,5 +1,5 @@
 -- Entity: cache_cell_2bit
--- Architecture: structural
+-- Architecture: Structural
 -- Author:
 
 library STD;
@@ -15,7 +15,7 @@ entity cache_cell_2bit is
     );
 end entity cache_cell_2bit;
 
-architecture structural of cache_cell_2bit is
+architecture Structural of cache_cell_2bit is
     component cache_cell is
         port (
             write_data  : in  std_logic;
@@ -26,7 +26,7 @@ architecture structural of cache_cell_2bit is
     end component cache_cell;
 
     -- Instantiate two cache_cell components, one for each bit
-    for cache_0, cache_1: cache_cell use entity work.cache_cell(structural);
+    for cache_0, cache_1: cache_cell use entity work.cache_cell(Structural);
 
 begin
 
@@ -45,4 +45,4 @@ begin
         read_data(1)
     );
 
-end architecture structural;
+end architecture Structural;

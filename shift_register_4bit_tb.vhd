@@ -23,7 +23,7 @@ architecture Test of shift_register_4bit_tb is
 
 begin
     -- instantiate shift_register_4bit
-    shift_register_4bit0: entity work.shift_register_4bit(structural)
+    shift_register_4bit0: entity work.shift_register_4bit(Structural)
         port map (
             d   => d,
             clk => clk,

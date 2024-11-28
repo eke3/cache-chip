@@ -10,12 +10,12 @@ entity tx_8bit is
     );
 end entity tx_8bit;
 
-architecture structural of tx_8bit is
+architecture Structural of tx_8bit is
 
 begin
 
     gen_tx: for i in 0 to 7 generate
-        tx_instance: entity work.tx(structural)
+        tx_instance: entity work.tx(Structural)
         port map (
             sel    => sel,
             selnot => selnot,
@@ -24,4 +24,4 @@ begin
         );
     end generate gen_tx;
 
-end architecture structural;
+end architecture Structural;

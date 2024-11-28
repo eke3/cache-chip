@@ -1,5 +1,5 @@
 -- Entity: mux_4x1_one_hot_2bit
--- Architecture: structural
+-- Architecture: Structural
 
 library IEEE;
 use IEEE.std_logic_1164.all;
@@ -15,7 +15,7 @@ entity mux_4x1_one_hot_2bit is
     );
 end entity mux_4x1_one_hot_2bit;
 
-architecture structural of mux_4x1_one_hot_2bit is
+architecture Structural of mux_4x1_one_hot_2bit is
     component mux_4x1_one_hot is
         port (
             A : in  std_logic;
@@ -30,7 +30,7 @@ architecture structural of mux_4x1_one_hot_2bit is
     signal result : std_logic_vector(1 downto 0);
 
 begin
-    mux_4x1_one_hot_inst: entity work.mux_4x1_one_hot(structural)
+    mux_4x1_one_hot_inst: entity work.mux_4x1_one_hot(Structural)
         port map (
             A => A(0),
             B => B(0),
@@ -40,7 +40,7 @@ begin
             F => result(0)
         );
 
-    mux_4x1_one_hot_inst2: entity work.mux_4x1_one_hot(structural)
+    mux_4x1_one_hot_inst2: entity work.mux_4x1_one_hot(Structural)
         port map (
             A => A(1),
             B => B(1),
@@ -51,4 +51,4 @@ begin
         );
 
     F <= result;
-end architecture structural;
+end architecture Structural;

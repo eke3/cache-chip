@@ -25,8 +25,8 @@ entity concatenator_8bit is
     );
 end entity concatenator_8bit;
 
--- Architecture using structural approach
-architecture structural of concatenator_8bit is
+-- Architecture using Structural approach
+architecture Structural of concatenator_8bit is
     -- Declare a component that acts as a simple bit buffer
     component buffer_1bit is
         port (
@@ -38,7 +38,7 @@ architecture structural of concatenator_8bit is
     -- Intermediate signals for each individual bit of the 4-bit output
     signal bits: std_logic_vector(15 downto 0);
     
-    for buffer1, buffer2, buffer3, buffer4, buffer5, buffer6, buffer7, buffer8, buffer9, buffer10, buffer11, buffer12, buffer13, buffer14, buffer15, buffer16: buffer_1bit use entity work.buffer_1bit(structural);
+    for buffer1, buffer2, buffer3, buffer4, buffer5, buffer6, buffer7, buffer8, buffer9, buffer10, buffer11, buffer12, buffer13, buffer14, buffer15, buffer16: buffer_1bit use entity work.buffer_1bit(Structural);
     
 begin
     -- Instantiate buffer components for each bit
@@ -141,4 +141,4 @@ begin
     -- Concatenate the output bits to form the 4-bit result
     output <= bits(15) & bits(14) & bits(13) & bits(12) & bits(11) & bits(10) & bits(9) & bits(8) & bits(7) & bits(6) & bits(5) & bits(4) & bits(3) & bits(2) & bits(1) & bits(0);  -- Corrected order
 
-end architecture structural;
+end architecture Structural;

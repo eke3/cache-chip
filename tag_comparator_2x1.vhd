@@ -1,5 +1,5 @@
 -- tag_comparator_2x1.vhd
--- 2-bit comparator using structural design with valid_comparator_2x1 components
+-- 2-bit comparator using Structural design with valid_comparator_2x1 components
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
@@ -36,7 +36,7 @@ architecture Structural of tag_comparator_2x1 is
 
 begin
     -- Compare the most significant bit (A(1) and B(1))
-    U1: entity work.valid_comparator_2x1(structural)
+    U1: entity work.valid_comparator_2x1(Structural)
     port map (
         A      => A(1),
         B      => B(1),
@@ -44,7 +44,7 @@ begin
     );
 
     -- Compare the least significant bit (A(0) and B(0))
-    U2: entity work.valid_comparator_2x1(structural)
+    U2: entity work.valid_comparator_2x1(Structural)
     port map (
         A      => A(0),
         B      => B(0),
@@ -52,7 +52,7 @@ begin
     );
 
     -- AND the results to check if both bits are equal
-    U3: entity work.and_2x1(structural)
+    U3: entity work.and_2x1(Structural)
     port map (
         A      => bit1_equal,
         B      => bit0_equal,

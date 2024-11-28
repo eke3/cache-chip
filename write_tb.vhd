@@ -7,7 +7,7 @@ use IEEE.std_logic_1164.all;
 entity write_tb is
 end write_tb;
 
-architecture test of write_tb is
+architecture Test of write_tb is
 
     -- Component declarations for the Unit Under Test (UUT)
     component dff_posedge is
@@ -188,71 +188,71 @@ architecture test of write_tb is
         
 
     begin
-        clock_inv: entity work.inverter(structural)
+        clock_inv: entity work.inverter(Structural)
             port map ( input => clk, output => not_clk );
 
-        chip_load: entity work.nand_2x1(structural)
+        chip_load: entity work.nand_2x1(Structural)
             port map ( A => not_clk, B => load_chip, output => chip_load_logic );
 
-        data_ff: entity work.dff_negedge_8bit(structural)
+        data_ff: entity work.dff_negedge_8bit(Structural)
             port map ( d => write_cache, clk => chip_load_logic, q => data_reg1, qbar => open );
 
-        byte_ff: entity work.dff_negedge_2bit(structural)
+        byte_ff: entity work.dff_negedge_2bit(Structural)
             port map ( d => byte_offset, clk => chip_load_logic, q => byte_reg1, qbar => open );
 
-        block_ff: entity work.dff_negedge_2bit(structural)
+        block_ff: entity work.dff_negedge_2bit(Structural)
             port map ( d => block_offset, clk => chip_load_logic, q => block_reg1, qbar => open );
 
-        tag_ff: entity work.dff_negedge_2bit(structural)
+        tag_ff: entity work.dff_negedge_2bit(Structural)
             port map ( d => write_tag, clk => chip_load_logic, q => tag_reg, qbar => open );
         
---        valid_ff: entity work.dff_negedge(structural)
+--        valid_ff: entity work.dff_negedge(Structural)
 --            port map ( d => write_valid, clk => clk, q => valid_reg, qbar => open );
 
-        data_ff2: entity work.dff_posedge_8bit(structural)
+        data_ff2: entity work.dff_posedge_8bit(Structural)
             port map ( d => data_reg1, clk => clk, q => data_reg2, qbar => open );
 
-        block_decoder: entity work.decoder_2x4(structural)
+        block_decoder: entity work.decoder_2x4(Structural)
             port map ( A => block_reg1, E => decoder_enable, Y => block_decoder_out );
 
-        byte_decoder: entity work.decoder_2x4(structural)
+        byte_decoder: entity work.decoder_2x4(Structural)
             port map ( A => byte_reg1, E => decoder_enable, Y => byte_decoder_out );
         
-        byte_decoder_ff: entity work.dff_posedge_4bit(structural)
+        byte_decoder_ff: entity work.dff_posedge_4bit(Structural)
             port map ( d => byte_decoder_out, clk => clk, q => byte_decoder_reg, qbar => open );
 
-        block_decoder_ff: entity work.dff_posedge_4bit(structural)
+        block_decoder_ff: entity work.dff_posedge_4bit(Structural)
             port map ( d => block_decoder_out, clk => clk, q => block_decoder_reg, qbar => open );
 
-        tag_vec: entity work.tag_vector(structural)
+        tag_vec: entity work.tag_vector(Structural)
             port map ( write_data => tag_reg, chip_enable => block_decoder_out, RW => RW_tag, sel => block_reg1, read_data => read_tag );
 
---        valid_vec: entity work.valid_vector(structural)
+--        valid_vec: entity work.valid_vector(Structural)
 --            port map ( write_data => valid_reg, reset => reset, chip_enable => block_decoder_out, RW => RW_valid, sel => block_reg1, read_data => read_valid );
 
-        valid_vec: entity work.valid_vector(structural)
+        valid_vec: entity work.valid_vector(Structural)
             port map ( vdd => vdd, gnd => gnd, write_data => write_valid, reset => reset, chip_enable => block_decoder_out, RW => RW_valid, sel => block_reg1, read_data => read_valid );
 
-        tag_cmp: entity work.tag_comparator_2x1(structural)
+        tag_cmp: entity work.tag_comparator_2x1(Structural)
             port map ( A => tag_reg, B => read_tag, output => cmp_tag );
 
-        valid_cmp: entity work.valid_comparator_2x1(structural)
+        valid_cmp: entity work.valid_comparator_2x1(Structural)
             port map ( A => vdd, B => read_valid, output => cmp_valid );
 
-        hit_miss_cmp: entity work.and_2x1(structural)
+        hit_miss_cmp: entity work.and_2x1(Structural)
             port map ( A => cmp_tag, B => cmp_valid, output => hit_miss );
         
-        hit_miss_ff: entity work.dff_posedge(structural)
+        hit_miss_ff: entity work.dff_posedge(Structural)
             port map ( d => hit_miss, clk => clk, q => hit_miss_reg, qbar => open );
 
         -- Now connect everything to the cache array
 
-        cache: entity work.block_cache(structural)
+        cache: entity work.block_cache(Structural)
             port map (mem_data => mem_data, hit_miss => hit_miss_reg, R_W => RW_cache, byte_offset => byte_decoder_reg, block_offset => block_decoder_reg, cpu_data => data_reg2, read_data => read_cache);
            
         -- register for read data
         
-        read_cache_ff: entity work.dff_negedge_8bit(structural)
+        read_cache_ff: entity work.dff_negedge_8bit(Structural)
             port map ( d => read_cache, clk => clk, q => read_cache_reg, qbar => open );
 
         stimulus: process

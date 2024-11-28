@@ -10,8 +10,8 @@ entity concatenator is
     );
 end entity concatenator;
 
--- Architecture using structural approach
-architecture structural of concatenator is
+-- Architecture using Structural approach
+architecture Structural of concatenator is
     -- Declare a component that acts as a simple bit buffer
     component buffer_1bit is
         port (
@@ -25,31 +25,34 @@ architecture structural of concatenator is
     
 begin
     -- Instantiate buffer components for each bit
-    buffer_bit_0 : entity work.buffer_1bit
+    buffer_bit_0 : entity work.buffer_1bit(Structural)
         port map (
             in_bit  => input_a(0),
             out_bit => bit_0
         );
 
-    buffer_bit_1 : entity work.buffer_1bit
+    buffer_bit_1 : entity work.buffer_1bit(Structural)
         port map (
             in_bit  => input_a(1),
             out_bit => bit_1
         );
 
-    buffer_bit_2 : entity work.buffer_1bit
+    buffer_bit_2 : entity work.buffer_1bit(Structural)
         port map (
             in_bit  => input_b(0),
             out_bit => bit_2
         );
 
-    buffer_bit_3 : entity work.buffer_1bit
+    buffer_bit_3 : entity work.buffer_1bit(Structural)
         port map (
             in_bit  => input_b(1),
             out_bit => bit_3
         );
 
     -- Concatenate the output bits to form the 4-bit result
-    output <= bit_1 & bit_0 & bit_3 & bit_2;  -- Corrected order
+    output(3) <= bit_1;
+    output(2) <= bit_0;
+    output(1) <= bit_3;
+    output(0) <= bit_2;
 
-end architecture structural;
+end architecture Structural;

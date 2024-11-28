@@ -1,5 +1,5 @@
 -- Entity: cache_vector_8bit
--- Architecture: structural
+-- Architecture: Structural
 -- Author:
 
 library STD;
@@ -18,7 +18,7 @@ entity cache_vector_8bit is
     );
 end entity cache_vector_8bit;
 
-architecture structural of cache_vector_8bit is
+architecture Structural of cache_vector_8bit is
     component cache_cell_8bit is
         port (
             write_data  : in  std_logic_vector(7 downto 0); -- 8-bit write data
@@ -29,7 +29,7 @@ architecture structural of cache_vector_8bit is
     end component cache_cell_8bit;
 
     -- Instantiate four cache_cell_8bit components with unique chip_enable and read_data
-    for cache_0, cache_1, cache_2, cache_3: cache_cell_8bit use entity work.cache_cell_8bit(structural);
+    for cache_0, cache_1, cache_2, cache_3: cache_cell_8bit use entity work.cache_cell_8bit(Structural);
 
 begin
     -- Map each cache cell to its respective chip enable and read data output
@@ -65,4 +65,4 @@ begin
         read_data   => read_data_3                          -- Unique read data output for cache cell 3
     );
 
-end architecture structural;
+end architecture Structural;

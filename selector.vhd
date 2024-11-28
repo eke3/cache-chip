@@ -1,5 +1,5 @@
 -- Entity: selector
--- Architecture: structural
+-- Architecture: Structural
 -- Author:
 
 library STD;
@@ -15,7 +15,7 @@ entity selector is
     );
 end entity selector;
 
-architecture structural of selector is
+architecture Structural of selector is
     component and_2x1 is
         port (
             A      : in  std_logic;
@@ -31,8 +31,8 @@ architecture structural of selector is
         );
     end component inverter;
 
-    for and_1, and_2: and_2x1 use entity work.and_2x1(structural);
-    for inverter_1: inverter use entity work.inverter(structural);
+    for and_1, and_2: and_2x1 use entity work.and_2x1(Structural);
+    for inverter_1: inverter use entity work.inverter(Structural);
 
     signal write_inv : std_logic;
 
@@ -54,4 +54,4 @@ begin
         write_inv,
         write_enable
     );
-end architecture structural;
+end architecture Structural;

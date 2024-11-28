@@ -60,9 +60,9 @@ architecture Structural of valid_vector is
     signal read_data_0, read_data_1, read_data_2, read_data_3 : STD_LOGIC;
     signal outline : std_logic; 
 
-    for demux: demux_1x4 use entity work.demux_1x4(structural);
-    for cell_0, cell_1, cell_2, cell_3: valid_cell use entity work.valid_cell(structural);
-    for mux: mux_4x1 use entity work.mux_4x1(structural);
+    for demux: demux_1x4 use entity work.demux_1x4(Structural);
+    for cell_0, cell_1, cell_2, cell_3: valid_cell use entity work.valid_cell(Structural);
+    for mux: mux_4x1 use entity work.mux_4x1(Structural);
 
 begin
     -- get only the output you want
