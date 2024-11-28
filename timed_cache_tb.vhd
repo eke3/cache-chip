@@ -17,7 +17,6 @@ architecture Test of timed_cache_tb is
             write_cache   : in  std_logic_vector(7 downto 0); -- from on-chip register, released by state machine
             block_offset  : in  std_logic_vector(1 downto 0); -- from on-chip register, released by state machine
             byte_offset   : in  std_logic_vector(1 downto 0); -- from on-chip register, released by state machine
-            write_valid   : in  std_logic; --from on-chip register, released by state machine
             tag     : in  std_logic_vector(1 downto 0); -- from on-chip register, released by state machine
             valid_WE : in std_logic; -- from state machine
             tag_WE   : in std_logic; -- from state machine
@@ -41,7 +40,7 @@ architecture Test of timed_cache_tb is
 
     -- signals from cpu
     signal tag, block_offset, byte_offset : STD_LOGIC_VECTOR(1 downto 0);
-    signal write_valid, START : STD_LOGIC;
+    signal START : STD_LOGIC;
 
     -- signals from state machine
     signal valid_WE, tag_WE, output_enable, RW_cache, decoder_enable, mem_addr_output_enable, BUSY : STD_LOGIC;
@@ -66,7 +65,6 @@ begin
         write_cache   => write_cache,
         block_offset  => block_offset,
         byte_offset   => byte_offset,
-        write_valid   => write_valid,
         tag     => tag,
         valid_WE => valid_WE,
         tag_WE   => tag_WE,
@@ -209,7 +207,6 @@ begin
             write_cache  <= "XXXXXXXX"; -- cpu data
             block_offset <= "XX";
             byte_offset <= "XX";
-            write_valid <= '1'; -- always 1
             tag <= "XX";
             valid_WE <= 'X';
             tag_WE <= 'X';
@@ -247,7 +244,6 @@ begin
                 write_cache  <= "XXXXXXXX"; -- cpu data
                 block_offset <= "XX";
                 byte_offset <= "XX";
-                write_valid <= '1'; -- always 1
                 tag <= "XX";
                 valid_WE <= 'X';
                 tag_WE <= 'X';
@@ -283,7 +279,6 @@ begin
 
         -- THIS BLOCK TESTS WRITE HIT
             system_reset;
-            wait for 10 ns;
             read_miss_test;
             write_hit_test;
             -- should write to one of the cells written and validated by the read miss

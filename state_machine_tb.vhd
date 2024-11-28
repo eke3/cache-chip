@@ -16,7 +16,6 @@ architecture behavior of tb_state_machine is
             reset_in: in std_logic;
             hit_miss: in std_logic;
             R_W: in std_logic;
-            cpu_addr: in std_logic_vector(5 downto 0);
             --mem_addr_ready: in std_logic;
             cache_RW: out std_logic;
             valid_WE: out std_logic;
@@ -63,7 +62,7 @@ begin
             reset_in => tb_reset_in,
             hit_miss => tb_hit_miss,
             R_W => tb_R_W,
-            cpu_addr => tb_cpu_addr,
+            -- cpu_addr => tb_cpu_addr,
             --mem_addr_ready => tb_mem_addr_ready,
             cache_RW => tb_cache_RW,
             valid_WE => tb_valid_RW,

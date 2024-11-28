@@ -13,7 +13,6 @@ entity timed_cache is
         write_cache   : in  std_logic_vector(7 downto 0); -- from on-chip register, released by state machine
         block_offset  : in  std_logic_vector(1 downto 0); -- from on-chip register, released by state machine
         byte_offset   : in  std_logic_vector(1 downto 0); -- from on-chip register, released by state machine
-        write_valid   : in  std_logic; --from on-chip register, released by state machine
         tag     : in  std_logic_vector(1 downto 0); -- from on-chip register, released by state machine
         valid_WE : in std_logic; -- from state machine
         tag_WE   : in std_logic; -- from state machine
@@ -237,7 +236,7 @@ architecture Structural of timed_cache is
             
             -- Vertical vector of four 1-bit valid cells.
             valid_vec: entity work.valid_vector(structural)
-                port map ( vdd => vdd, gnd => gnd, write_data => write_valid, reset => reset, chip_enable => block_decoder_out, RW => RW_valid, sel => block_offset, read_data => read_valid );
+                port map ( vdd => vdd, gnd => gnd, write_data => vdd, reset => reset, chip_enable => block_decoder_out, RW => RW_valid, sel => block_offset, read_data => read_valid );
             
             -- 2-bit comparator for tags to check for hit/miss.
             tag_cmp: entity work.tag_comparator_2x1(structural)

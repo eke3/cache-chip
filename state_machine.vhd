@@ -23,7 +23,6 @@ entity state_machine is
         reset_in: in std_logic;
         hit_miss: in std_logic;
         R_W: in std_logic;
-        cpu_addr: in std_logic_vector(5 downto 0);
 
         cache_RW: out std_logic;
         valid_WE: out std_logic;
@@ -31,8 +30,8 @@ entity state_machine is
         decoder_enable: out std_logic;
         mem_addr_out_enable: out std_logic;
         mem_data_read_enable: out std_logic;
-        data_mux_enable: out std_logic;
-        busy: out std_logic; -- also use for decoder enable
+        -- data_mux_enable: out std_logic;
+        busy: out std_logic;
         output_enable: out std_logic -- cpu data output enable
     );
 end state_machine;
