@@ -95,4 +95,3 @@ begin
     );
 
 end architecture Structural;
-

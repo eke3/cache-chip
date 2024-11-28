@@ -9,8 +9,8 @@ entity mux_2x1_8bit is
     port (
         A      : in  STD_LOGIC_VECTOR(7 downto 0); -- Input 0 (8 bits)
         B      : in  STD_LOGIC_VECTOR(7 downto 0); -- Input 1 (8 bits)
-        sel    : in  STD_LOGIC;                    -- sel signal
-        output : out STD_LOGIC_VECTOR(7 downto 0)  -- Output of the multiplexer (8 bits)
+        sel    : in  STD_LOGIC; -- sel signal
+        output : out STD_LOGIC_VECTOR(7 downto 0) -- Output of the multiplexer (8 bits)
     );
 end entity mux_2x1_8bit;
 
@@ -54,8 +54,8 @@ begin
     -- Instantiate the inverter to generate sel_not signal
     sel_inverter: component inverter
     port map (
-        input  => sel,
-        output => sel_not
+        input      => sel,
+        output     => sel_not
     );
 
     -- Instantiate the and_2x1 gates for each bit of the 8-bit input
@@ -66,7 +66,7 @@ begin
             B      => sel_not,
             output => and_out0(i)
         );
-    end generate gen_and_gate0;
+    end generate;
 
     gen_and_gate1: for i in 0 to 7 generate
         and_gate1: entity work.and_2x1
@@ -75,7 +75,7 @@ begin
             B      => sel,
             output => and_out1(i)
         );
-    end generate gen_and_gate1;
+    end generate;
 
     -- Instantiate the or_2x1 gate to combine the outputs of the and gates for each bit
     gen_or_gate: for i in 0 to 7 generate
@@ -85,6 +85,6 @@ begin
             B      => and_out1(i),
             output => output(i)
         );
-    end generate gen_or_gate;
+    end generate;
 
 end architecture Structural;

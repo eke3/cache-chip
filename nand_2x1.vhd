@@ -36,18 +36,17 @@ architecture Structural of nand_2x1 is
 begin
     -- Instantiate the and_2x1 gate to calculate A and B
     and_gate: entity work.and_2x1(Structural)
-        port map (
-            A      => A,
-            B      => B,
-            output => and_out
-        );
+    port map (
+        A      => A,
+        B      => B,
+        output => and_out
+    );
 
     -- Instantiate the inverter to invert the output of the and_2x1 gate
     inv_gate: entity work.inverter(Structural)
-        port map (
-            input  => and_out,
-            output => output
-        );
+    port map (
+        input  => and_out,
+        output => output
+    );
 
 end architecture Structural;
-

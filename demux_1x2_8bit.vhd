@@ -42,4 +42,3 @@ begin
     end generate;
 
 end architecture Structural;
-

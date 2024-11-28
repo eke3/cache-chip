@@ -60,4 +60,3 @@ begin
     F(1) <= F_bit1;
 
 end architecture Structural;
-

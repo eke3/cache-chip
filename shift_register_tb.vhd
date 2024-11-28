@@ -7,30 +7,30 @@ end entity tb_shift_register_bit;
 
 architecture Test of tb_shift_register_bit is
     -- Component declaration
-    component shift_register_bit_2
-        port(
+    component shift_register_bit_2 is
+        port (
             input  : in  std_logic;
             clk    : in  std_logic;
             output : out std_logic
         );
-    end component;
+    end component shift_register_bit_2;
 
     -- Test bench signals
-    signal tb_input  : std_logic := '0';
-    signal tb_clk    : std_logic := '0';
-    signal tb_output : std_logic;
+    signal tb_input     : std_logic := '0';
+    signal tb_clk       : std_logic := '0';
+    signal tb_output    : std_logic;
 
     -- Clock period constant
-    constant clk_period : time := 20 ns;
-    
+    constant clk_period : time      := 20 ns;
+
 begin
     -- Instantiate the shift_register_bit
     uut: entity work.shift_register_bit_2(Structural)
-        port map (
-            input  => tb_input,
-            clk    => tb_clk,
-            output => tb_output
-        );
+    port map (
+        input  => tb_input,
+        clk    => tb_clk,
+        output => tb_output
+    );
 
     -- Clock process
     clk_process: process
@@ -47,13 +47,14 @@ begin
     stimulus_process: process
     begin
         -- Initial state
-        tb_input <= '0';
+        tb_input   <= '0';
         wait for clk_period;
         wait for clk_period;
 
         -- Apply a series of test inputs
-        tb_input <= '1'; wait for clk_period;
-        tb_input<='0';
+        tb_input   <= '1';
+        wait for clk_period;
+        tb_input   <= '0';
         wait for clk_period;
         wait for clk_period;
         wait for clk_period;
@@ -61,4 +62,3 @@ begin
 
     end process stimulus_process;
 end architecture Test;
-

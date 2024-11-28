@@ -12,14 +12,14 @@ architecture Test of valid_vector_tb is
             chip_enable : in  std_logic_vector(3 downto 0);
             RW          : in  std_logic;
             sel         : in  std_logic_vector(1 downto 0);
-            read_data : out std_logic
+            read_data   : out std_logic
         );
     end component valid_vector;
 
-    signal write_data, reset, RW                              : std_logic;
-    signal chip_enable                                        : std_logic_vector(3 downto 0);
-    signal sel                                                : std_logic_vector(1 downto 0);
-    signal read_data : std_logic;
+    signal write_data, reset, RW : std_logic;
+    signal chip_enable           : std_logic_vector(3 downto 0);
+    signal sel                   : std_logic_vector(1 downto 0);
+    signal read_data             : std_logic;
 
 begin
     uut: entity work.valid_vector(Structural)
@@ -29,19 +29,19 @@ begin
         chip_enable => chip_enable,
         RW          => RW,
         sel         => sel,
-        read_data => read_data
+        read_data   => read_data
     );
 
     process
     begin
-    
-        write_data <= 'X';
+
+        write_data  <= 'X';
         chip_enable <= "0001";
-        sel <= "00";
-        RW <= '1';
-        reset <= '0';
+        sel         <= "00";
+        RW          <= '1';
+        reset       <= '0';
         wait for 10 ns;
-        
+
         -- Reset
         reset       <= '1';
         write_data  <= '0';
@@ -53,12 +53,12 @@ begin
         -- Release reset
         reset       <= '0';
         wait for 10 ns;
-        
-        RW <= '1';
+
+        RW          <= '1';
         chip_enable <= "0001";
         wait for 10 ns;
-        
-        
+
+
         -- Write 1 to cell 0
         write_data  <= '1';
         chip_enable <= "0001";
@@ -153,4 +153,3 @@ begin
     end process;
 
 end architecture Test;
-

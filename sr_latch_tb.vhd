@@ -6,14 +6,14 @@ end entity tb_sr_latch;
 
 architecture Test of tb_sr_latch is
     -- Component declaration for sr_latch
-    component sr_latch
+    component sr_latch is
         port (
-            S  : in  std_logic;  -- Set input
-            R  : in  std_logic;  -- Reset input
-            Q  : inout std_logic; -- Output Q
-            Qn : inout std_logic  -- Complement of Q
+            S  : in    std_logic;    -- Set input
+            R  : in    std_logic;    -- Reset input
+            Q  : inout std_logic;    -- Output Q
+            Qn : inout std_logic     -- Complement of Q
         );
-    end component;
+    end component sr_latch;
 
     -- Test bench signals
     signal tb_S  : std_logic := '0'; -- Initialize S to 0
@@ -24,21 +24,21 @@ architecture Test of tb_sr_latch is
 begin
     -- Instantiate the sr_latch
     uut: entity work.sr_latch(Structural)
-        port map (
-            S  => tb_S,
-            R  => tb_R,
-            Q  => tb_Q,
-            Qn => tb_Qn
-        );
+    port map (
+        S  => tb_S,
+        R  => tb_R,
+        Q  => tb_Q,
+        Qn => tb_Qn
+    );
 
     -- Stimulus process
     stimulus_process: process
     begin
-    
+
         tb_S <= '1';
         tb_R <= '0';
         wait for 20 ns;
-    
+
         -- Test case 1: Hold state (S=0, R=0)
         tb_S <= '0';
         tb_R <= '0';
@@ -65,4 +65,3 @@ begin
     end process stimulus_process;
 
 end architecture Test;
-

@@ -11,10 +11,10 @@ end entity selector_tb;
 architecture Test of selector_tb is
 
     -- Signals to connect to the selector inputs and outputs
-    signal chip_enable  : std_logic;
-    signal RW           : std_logic;
-    signal read_enable  : std_logic;
-    signal write_enable : std_logic;
+    signal chip_enable    : std_logic;
+    signal RW             : std_logic;
+    signal read_enable    : std_logic;
+    signal write_enable   : std_logic;
 
     -- Test vector array to hold combinations of chip_enable and RW inputs
     type test_vector_array is array (natural range <>) of std_logic_vector(1 downto 0);
@@ -26,7 +26,7 @@ architecture Test of selector_tb is
     );
 
     -- Index to iterate over test vectors
-    signal test_index : integer := 0;
+    signal test_index     : integer           := 0;
 
     -- Procedure to print current input and output values
     procedure print_output is
@@ -36,12 +36,12 @@ architecture Test of selector_tb is
         write(out_line, std_logic'image(chip_enable));
         write(out_line, string'(" RW: "));
         write(out_line, std_logic'image(RW));
-        
+
         write(out_line, string'(" | Outputs - Read Enable: "));
         write(out_line, std_logic'image(read_enable));
         write(out_line, string'(" Write Enable: "));
         write(out_line, std_logic'image(write_enable));
-        
+
         writeline(output, out_line);
     end procedure print_output;
 

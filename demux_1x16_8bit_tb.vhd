@@ -1,14 +1,14 @@
 library IEEE;
-use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_1164.all;
 
 entity demux_1x16_8bit_tb is
--- No ports for a testbench
-end demux_1x16_8bit_tb;
+    -- No ports for a testbench
+end entity demux_1x16_8bit_tb;
 
 architecture Test of demux_1x16_8bit_tb is
 
     -- Component declaration
-    component demux_1x16_8bit
+    component demux_1x16_8bit is
         port (
             data_in     : in  STD_LOGIC_VECTOR(7 downto 0);
             sel         : in  STD_LOGIC_VECTOR(3 downto 0);
@@ -29,7 +29,7 @@ architecture Test of demux_1x16_8bit_tb is
             data_out_14 : out STD_LOGIC_VECTOR(7 downto 0);
             data_out_15 : out STD_LOGIC_VECTOR(7 downto 0)
         );
-    end component;
+    end component demux_1x16_8bit;
 
     -- Testbench signals
     signal data_in     : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
@@ -54,97 +54,96 @@ architecture Test of demux_1x16_8bit_tb is
 begin
     -- Instantiate the Unit Under Test (UUT)
     uut: entity work.demux_1x16_8bit(Structural)
-        port map (
-            data_in     => data_in,
-            sel         => sel,
-            data_out_0  => data_out_0,
-            data_out_1  => data_out_1,
-            data_out_2  => data_out_2,
-            data_out_3  => data_out_3,
-            data_out_4  => data_out_4,
-            data_out_5  => data_out_5,
-            data_out_6  => data_out_6,
-            data_out_7  => data_out_7,
-            data_out_8  => data_out_8,
-            data_out_9  => data_out_9,
-            data_out_10 => data_out_10,
-            data_out_11 => data_out_11,
-            data_out_12 => data_out_12,
-            data_out_13 => data_out_13,
-            data_out_14 => data_out_14,
-            data_out_15 => data_out_15
-        );
+    port map (
+        data_in     => data_in,
+        sel         => sel,
+        data_out_0  => data_out_0,
+        data_out_1  => data_out_1,
+        data_out_2  => data_out_2,
+        data_out_3  => data_out_3,
+        data_out_4  => data_out_4,
+        data_out_5  => data_out_5,
+        data_out_6  => data_out_6,
+        data_out_7  => data_out_7,
+        data_out_8  => data_out_8,
+        data_out_9  => data_out_9,
+        data_out_10 => data_out_10,
+        data_out_11 => data_out_11,
+        data_out_12 => data_out_12,
+        data_out_13 => data_out_13,
+        data_out_14 => data_out_14,
+        data_out_15 => data_out_15
+    );
 
     -- Test process
     stimulus_process: process
     begin
         -- Loop through all selector values
-        data_in <= "10101010";  -- Example input
-        sel <= "0000";  -- Select output channel
-        wait for 10 ns; -- Allow time for propagation
-        
-        data_in <= "10101010";  -- Example input
-        sel <= "0001";  -- Select output channel
-        wait for 10 ns; -- Allow time for propagation
-        
-        data_in <= "10101010";  -- Example input
-        sel <= "0010";  -- Select output channel
-        wait for 10 ns; -- Allow time for propagation
-        
-        data_in <= "10101010";  -- Example input
-        sel <= "0011";  -- Select output channel
-        wait for 10 ns; -- Allow time for propagation
-        
-        data_in <= "10101010";  -- Example input
-        sel <= "0100";  -- Select output channel
-        wait for 10 ns; -- Allow time for propagation
-        
-        data_in <= "10101010";  -- Example input
-        sel <= "0101";  -- Select output channel
-        wait for 10 ns; -- Allow time for propagation
-        
-        data_in <= "10101010";  -- Example input
-        sel <= "0110";  -- Select output channel
-        wait for 10 ns; -- Allow time for propagation
-        
-        data_in <= "10101010";  -- Example input
-        sel <= "0111";  -- Select output channel
-        wait for 10 ns; -- Allow time for propagation
-        
-        data_in <= "10101010";  -- Example input
-        sel <= "1000";  -- Select output channel
-        wait for 10 ns; -- Allow time for propagation
-        
-        data_in <= "10101010";  -- Example input
-        sel <= "1001";  -- Select output channel
-        wait for 10 ns; -- Allow time for propagation
+        data_in <= "10101010"; -- Example input
+        sel     <= "0000";     -- Select output channel
+        wait for 10 ns;        -- Allow time for propagation
 
-        data_in <= "10101010";  -- Example input
-        sel <= "1010";  -- Select output channel
-        wait for 10 ns; -- Allow time for propagation
-        
-        data_in <= "10101010";  -- Example input
-        sel <= "1011";  -- Select output channel
-        wait for 10 ns; -- Allow time for propagation
-        
-        data_in <= "10101010";  -- Example input
-        sel <= "1100";  -- Select output channel
-        wait for 10 ns; -- Allow time for propagation
-        
-        data_in <= "10101010";  -- Example input
-        sel <= "1101";  -- Select output channel
-        wait for 10 ns; -- Allow time for propagation
-        
-        data_in <= "10101010";  -- Example input
-        sel <= "1110";  -- Select output channel
-        wait for 10 ns; -- Allow time for propagation
-        
-        data_in <= "10101010";  -- Example input
-        sel <= "1111";  -- Select output channel
-        wait for 10 ns; -- Allow time for propagation
-        
-        wait; -- Stop the process
+        data_in <= "10101010"; -- Example input
+        sel     <= "0001";     -- Select output channel
+        wait for 10 ns;        -- Allow time for propagation
+
+        data_in <= "10101010"; -- Example input
+        sel     <= "0010";     -- Select output channel
+        wait for 10 ns;        -- Allow time for propagation
+
+        data_in <= "10101010"; -- Example input
+        sel     <= "0011";     -- Select output channel
+        wait for 10 ns;        -- Allow time for propagation
+
+        data_in <= "10101010"; -- Example input
+        sel     <= "0100";     -- Select output channel
+        wait for 10 ns;        -- Allow time for propagation
+
+        data_in <= "10101010"; -- Example input
+        sel     <= "0101";     -- Select output channel
+        wait for 10 ns;        -- Allow time for propagation
+
+        data_in <= "10101010"; -- Example input
+        sel     <= "0110";     -- Select output channel
+        wait for 10 ns;        -- Allow time for propagation
+
+        data_in <= "10101010"; -- Example input
+        sel     <= "0111";     -- Select output channel
+        wait for 10 ns;        -- Allow time for propagation
+
+        data_in <= "10101010"; -- Example input
+        sel     <= "1000";     -- Select output channel
+        wait for 10 ns;        -- Allow time for propagation
+
+        data_in <= "10101010"; -- Example input
+        sel     <= "1001";     -- Select output channel
+        wait for 10 ns;        -- Allow time for propagation
+
+        data_in <= "10101010"; -- Example input
+        sel     <= "1010";     -- Select output channel
+        wait for 10 ns;        -- Allow time for propagation
+
+        data_in <= "10101010"; -- Example input
+        sel     <= "1011";     -- Select output channel
+        wait for 10 ns;        -- Allow time for propagation
+
+        data_in <= "10101010"; -- Example input
+        sel     <= "1100";     -- Select output channel
+        wait for 10 ns;        -- Allow time for propagation
+
+        data_in <= "10101010"; -- Example input
+        sel     <= "1101";     -- Select output channel
+        wait for 10 ns;        -- Allow time for propagation
+
+        data_in <= "10101010"; -- Example input
+        sel     <= "1110";     -- Select output channel
+        wait for 10 ns;        -- Allow time for propagation
+
+        data_in <= "10101010"; -- Example input
+        sel     <= "1111";     -- Select output channel
+        wait for 10 ns;        -- Allow time for propagation
+
+        wait;                  -- Stop the process
     end process stimulus_process;
 
 end architecture Test;
-

@@ -49,4 +49,3 @@ begin
     output <= out_wire;
 
 end architecture Structural;
-

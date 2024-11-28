@@ -8,51 +8,51 @@ end entity tb_shift_byte_mem_data;
 architecture Test of tb_shift_byte_mem_data is
     -- Component Declaration
     component shift_byte_mem_data is
-        port(
+        port (
             vdd      : in  std_logic;
             gnd      : in  std_logic;
             enable   : in  std_logic;
             mem_byte : in  std_logic_vector(7 downto 0);
             clk      : in  std_logic;
-            reset:     in std_logic;
+            reset    : in  std_logic;
             byte_00  : out std_logic_vector(7 downto 0);
             byte_01  : out std_logic_vector(7 downto 0);
             byte_10  : out std_logic_vector(7 downto 0);
             byte_11  : out std_logic_vector(7 downto 0)
         );
-    end component;
+    end component shift_byte_mem_data;
 
     -- Signals for Input and Output
-    signal vdd      : std_logic := '1';
-    signal gnd      : std_logic := '0';
-    signal enable   : std_logic := '0';
-    signal mem_byte : std_logic_vector(7 downto 0) := (others => '0');
-    signal tb_clk   : std_logic := '0'; -- Test bench clock
-    signal clk      : std_logic := '1'; -- Negative edge-triggered clock
-    signal byte_00  : std_logic_vector(7 downto 0);
-    signal byte_01  : std_logic_vector(7 downto 0);
-    signal byte_10  : std_logic_vector(7 downto 0);
-    signal byte_11  : std_logic_vector(7 downto 0);
-    signal reset: std_logic;
+    signal vdd          : std_logic                    := '1';
+    signal gnd          : std_logic                    := '0';
+    signal enable       : std_logic                    := '0';
+    signal mem_byte     : std_logic_vector(7 downto 0) := (others => '0');
+    signal tb_clk       : std_logic                    := '0'; -- Test bench clock
+    signal clk          : std_logic                    := '1'; -- Negative edge-triggered clock
+    signal byte_00      : std_logic_vector(7 downto 0);
+    signal byte_01      : std_logic_vector(7 downto 0);
+    signal byte_10      : std_logic_vector(7 downto 0);
+    signal byte_11      : std_logic_vector(7 downto 0);
+    signal reset        : std_logic;
 
     -- Clock Period
-    constant clk_period : time := 10 ns;
+    constant clk_period : time                         := 10 ns;
 
 begin
     -- Instantiate the Unit Under Test (UUT)
     uut: entity work.shift_byte_mem_data(Structural)
-        port map(
-            vdd      => vdd,
-            gnd      => gnd,
-            enable   => enable,
-            mem_byte => mem_byte,
-            clk      => clk,
-            reset    => reset,
-            byte_00  => byte_00,
-            byte_01  => byte_01,
-            byte_10  => byte_10,
-            byte_11  => byte_11
-        );
+    port map (
+        vdd      => vdd,
+        gnd      => gnd,
+        enable   => enable,
+        mem_byte => mem_byte,
+        clk      => clk,
+        reset    => reset,
+        byte_00  => byte_00,
+        byte_01  => byte_01,
+        byte_10  => byte_10,
+        byte_11  => byte_11
+    );
 
     -- Generate Test Bench Clock (tb_clk)
     tb_clk_process: process
@@ -63,44 +63,44 @@ begin
             tb_clk <= '1';
             wait for clk_period / 2;
         end loop;
-    end process;
+    end process tb_clk_process;
 
     -- Generate Negative Edge-Triggered Clock (clk)
-    clk_process: process(tb_clk)
+    clk_process: process (tb_clk) is
     begin
-        clk <= not tb_clk after clk_period / 2;
-    end process;
+        clk        <= not tb_clk after clk_period / 2;
+    end process clk_process;
 
     -- Stimulus Process
     stimulus: process
     begin
-        reset<='1';
+        reset      <= '1';
         wait for clk_period;
-        reset<='0';
+        reset      <= '0';
         wait for clk_period * 10;
         -- Test Case 1: Enable signal is low, no operation
-        enable <= '1'; wait for clk_period; enable <= '0';
-        mem_byte <= "10101010";
-        wait for clk_period*2;
-        
-
+        enable     <= '1';
+        wait for clk_period;
+        enable     <= '0';
+        mem_byte   <= "10101010";
+        wait for clk_period * 2;
 
 
         -- Test Case 2: Enable signal high, shift input to bytes
-        mem_byte <= "11001100";
-        wait for clk_period * 2; -- Hold for 2 clock cycles
+        mem_byte   <= "11001100";
+        wait for clk_period * 2;                               -- Hold for 2 clock cycles
 
         -- Test Case 3: Change mem_byte while enabled
-        mem_byte <= "11110000";
-        wait for clk_period * 2; -- Hold for 2 clock cycles
+        mem_byte   <= "11110000";
+        wait for clk_period * 2;                               -- Hold for 2 clock cycles
 
         -- Test Case 4: Disable module
         --enable <= '';
-        mem_byte <= "00000011";
-        wait for clk_period * 2; -- Hold for 2 clock cycles
+        mem_byte   <= "00000011";
+        wait for clk_period * 2;                               -- Hold for 2 clock cycles
 
         -- End Simulation
         wait;
-    end process;
+    end process stimulus;
 
 end architecture Test;

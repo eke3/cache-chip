@@ -52,4 +52,3 @@ begin
     data_out_2 <= demux_out_1;          -- Combine bit 0 and bit 1 for output 2
 
 end architecture Structural;
-

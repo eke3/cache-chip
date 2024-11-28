@@ -5,7 +5,7 @@ use IEEE.STD_LOGIC_1164.all;
 entity one_hot_to_binary is
     port (
         one_hot : in  STD_LOGIC_VECTOR(3 downto 0); -- One-hot encoded input
-        binary  : out STD_LOGIC_VECTOR(1 downto 0)  -- 2-bit binary output
+        binary  : out STD_LOGIC_VECTOR(1 downto 0) -- 2-bit binary output
     );
 end entity one_hot_to_binary;
 
@@ -19,7 +19,7 @@ architecture Structural of one_hot_to_binary is
             B      : in  STD_LOGIC;
             output : out STD_LOGIC
         );
-    end component;
+    end component or_2x1;
 
 begin
 
@@ -27,19 +27,18 @@ begin
 
     -- Binary bit 1 (MSB): '1' if one_hot(2) or one_hot(3) is active
     or_gate_msb: entity work.or_2x1(Structural)
-        port map (
-            A      => one_hot(2),
-            B      => one_hot(3),
-            output => binary(1)
-        );
+    port map (
+        A      => one_hot(2),
+        B      => one_hot(3),
+        output => binary(1)
+    );
 
     -- Binary bit 0 (LSB): '1' if one_hot(1) or one_hot(3) is active
     or_gate_lsb: entity work.or_2x1(Structural)
-        port map (
-            A      => one_hot(1),
-            B      => one_hot(3),
-            output => binary(0)
-        );
+    port map (
+        A      => one_hot(1),
+        B      => one_hot(3),
+        output => binary(0)
+    );
 
 end architecture Structural;
-

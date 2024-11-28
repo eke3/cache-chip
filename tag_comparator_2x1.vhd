@@ -60,4 +60,3 @@ begin
     );
 
 end architecture Structural;
-
