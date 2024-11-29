@@ -58,10 +58,11 @@ architecture Structural of chip is
             tag                    : in  std_logic_vector(1 downto 0); -- from on-chip register, released by state machine
             valid_WE               : in  std_logic;                    -- from state machine
             tag_WE                 : in  std_logic;                    -- from state machine
-            output_enable          : in  std_logic;
+            output_enable          : in  std_logic;                    -- from state machine
             RW_cache               : in  std_logic;                    -- from reg
             decoder_enable         : in  std_logic;                    -- from state machine
-            mem_addr_output_enable : in  std_logic;
+            busy                   : in std_logic;                     -- from state machine
+            mem_addr_output_enable : in  std_logic;                    -- from state machine
             mem_addr               : out std_logic_vector(5 downto 0); -- to memory
             read_cache             : out std_logic_vector(7 downto 0); -- to on-chip register, which will be released off chip by state machine's OUTPUT_ENABLE signal
             hit_or_miss            : out std_logic                     -- status signal going to state machine
@@ -95,6 +96,15 @@ architecture Structural of chip is
         );
     end component dff_negedge_8bit;
 
+    component mux_2x1_2bit is
+        port (
+            A      : in  std_logic_vector(1 downto 0);
+            B      : in  std_logic_vector(1 downto 0);
+            sel    : in  std_logic;
+            output : out std_logic_vector(1 downto 0)
+        );
+    end component mux_2x1_2bit;
+    
     component mux_2x1_8bit is
         port (
             A      : in  std_logic_vector(7 downto 0);
@@ -103,22 +113,6 @@ architecture Structural of chip is
             output : out std_logic_vector(7 downto 0)
         );
     end component mux_2x1_8bit;
-
-    component and_2x1 is
-        port (
-            A      : in  std_logic;
-            B      : in  std_logic;
-            output : out std_logic
-        );
-    end component and_2x1;
-
-    component nor_2x1 is
-        port (
-            A      : in  std_logic;
-            B      : in  std_logic;
-            output : out std_logic
-        );
-    end component nor_2x1;
 
     component inverter is
         port (
@@ -254,6 +248,7 @@ begin
         output_enable          => output_enable,
         RW_cache               => cache_RW,
         decoder_enable         => decoder_enable,
+        busy                   => busy_out,
         mem_addr_output_enable => mem_addr_out_enable,
         mem_addr               => mem_add,
         read_cache             => cpu_data,

@@ -5,7 +5,7 @@ entity tb_mux_16x1 is
     -- Testbench does not have ports
 end entity tb_mux_16x1;
 
-architecture Testbench of tb_mux_16x1 is
+architecture Test of tb_mux_16x1 is
 
     -- Component declaration for the Unit Under Test (UUT)
     component mux_16x1 is
@@ -62,4 +62,4 @@ begin
         wait;
     end process;
 
-end architecture Testbench;
+end architecture Test;

@@ -16,13 +16,14 @@ entity timed_cache is
         tag                    : in  std_logic_vector(1 downto 0); -- from on-chip register, released by state machine
         valid_WE               : in  std_logic; -- from state machine
         tag_WE                 : in  std_logic; -- from state machine
-        output_enable          : in  std_logic;
+        output_enable          : in  std_logic; -- from state machine
         RW_cache               : in  std_logic; -- from state machine
         decoder_enable         : in  std_logic; -- from state machine
-        mem_addr_output_enable : in  std_logic;
+        busy                   : in  std_logic; -- from state machine
+        mem_addr_output_enable : in  std_logic; -- from state machine
         mem_addr               : out std_logic_vector(5 downto 0); -- to memory
         read_cache             : out std_logic_vector(7 downto 0); -- to on-chip register, which will be released off chip by state machine's OUTPUT_ENABLE signal
-        hit_or_miss            : out std_logic
+        hit_or_miss            : out std_logic  -- status signal going to state machine
     );
 end entity timed_cache;
 
@@ -200,6 +201,7 @@ architecture Structural of timed_cache is
     signal byte_decoder_out, block_decoder_out           : std_logic_vector(3 downto 0);
     signal byte_decoder_reg, block_decoder_reg           : std_logic_vector(3 downto 0);
     signal RW_valid, RW_tag                              : std_logic;
+    signal read_cache_data_out                           : std_logic_vector(7 downto 0);
     signal read_cache_data_tx_in, read_cache_data_tx_out : STD_LOGIC_VECTOR(7 downto 0);
     signal mem_addr_tx_in, mem_addr_tx_out               : std_logic_vector(5 downto 0);
     signal output_enable_not, mem_addr_output_enable_not : std_logic;
@@ -346,7 +348,16 @@ begin
         R_W          => RW_cache,
         byte_offset  => byte_decoder_reg,
         block_offset => block_decoder_reg,
-        read_data    => read_cache_data_tx_in
+        read_data    => read_cache_data_out
+    );
+
+    -- Register that loads data read from the cache into a transmission gate when BUSY goes low.
+    data_out_ff: entity work.dff_negedge_8bit(Structural)
+    port map (
+        d            => read_cache_data_out,
+        clk          => busy,
+        q            => read_cache_data_tx_in,
+        qbar         => open
     );
 
     -- Build memory address that will be sent to memory during a read miss.
