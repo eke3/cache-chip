@@ -31,21 +31,27 @@ architecture Structural of byte_selector is
         );
     end component or_2x1;
 
+    component or_4x1_2bit is
+        port (
+            A      : in  std_logic_vector(1 downto 0);
+            B      : in  std_logic_vector(1 downto 0);
+            C      : in  std_logic_vector(1 downto 0);
+            D      : in  std_logic_vector(1 downto 0);
+            output : out std_logic_vector(1 downto 0)
+        );
+    end component or_4x1_2bit;
+
     signal or1_out, or2_out, or3_out, or4_out     : std_logic;
-    signal s1, s2, s3, s4                         : std_logic_vector(1 downto 0);
+    signal s1, s2, s3, s4                         : std_logic_vector(1 downto 0); -- bytes to transmit
     signal mux1_out, mux2_out, mux3_out, mux4_out : std_logic_vector(1 downto 0);
     signal or_out                                 : std_logic_vector(1 downto 0);
 
 begin
 
-    s1(1)       <= gnd;
-    s1(0)       <= gnd;
-    s2(1)       <= gnd;
-    s2(0)       <= vdd;
-    s3(1)       <= vdd;
-    s3(0)       <= gnd;
-    s4(1)       <= vdd;
-    s4(0)       <= vdd;
+    s1          <= (gnd, gnd);                                                    -- 00
+    s2          <= (gnd, vdd);                                                    -- 01
+    s3          <= (vdd, gnd);                                                    -- 10
+    s4          <= (vdd, vdd);                                                    -- 11
 
     or1: entity work.or_2x1(Structural)
     port map (
@@ -117,4 +123,5 @@ begin
     );
 
     byte_offset <= or_out;
+
 end architecture Structural;
