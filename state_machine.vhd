@@ -241,53 +241,14 @@ begin
 
     -- checks for read_hit and if timer expired to determine if
     -- output enable should go high
-    and4_2: entity work.and_4x1(Structural)
-    port map (
-        A           => R_W_sig,
-        B           => valid_ready,
-        C           => hit_miss,
-        D           => read_hit_count,
-        output      => temp_oe_1
-    );
-
-    -- checks for read_miss and if timer expired to determine if
-    -- output enable should go high
-    and3_2: entity work.and_3x1(Structural)
-    port map (
-        A           => R_W_sig,
-        B           => hit_miss_inv,
-        C           => read_miss_count,
-        output      => temp_oe_2
-    );
 
     -- the following nonsense with the output enables just makes sure
     -- it holds for the proper amount of time, feel free to make it better
     or_1: entity work.or_2x1(Structural)
     port map (
-        A           => temp_oe_1,
-        B           => temp_oe_2,
+        A           => read_hit_count,
+        B           => read_miss_count,
         output      => output_enable_temp
-    );
-
-    and_2: entity work.and_2x1(Structural)
-    port map (
-        A           => output_enable_temp,
-        B           => not_clk,
-        output      => output_enable_temp_2
-    );
-
-    shift_reg_2_4: entity work.shift_register_bit_2(Structural)
-    port map (
-        input       => output_enable_temp_2,
-        clk         => not_clk,
-        output      => output_enable_temp_3
-    );
-
-    or_2x1_3: entity work.or_2x1(Structural)
-    port map (
-        A           => output_enable_temp_2,
-        B           => output_enable_temp_3,
-        output      => output_enable_sig
     );
 
     -- checks for a read miss to trigger write enables for valid and tag
@@ -476,12 +437,12 @@ begin
     decoder_enable_logic: entity work.or_2x1(Structural)
     port map (
         A           => busy_sig,
-        B           => output_enable_sig,
+        B           => output_enable_temp,
         output      => decoder_enable
     );
 
     busy                 <= busy_sig;
-    output_enable        <= output_enable_sig;
+    output_enable        <= output_enable_temp;
     tag_WE               <= tag_valid_WE;
     valid_WE             <= tag_valid_WE;
     mem_addr_out_enable  <= mem_addr_out_enable_sig;
