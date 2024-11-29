@@ -32,68 +32,69 @@ begin
 
     dff_1: entity work.dff_negedge(Structural)
     port map (
-        input,
-        clk,
-        count_1
+        d    => input,
+        clk  => clk,
+        q    => count_1,
+        qbar => open
     );
 
     dff_2: entity work.dff_negedge(Structural)
     port map (
-        count_1,
-        clk,
-        count_2
+        d    => count_1,
+        clk  => clk,
+        q    => count_2,
+        qbar => open
     );
 
     dff_3: entity work.dff_negedge(Structural)
     port map (
-        count_2,
-        clk,
-        count_3
+        d    => count_2,
+        clk  => clk,
+        q    => count_3,
+        qbar => open
     );
 
     dff_4: entity work.dff_negedge(Structural)
     port map (
-        count_3,
-        clk,
-        count_4
+        d    => count_3,
+        clk  => clk,
+        q    => count_4,
+        qbar => open
     );
 
     dff_5: entity work.dff_negedge(Structural)
     port map (
-        count_4,
-        clk,
-        count_5
+        d    => count_4,
+        clk  => clk,
+        q    => count_5,
+        qbar => open
     );
 
     dff_6: entity work.dff_negedge(Structural)
     port map (
-        count_5,
-        clk,
-        count_6
+        d    => count_5,
+        clk  => clk,
+        q    => count_6,
+        qbar => open
     );
 
     dff_7: entity work.dff_negedge(Structural)
     port map (
-        count_6,
-        clk,
-        count_7
+        d    => count_6,
+        clk  => clk,
+        q    => count_7,
+        qbar => open
     );
 
     dff_8: entity work.dff_negedge(Structural)
     port map (
-        count_7,
-        clk,
-        output
+        d    => count_7,
+        clk  => clk,
+        q    => output,
+        qbar => open
     );
 
     -- used for byte selection
-    full_output(0) <= input;
-    full_output(1) <= count_1;
-    full_output(2) <= count_2;
-    full_output(3) <= count_3;
-    full_output(4) <= count_4;
-    full_output(5) <= count_5;
-    full_output(6) <= count_6;
-    full_output(7) <= count_7;
+    full_output <= (count_7, count_6, count_5, count_4, count_3, count_2, count_1, input);
 
 end architecture Structural;

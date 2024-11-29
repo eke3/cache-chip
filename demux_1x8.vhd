@@ -40,102 +40,89 @@ architecture Structural of demux_1x8 is
     end component inverter;
 
     -- Intermediate signals for the inverted select bits
-    signal sel_not0, sel_not1, sel_not2 : STD_LOGIC;
-
-    for inv0, inv1, inv2: inverter use entity work.inverter(Structural);
-    for and0, and1, and2, and3, and4, and5, and6, and7: and_4x1 use entity work.and_4x1(Structural);
+    signal sel_not : STD_LOGIC_VECTOR(2 downto 0);
 
 begin
     -- Instantiate inverters for each bit of the selector `sel`
-    inv0: component inverter
-    port map (
-        input  => sel(0),
-        output => sel_not0
-    );
-
-    inv1: component inverter
-    port map (
-        input  => sel(1),
-        output => sel_not1
-    );
-
-    inv2: component inverter
-    port map (
-        input  => sel(2),
-        output => sel_not2
-    );
+    gen_inv: for i in 0 to 2 generate
+        inv: entity work.inverter(Structural)
+        port map (
+            input  => sel(i),
+            output => sel_not(i)
+        );
+    end generate;
 
     -- Instantiate 8 instances of and_4x1 to control each output
-    and0: component and_4x1
+    and0: entity work.and_4x1(Structural)
     port map (
-        A      => data_in,
-        B      => sel_not2,
-        C      => sel_not1,
-        D      => sel_not0,
-        output => data_out_0
+        A          => data_in,
+        B          => sel_not(2),
+        C          => sel_not(1),
+        D          => sel_not(0),
+        output     => data_out_0
     );
 
-    and1: component and_4x1
+    and1: entity work.and_4x1(Structural)
     port map (
-        A      => data_in,
-        B      => sel_not2,
-        C      => sel_not1,
-        D      => sel(0),
-        output => data_out_1
+        A          => data_in,
+        B          => sel_not(2),
+        C          => sel_not(1),
+        D          => sel(0),
+        output     => data_out_1
     );
 
-    and2: component and_4x1
+    and2: entity work.and_4x1(Structural)
     port map (
-        A      => data_in,
-        B      => sel_not2,
-        C      => sel(1),
-        D      => sel_not0,
-        output => data_out_2
+        A          => data_in,
+        B          => sel_not(2),
+        C          => sel(1),
+        D          => sel_not(0),
+        output     => data_out_2
     );
 
-    and3: component and_4x1
+    and3: entity work.and_4x1(Structural)
     port map (
-        A      => data_in,
-        B      => sel_not2,
-        C      => sel(1),
-        D      => sel(0),
-        output => data_out_3
+        A          => data_in,
+        B          => sel_not(2),
+        C          => sel(1),
+        D          => sel(0),
+        output     => data_out_3
     );
 
-    and4: component and_4x1
+    and4: entity work.and_4x1(Structural)
     port map (
-        A      => data_in,
-        B      => sel(2),
-        C      => sel_not1,
-        D      => sel_not0,
-        output => data_out_4
+        A          => data_in,
+        B          => sel(2),
+        C          => sel_not(1),
+        D          => sel_not(0),
+        output     => data_out_4
     );
 
-    and5: component and_4x1
+    and5: entity work.and_4x1(Structural)
     port map (
-        A      => data_in,
-        B      => sel(2),
-        C      => sel_not1,
-        D      => sel(0),
-        output => data_out_5
+        A          => data_in,
+        B          => sel(2),
+        C          => sel_not(1),
+        D          => sel(0),
+        output     => data_out_5
     );
 
-    and6: component and_4x1
+    and6: entity work.and_4x1(Structural)
     port map (
-        A      => data_in,
-        B      => sel(2),
-        C      => sel(1),
-        D      => sel_not0,
-        output => data_out_6
+        A          => data_in,
+        B          => sel(2),
+        C          => sel(1),
+        D          => sel_not(0),
+        output     => data_out_6
     );
 
-    and7: component and_4x1
+    and7: entity work.and_4x1(Structural)
     port map (
-        A      => data_in,
-        B      => sel(2),
-        C      => sel(1),
-        D      => sel(0),
-        output => data_out_7
+        A          => data_in,
+        B          => sel(2),
+        C          => sel(1),
+        D          => sel(0),
+        output     => data_out_7
     );
 
 end architecture Structural;

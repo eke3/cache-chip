@@ -20,7 +20,6 @@ architecture Structural of dff_posedge is
 begin
 
     output: process
-
     begin
         wait until (clk'event and clk = '1');
         q    <= d;

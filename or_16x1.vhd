@@ -25,133 +25,67 @@ end entity or_16x1;
 
 architecture Structural of or_16x1 is
 
+    component or_8x1 is
+        port (
+            A      : in  STD_LOGIC;                           -- Input A
+            B      : in  STD_LOGIC;                           -- Input B
+            C      : in  STD_LOGIC;                           -- Input C
+            D      : in  STD_LOGIC;                           -- Input D
+            E      : in  STD_LOGIC;                           -- Input E
+            F      : in  STD_LOGIC;                           -- Input F
+            G      : in  STD_LOGIC;                           -- Input G
+            H      : in  STD_LOGIC;                           -- Input H
+            output : out STD_LOGIC                            -- Output of the OR gate
+        );
+    end component or_8x1;
+
     -- Declare the 2x1 OR gate component
     component or_2x1 is
         port (
-            A      : in  STD_LOGIC;               -- Input A
-            B      : in  STD_LOGIC;               -- Input B
-            output : out STD_LOGIC                -- Output of the OR gate
+            A      : in  STD_LOGIC;                           -- Input A
+            B      : in  STD_LOGIC;                           -- Input B
+            output : out STD_LOGIC                            -- Output of the OR gate
         );
     end component or_2x1;
 
     -- Signals for intermediate connections
-    signal level1 : STD_LOGIC_VECTOR(7 downto 0); -- First stage (8 OR gates)
-    signal level2 : STD_LOGIC_VECTOR(3 downto 0); -- Second stage (4 OR gates)
-    signal level3 : STD_LOGIC_VECTOR(1 downto 0); -- Third stage (2 OR gates)
-    signal level4 : STD_LOGIC;                    -- Final OR gate output
+    signal or_8x1_out1, or_8x1_out2, or_16x1_out : STD_LOGIC; -- Intermediate signals for OR operations
 
 begin
 
-    -- Stage 1: Combine pairs of inputs using 8 OR gates
-    or_gate1: entity work.or_2x1(Structural)
+    or_1: entity work.or_8x1(Structural)
     port map (
         A      => input0,
         B      => input1,
-        output => level1(0)
+        C      => input2,
+        D      => input3,
+        E      => input4,
+        F      => input5,
+        G      => input6,
+        H      => input7,
+        output => or_8x1_out1
     );
 
-    or_gate2: entity work.or_2x1(Structural)
-    port map (
-        A      => input2,
-        B      => input3,
-        output => level1(1)
-    );
-
-    or_gate3: entity work.or_2x1(Structural)
-    port map (
-        A      => input4,
-        B      => input5,
-        output => level1(2)
-    );
-
-    or_gate4: entity work.or_2x1(Structural)
-    port map (
-        A      => input6,
-        B      => input7,
-        output => level1(3)
-    );
-
-    or_gate5: entity work.or_2x1(Structural)
+    or_2: entity work.or_8x1(Structural)
     port map (
         A      => input8,
         B      => input9,
-        output => level1(4)
+        C      => input10,
+        D      => input11,
+        E      => input12,
+        F      => input13,
+        G      => input14,
+        H      => input15,
+        output => or_8x1_out2
     );
 
-    or_gate6: entity work.or_2x1(Structural)
+    or_3: entity work.or_2x1(Structural)
     port map (
-        A      => input10,
-        B      => input11,
-        output => level1(5)
+        A      => or_8x1_out1,
+        B      => or_8x1_out2,
+        output => or_16x1_out
     );
 
-    or_gate7: entity work.or_2x1(Structural)
-    port map (
-        A      => input12,
-        B      => input13,
-        output => level1(6)
-    );
-
-    or_gate8: entity work.or_2x1(Structural)
-    port map (
-        A      => input14,
-        B      => input15,
-        output => level1(7)
-    );
-
-    -- Stage 2: Combine results from Stage 1 using 4 OR gates
-    or_gate9: entity work.or_2x1(Structural)
-    port map (
-        A      => level1(0),
-        B      => level1(1),
-        output => level2(0)
-    );
-
-    or_gate10: entity work.or_2x1(Structural)
-    port map (
-        A      => level1(2),
-        B      => level1(3),
-        output => level2(1)
-    );
-
-    or_gate11: entity work.or_2x1(Structural)
-    port map (
-        A      => level1(4),
-        B      => level1(5),
-        output => level2(2)
-    );
-
-    or_gate12: entity work.or_2x1(Structural)
-    port map (
-        A      => level1(6),
-        B      => level1(7),
-        output => level2(3)
-    );
-
-    -- Stage 3: Combine results from Stage 2 using 2 OR gates
-    or_gate13: entity work.or_2x1(Structural)
-    port map (
-        A      => level2(0),
-        B      => level2(1),
-        output => level3(0)
-    );
-
-    or_gate14: entity work.or_2x1(Structural)
-    port map (
-        A      => level2(2),
-        B      => level2(3),
-        output => level3(1)
-    );
-
-    -- Stage 4: Combine results from Stage 3 using 1 OR gate
-    or_gate15: entity work.or_2x1(Structural)
-    port map (
-        A      => level3(0),
-        B      => level3(1),
-        output => level4
-    );
-
-    -- Assign the final output
-    output <= level4;
+    output <= or_16x1_out;
 
 end architecture Structural;

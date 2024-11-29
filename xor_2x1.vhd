@@ -45,7 +45,6 @@ architecture Structural of xor_2x1 is
     signal or_out   : STD_LOGIC;
 
 begin
-
     -- Invert the inputs A and B
     not_A_gate: entity work.inverter(Structural)
     port map (

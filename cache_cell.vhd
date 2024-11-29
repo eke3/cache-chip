@@ -17,14 +17,14 @@ entity cache_cell is
 end entity cache_cell;
 
 architecture Structural of cache_cell is
-    component Dlatch is
+    component d_latch is
         port (
             d    : in  std_logic;
             clk  : in  std_logic;
             q    : out std_logic;
             qbar : out std_logic
         );
-    end component Dlatch;
+    end component d_latch;
 
     component selector is
         port (
@@ -44,30 +44,27 @@ architecture Structural of cache_cell is
         );
     end component tx;
 
-    for d_latch: Dlatch use entity work.Dlatch(Structural);
-    for selector_inst: selector use entity work.selector(Structural);
-    for tx_inst: tx use entity work.tx(Structural);
-
     signal q                         : std_logic;
     signal write_enable, read_enable : std_logic;
     signal q_inv                     : std_logic;
 
 begin
-    selector_inst: component selector
+
+    selector_inst: entity work.selector(Structural)
     port map (
         chip_enable  => chip_enable,
         RW           => RW,
         read_enable  => read_enable,
         write_enable => write_enable
     );
-    d_latch: component Dlatch
+    d_latch_inst: entity work.d_latch(Structural)
     port map (
         d            => write_data,
         clk          => write_enable,
         q            => q,
         qbar         => q_inv
     );
-    tx_inst: component tx
+    tx_inst: entity work.tx(Structural)
     port map (
         sel          => read_enable,
         selnot       => write_enable,

@@ -46,40 +46,37 @@ architecture Structural of mux_16x1 is
     -- Intermediate signals for the 1-hot encoded AND gates
     signal and_out : STD_LOGIC_VECTOR(15 downto 0); -- For each AND gate's output
 
-    for or_gate: or_16x1 use entity work.or_16x1(Structural);
-
 begin
 
     -- Stage 1: 16 AND gates to implement 1-hot selection
     gen_and: for i in 0 to 15 generate
-        and_gate: entity work.and_2x1
+        and_gate: entity work.and_2x1(Structural)
         port map (
-            inputs(i),
-            sel_one_hot(i),
-            and_out(i)
+            A      => inputs(i),
+            B      => sel_one_hot(i),
+            output => and_out(i)
         );
     end generate;
 
-    or_gate: component or_16x1
+    or_gate: entity work.or_16x1(Structural)
     port map (
-        and_out(0),
-        and_out(1),
-        and_out(2),
-        and_out(3),
-        and_out(4),
-        and_out(5),
-        and_out(6),
-        and_out(7),
-        and_out(8),
-        and_out(9),
-        and_out(10),
-        and_out(11),
-        and_out(12),
-        and_out(13),
-        and_out(14),
-        and_out(15),
-        output
+        input0     => and_out(0),
+        input1     => and_out(1),
+        input2     => and_out(2),
+        input3     => and_out(3),
+        input4     => and_out(4),
+        input5     => and_out(5),
+        input6     => and_out(6),
+        input7     => and_out(7),
+        input8     => and_out(8),
+        input9     => and_out(9),
+        input10    => and_out(10),
+        input11    => and_out(11),
+        input12    => and_out(12),
+        input13    => and_out(13),
+        input14    => and_out(14),
+        input15    => and_out(15),
+        output     => output
     );
-
 
 end architecture Structural;

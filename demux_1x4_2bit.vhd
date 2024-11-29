@@ -29,27 +29,18 @@ architecture Structural of demux_1x4_2bit is
         );
     end component demux_1x4;
 
-    for demux_0, demux_1: demux_1x4 use entity work.demux_1x4(Structural);
-
 begin
-    demux_0: component demux_1x4
-    port map (
-        data_in    => data_in(0),
-        sel        => sel,
-        data_out_3 => data_out_3(0),
-        data_out_2 => data_out_2(0),
-        data_out_1 => data_out_1(0),
-        data_out_0 => data_out_0(0)
-    );
 
-    demux_1: component demux_1x4
-    port map (
-        data_in    => data_in(1),
-        sel        => sel,
-        data_out_3 => data_out_3(1),
-        data_out_2 => data_out_2(1),
-        data_out_1 => data_out_1(1),
-        data_out_0 => data_out_0(1)
-    );
+    gen_demux: for i in 0 to 1 generate
+        demux: entity work.demux_1x4(Structural)
+        port map (
+            data_in    => data_in(i),
+            sel        => sel,
+            data_out_3 => data_out_3(i),
+            data_out_2 => data_out_2(i),
+            data_out_1 => data_out_1(i),
+            data_out_0 => data_out_0(i)
+        );
+    end generate;
 
 end architecture Structural;

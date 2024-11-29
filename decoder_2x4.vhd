@@ -30,68 +30,59 @@ architecture Structural of decoder_2x4 is
     end component and_2x1;
 
     -- Intermediate signals
-    signal not_A1, not_A0, g, h, i, j : STD_LOGIC;
+    signal not_A1, not_A0 : STD_LOGIC;
+    signal and_vec        : STD_LOGIC_VECTOR(3 downto 0);
 
 begin
 
     -- Instantiate components
-    NOT1: entity work.inverter
+    NOT1: entity work.inverter(Structural)
     port map (
-        input  => A(1),
-        output => not_A1
+        input      => A(1),
+        output     => not_A1
     );
-    NOT0: entity work.inverter
+
+    NOT0: entity work.inverter(Structural)
     port map (
-        input  => A(0),
-        output => not_A0
+        input      => A(0),
+        output     => not_A0
     );
-    AND1: entity work.and_2x1
+
+    AND1: entity work.and_2x1(Structural)
     port map (
-        A      => A(1),
-        B      => A(0),
-        output => g
+        A          => A(1),
+        B          => A(0),
+        output     => and_vec(3)
     );
-    AND2: entity work.and_2x1
+
+    AND2: entity work.and_2x1(Structural)
     port map (
-        A      => A(1),
-        B      => not_A0,
-        output => h
+        A          => A(1),
+        B          => not_A0,
+        output     => and_vec(2)
     );
-    AND3: entity work.and_2x1
+
+    AND3: entity work.and_2x1(Structural)
     port map (
-        A      => not_A1,
-        B      => A(0),
-        output => i
+        A          => not_A1,
+        B          => A(0),
+        output     => and_vec(1)
     );
-    AND4: entity work.and_2x1
+
+    AND4: entity work.and_2x1(Structural)
     port map (
-        A      => not_A1,
-        B      => not_A0,
-        output => j
+        A          => not_A1,
+        B          => not_A0,
+        output     => and_vec(0)
     );
-    AND5: entity work.and_2x1
-    port map (
-        A      => g,
-        B      => E,
-        output => Y(3)
-    );
-    AND6: entity work.and_2x1
-    port map (
-        A      => h,
-        B      => E,
-        output => Y(2)
-    );
-    AND7: entity work.and_2x1
-    port map (
-        A      => i,
-        B      => E,
-        output => Y(1)
-    );
-    AND8: entity work.and_2x1
-    port map (
-        A      => j,
-        B      => E,
-        output => Y(0)
-    );
+
+    gen_and: for i in 0 to 3 generate
+        ANDX: entity work.and_2x1(Structural)
+        port map (
+            A      => and_vec(i),
+            B      => E,
+            output => Y(i)
+        );
+    end generate;
 
 end architecture Structural;

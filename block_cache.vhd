@@ -8,25 +8,15 @@ use IEEE.std_logic_1164.all;
 entity block_cache is
     port (
         write_cache  : in  std_logic_vector(7 downto 0);
-        --            mem_addr    : out std_logic_vector(5 downto 0);
         hit_miss     : in  std_logic;
         R_W          : in  std_logic;
         byte_offset  : in  std_logic_vector(3 downto 0);
         block_offset : in  std_logic_vector(3 downto 0);
-        -- cpu_data    : in std_logic_vector(7 downto 0);
         read_data    : out std_logic_vector(7 downto 0)
     );
 end entity block_cache;
 
 architecture Structural of block_cache is
-
-    component readmiss_writehit is
-        port (
-            hit_miss           : in  std_logic;
-            R_W                : in  std_logic;
-            enable_cache_write : out std_logic
-        );
-    end component readmiss_writehit;
 
     component cache_cell_8bit is
         port (
@@ -60,16 +50,6 @@ architecture Structural of block_cache is
         );
     end component demux_1x16_8bit;
 
-    -- component data_input_selector
-    --     port(
-    --         cpu_data: in std_logic_vector(7 downto 0);
-    --         mem_data: in std_logic_vector(7 downto 0);
-    --         hit_miss: in std_logic;
-    --         R_W:      in std_logic;
-    --         out_data: out std_logic_vector(7 downto 0)
-    --     );
-    -- end component;
-
     component mux_16x1_8bit is
         port (
             inputs   : in  STD_LOGIC_VECTOR(127 downto 0);  -- 16 inputs, each 8-bit wide
@@ -78,14 +58,6 @@ architecture Structural of block_cache is
             output   : out STD_LOGIC_VECTOR(7 downto 0)     -- 8-bit output
         );
     end component mux_16x1_8bit;
-
-    component concatenator is
-        port (
-            input_a : in  std_logic_vector(1 downto 0);     -- First 2-bit input
-            input_b : in  std_logic_vector(1 downto 0);     -- Second 2-bit input
-            output  : out std_logic_vector(3 downto 0)      -- Concatenated 4-bit output
-        );
-    end component concatenator;
 
     component and_2x1 is
         port (
@@ -127,13 +99,13 @@ architecture Structural of block_cache is
 
 begin
 
-    RW_inverter: entity work.inverter(Structural)
+    rw_inverter: entity work.inverter(Structural)
     port map (
         input           => R_W,
         output          => RW_not
     );
 
-    RW_nand: entity work.nand_2x1(Structural)
+    rw_nand: entity work.nand_2x1(Structural)
     port map (
         A               => RW_not,
         B               => hit_miss,
@@ -258,11 +230,7 @@ begin
         binary          => byte_off_bin
     );
 
-    concatenator_1: entity work.concatenator(Structural)
-    port map (
-        input_a         => block_off_bin,
-        input_b         => byte_off_bin,
-        output          => comb_addr
-    );
+    comb_addr(3 downto 2) <= block_off_bin;
+    comb_addr(1 downto 0) <= byte_off_bin;
 
 end architecture Structural;

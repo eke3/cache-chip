@@ -25,65 +25,16 @@ architecture Structural of cache_cell_8bit is
         );
     end component cache_cell;
 
-    for cache_0, cache_1, cache_2, cache_3, cache_4, cache_5, cache_6, cache_7: cache_cell use entity work.cache_cell(Structural);
-
 begin
 
-    cache_0: component cache_cell
-    port map (
-        write_data(0),
-        chip_enable,
-        RW,
-        read_data(0)
-    );
-    cache_1: component cache_cell
-    port map (
-        write_data(1),
-        chip_enable,
-        RW,
-        read_data(1)
-    );
-    cache_2: component cache_cell
-    port map (
-        write_data(2),
-        chip_enable,
-        RW,
-        read_data(2)
-    );
-    cache_3: component cache_cell
-    port map (
-        write_data(3),
-        chip_enable,
-        RW,
-        read_data(3)
-    );
-    cache_4: component cache_cell
-    port map (
-        write_data(4),
-        chip_enable,
-        RW,
-        read_data(4)
-    );
-    cache_5: component cache_cell
-    port map (
-        write_data(5),
-        chip_enable,
-        RW,
-        read_data(5)
-    );
-    cache_6: component cache_cell
-    port map (
-        write_data(6),
-        chip_enable,
-        RW,
-        read_data(6)
-    );
-    cache_7: component cache_cell
-    port map (
-        write_data(7),
-        chip_enable,
-        RW,
-        read_data(7)
-    );
+    gen_cache_cells: for i in 0 to 7 generate
+        cache_cell_inst: entity work.cache_cell(Structural)
+        port map (
+            write_data(i),
+            chip_enable,
+            RW,
+            read_data(i)
+        );
+    end generate;
 
 end architecture Structural;

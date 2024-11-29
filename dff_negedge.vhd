@@ -20,7 +20,6 @@ architecture Structural of dff_negedge is
 begin
 
     output: process
-
     begin
         wait until (clk'event and clk = '0');
         q    <= d;

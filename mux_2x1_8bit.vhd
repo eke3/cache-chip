@@ -15,76 +15,31 @@ entity mux_2x1_8bit is
 end entity mux_2x1_8bit;
 
 architecture Structural of mux_2x1_8bit is
-    -- Declare the and_2x1 component
-    component and_2x1 is
+    -- Declare the mux_2x1 component
+    component mux_2x1 is
         port (
             A      : in  STD_LOGIC;
             B      : in  STD_LOGIC;
+            sel    : in  STD_LOGIC;
             output : out STD_LOGIC
         );
-    end component and_2x1;
+    end component mux_2x1;
 
-    -- Declare the or_2x1 component
-    component or_2x1 is
-        port (
-            A      : in  STD_LOGIC;
-            B      : in  STD_LOGIC;
-            output : out STD_LOGIC
-        );
-    end component or_2x1;
-
-    -- Declare the inverter component
-    component inverter is
-        port (
-            input  : in  STD_LOGIC;
-            output : out STD_LOGIC
-        );
-    end component inverter;
-
-    -- Intermediate signals for outputs of the and_2x1 gates
-    signal and_out0, and_out1 : STD_LOGIC_VECTOR(7 downto 0);
-    -- Intermediate signal for inverted sel bit
-    signal sel_not            : STD_LOGIC;
-
-    -- Instantiate the components
-    for sel_inverter: inverter use entity work.inverter(Structural);
+    signal mux_out : STD_LOGIC_VECTOR(7 downto 0);
 
 begin
 
-    -- Instantiate the inverter to generate sel_not signal
-    sel_inverter: component inverter
-    port map (
-        input      => sel,
-        output     => sel_not
-    );
-
-    -- Instantiate the and_2x1 gates for each bit of the 8-bit input
-    gen_and_gate0: for i in 0 to 7 generate
-        and_gate0: entity work.and_2x1
+    -- Instantiate the mux_2x1 for each bit
+    gen_mux_2x1: for i in 0 to 7 generate
+        mux_2x1_inst: entity work.mux_2x1(Structural)
         port map (
             A      => A(i),
-            B      => sel_not,
-            output => and_out0(i)
+            B      => B(i),
+            sel    => sel,
+            output => mux_out(i)
         );
     end generate;
 
-    gen_and_gate1: for i in 0 to 7 generate
-        and_gate1: entity work.and_2x1
-        port map (
-            A      => B(i),
-            B      => sel,
-            output => and_out1(i)
-        );
-    end generate;
-
-    -- Instantiate the or_2x1 gate to combine the outputs of the and gates for each bit
-    gen_or_gate: for i in 0 to 7 generate
-        or_gate: entity work.or_2x1
-        port map (
-            A      => and_out0(i),
-            B      => and_out1(i),
-            output => output(i)
-        );
-    end generate;
+    output <= mux_out;
 
 end architecture Structural;

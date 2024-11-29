@@ -14,6 +14,7 @@ end entity inverter;
 architecture Structural of inverter is
 
 begin
+
     output <= not (input);
 
 end architecture Structural;

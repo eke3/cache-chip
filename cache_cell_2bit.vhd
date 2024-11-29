@@ -25,24 +25,16 @@ architecture Structural of cache_cell_2bit is
         );
     end component cache_cell;
 
-    -- Instantiate two cache_cell components, one for each bit
-    for cache_0, cache_1: cache_cell use entity work.cache_cell(Structural);
-
 begin
 
-    cache_0: component cache_cell
-    port map (
-        write_data(0),
-        chip_enable,
-        RW,
-        read_data(0)
-    );
-    cache_1: component cache_cell
-    port map (
-        write_data(1),
-        chip_enable,
-        RW,
-        read_data(1)
-    );
+    gen_cache_cells: for i in 0 to 1 generate
+        cache_cell_inst: entity work.cache_cell(Structural)
+        port map (
+            write_data(i),
+            chip_enable,
+            RW,
+            read_data(i)
+        );
+    end generate;
 
 end architecture Structural;

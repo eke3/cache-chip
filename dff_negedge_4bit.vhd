@@ -21,36 +21,15 @@ architecture Structural of dff_negedge_4bit is
     end component dff_negedge;
 
 begin
-    bit0: entity work.dff_negedge(Structural)
-    port map (
-        d    => d(0),
-        clk  => clk,
-        q    => q(0),
-        qbar => qbar(0)
-    );
 
-    bit1: entity work.dff_negedge(Structural)
-    port map (
-        d    => d(1),
-        clk  => clk,
-        q    => q(1),
-        qbar => qbar(1)
-    );
-
-    bit2: entity work.dff_negedge(Structural)
-    port map (
-        d    => d(2),
-        clk  => clk,
-        q    => q(2),
-        qbar => qbar(2)
-    );
-
-    bit3: entity work.dff_negedge(Structural)
-    port map (
-        d    => d(3),
-        clk  => clk,
-        q    => q(3),
-        qbar => qbar(3)
-    );
+    gen_bit: for i in 0 to 3 generate
+        bit: entity work.dff_negedge(Structural)
+        port map (
+            d    => d(i),
+            clk  => clk,
+            q    => q(i),
+            qbar => qbar(i)
+        );
+    end generate;
 
 end architecture Structural;

@@ -24,28 +24,21 @@ architecture Structural of mux_2x1_2bit is
         );
     end component mux_2x1;
 
-    signal out_wire : STD_LOGIC_VECTOR(1 downto 0);
+    signal mux_out : STD_LOGIC_VECTOR(1 downto 0);
 
 begin
 
-    -- Instantiate the first mux_2x1 for the lower bit
-    mux_2x1_inst0: entity work.mux_2x1(Structural)
-    port map (
-        A      => A(0),
-        B      => B(0),
-        sel    => sel,
-        output => out_wire(0)
-    );
+    -- Instantiate the mux_2x1 for each bit
+    gen_mux_2x1: for i in 0 to 1 generate
+        mux_2x1_inst: entity work.mux_2x1(Structural)
+        port map (
+            A      => A(i),
+            B      => B(i),
+            sel    => sel,
+            output => mux_out(i)
+        );
+    end generate;
 
-    -- Instantiate the second mux_2x1 for the higher bit
-    mux_2x1_inst1: entity work.mux_2x1(Structural)
-    port map (
-        A      => A(1),
-        B      => B(1),
-        sel    => sel,
-        output => out_wire(1)
-    );
-
-    output <= out_wire;
+    output <= mux_out;
 
 end architecture Structural;

@@ -29,8 +29,6 @@ architecture Structural of demux_1x4_8bit is
         );
     end component demux_1x4;
 
-    --    for demux: demux_1x4 use entity work.demux_1x4(Structural);
-
 begin
     -- Generate loop to instantiate eight instances of demux_1x4 for each bit of the 8-bit input
     gen_demux: for i in 0 to 7 generate

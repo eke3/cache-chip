@@ -33,7 +33,6 @@ architecture Structural of xnor_2x1 is
     signal xor_out : STD_LOGIC;
 
 begin
-
     -- Instantiate the XOR gate to calculate A xor B
     xor_gate: entity work.xor_2x1(Structural)
     port map (

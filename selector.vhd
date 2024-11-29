@@ -31,27 +31,27 @@ architecture Structural of selector is
         );
     end component inverter;
 
-    for and_1, and_2: and_2x1 use entity work.and_2x1(Structural);
-    for inverter_1: inverter use entity work.inverter(Structural);
-
     signal write_inv : std_logic;
 
 begin
-    and_1: component and_2x1
+    and_1: entity work.and_2x1(Structural)
     port map (
-        chip_enable,
-        RW,
-        read_enable
+        A      => chip_enable,
+        B      => RW,
+        output => read_enable
     );
-    inverter_1: component inverter
+
+    inverter_1: entity work.inverter(Structural)
     port map (
-        RW,
-        write_inv
+        input  => RW,
+        output => write_inv
     );
-    and_2: component and_2x1
+
+    and_2: entity work.and_2x1(Structural)
     port map (
-        chip_enable,
-        write_inv,
-        write_enable
+        A      => chip_enable,
+        B      => write_inv,
+        output => write_enable
     );
+
 end architecture Structural;

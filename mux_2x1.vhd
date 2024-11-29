@@ -45,29 +45,26 @@ architecture Structural of mux_2x1 is
     signal and_out0, and_out1 : STD_LOGIC;
     -- Intermediate signal for inverted sel bit
     signal sel_not            : STD_LOGIC;
-
-    for sel_inverter: inverter use entity work.inverter(Structural);
-    for and_gate0, and_gate1: and_2x1 use entity work.and_2x1(Structural);
-    for or_gate: or_2x1 use entity work.or_2x1(Structural);
+    signal mux_out            : STD_LOGIC;
 
 begin
 
     -- Instantiate the inverter to generate sel_not signal
-    sel_inverter: component inverter
+    sel_inverter: entity work.inverter(Structural)
     port map (
         input  => sel,
         output => sel_not
     );
 
     -- Instantiate the and_2x1 gates to enable each data input based on sel signal
-    and_gate0: component and_2x1
+    and_gate0: entity work.and_2x1(Structural)
     port map (
         A      => A,
         B      => sel_not,
         output => and_out0
     );
 
-    and_gate1: component and_2x1
+    and_gate1: entity work.and_2x1(Structural)
     port map (
         A      => B,
         B      => sel,
@@ -75,11 +72,14 @@ begin
     );
 
     -- Instantiate the or_2x1 gate to combine the outputs of the and gates
-    or_gate: component or_2x1
+    or_gate: entity work.or_2x1(Structural)
     port map (
         A      => and_out0,
         B      => and_out1,
-        output => output
+        output => mux_out
     );
+
+    -- Assign the output of the multiplexer to the output port
+    output <= mux_out;
 
 end architecture Structural;

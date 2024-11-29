@@ -54,13 +54,10 @@ architecture Structural of tag_vector is
     -- Internal signals for the demux outputs
     signal demux_out_3, demux_out_2, demux_out_1, demux_out_0 : STD_LOGIC_VECTOR(1 downto 0);
     signal read_data_3, read_data_0, read_data_1, read_data_2 : STD_LOGIC_VECTOR(1 downto 0);
-    for demux_inst: demux_1x4_2bit use entity work.demux_1x4_2bit(Structural);
-    for cache_0, cache_1, cache_2, cache_3: cache_cell_2bit use entity work.cache_cell_2bit(Structural);
-    for mux: mux_4x1_2bit use entity work.mux_4x1_2bit(Structural);
 
 begin
 
-    mux: component mux_4x1_2bit
+    mux: entity work.mux_4x1_2bit(Structural)
     port map (
         read_data0  => read_data_0,
         read_data1  => read_data_1,
@@ -70,7 +67,7 @@ begin
         F           => read_data
     );
     -- Instantiate the demux_1x4_2bit and connect the shared write_data and sel
-    demux_inst: component demux_1x4_2bit
+    demux_inst: entity work.demux_1x4_2bit(Structural)
     port map (
         data_in     => write_data,                          -- Shared write data input
         sel         => sel,                                 -- 2-bit selector input
@@ -81,7 +78,7 @@ begin
     );
 
     -- Instantiate each cache_cell_2bit and connect signals as required
-    cache_0: component cache_cell_2bit
+    cache_0: entity work.cache_cell_2bit(Structural)
     port map (
         write_data  => demux_out_0,                         -- Demux output for cache cell 0
         chip_enable => chip_enable(0),                      -- Unique chip enable for cache cell 0
@@ -89,7 +86,7 @@ begin
         read_data   => read_data_0                          -- Unique read data output for cache cell 0
     );
 
-    cache_1: component cache_cell_2bit
+    cache_1: entity work.cache_cell_2bit(Structural)
     port map (
         write_data  => demux_out_1,                         -- Demux output for cache cell 1
         chip_enable => chip_enable(1),                      -- Unique chip enable for cache cell 1
@@ -97,7 +94,7 @@ begin
         read_data   => read_data_1                          -- Unique read data output for cache cell 1
     );
 
-    cache_2: component cache_cell_2bit
+    cache_2: entity work.cache_cell_2bit(Structural)
     port map (
         write_data  => demux_out_2,                         -- Demux output for cache cell 2
         chip_enable => chip_enable(2),                      -- Unique chip enable for cache cell 2
@@ -105,7 +102,7 @@ begin
         read_data   => read_data_2                          -- Unique read data output for cache cell 2
     );
 
-    cache_3: component cache_cell_2bit
+    cache_3: entity work.cache_cell_2bit(Structural)
     port map (
         write_data  => demux_out_3,                         -- Demux output for cache cell 3
         chip_enable => chip_enable(3),                      -- Unique chip enable for cache cell 3

@@ -13,18 +13,15 @@ entity tag_comparator_2x1 is
 end entity tag_comparator_2x1;
 
 architecture Structural of tag_comparator_2x1 is
-    -- Signals for intermediate XNOR results
-    signal bit1_equal : STD_LOGIC;
-    signal bit0_equal : STD_LOGIC;
 
     -- Component declarations
-    component valid_comparator_2x1 is
+    component xnor_2x1 is
         port (
             A      : in  STD_LOGIC;
             B      : in  STD_LOGIC;
             output : out STD_LOGIC
         );
-    end component valid_comparator_2x1;
+    end component xnor_2x1;
 
     component and_2x1 is
         port (
@@ -34,9 +31,13 @@ architecture Structural of tag_comparator_2x1 is
         );
     end component and_2x1;
 
+    -- Signals for intermediate XNOR results
+    signal bit1_equal : STD_LOGIC;
+    signal bit0_equal : STD_LOGIC;
+
 begin
     -- Compare the most significant bit (A(1) and B(1))
-    U1: entity work.valid_comparator_2x1(Structural)
+    U1: entity work.xnor_2x1(Structural)
     port map (
         A      => A(1),
         B      => B(1),
@@ -44,7 +45,7 @@ begin
     );
 
     -- Compare the least significant bit (A(0) and B(0))
-    U2: entity work.valid_comparator_2x1(Structural)
+    U2: entity work.xnor_2x1(Structural)
     port map (
         A      => A(0),
         B      => B(0),

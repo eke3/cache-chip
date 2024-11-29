@@ -21,12 +21,7 @@ architecture Structural of sr_latch is
         );
     end component nor_2x1;
 
-    -- Intermediate signals
-    signal Q_wire  : std_logic;     -- Internal connection for Q
-    signal Qn_wire : std_logic;     -- Internal connection for Qn
-
 begin
-
     -- First NOR gate for Q
     nor1: entity work.nor_2x1(Structural)
     port map (

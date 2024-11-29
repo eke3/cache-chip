@@ -33,7 +33,6 @@ architecture Structural of chip is
             reset_in             : in  std_logic;
             hit_miss             : in  std_logic;
             R_W                  : in  std_logic;
-
             cache_RW             : out std_logic;
             valid_WE             : out std_logic;
             tag_WE               : out std_logic;
@@ -61,7 +60,7 @@ architecture Structural of chip is
             output_enable          : in  std_logic;                    -- from state machine
             RW_cache               : in  std_logic;                    -- from reg
             decoder_enable         : in  std_logic;                    -- from state machine
-            busy                   : in std_logic;                     -- from state machine
+            busy                   : in  std_logic;                    -- from state machine
             mem_addr_output_enable : in  std_logic;                    -- from state machine
             mem_addr               : out std_logic_vector(5 downto 0); -- to memory
             read_cache             : out std_logic_vector(7 downto 0); -- to on-chip register, which will be released off chip by state machine's OUTPUT_ENABLE signal
@@ -104,7 +103,7 @@ architecture Structural of chip is
             output : out std_logic_vector(1 downto 0)
         );
     end component mux_2x1_2bit;
-    
+
     component mux_2x1_8bit is
         port (
             A      : in  std_logic_vector(7 downto 0);

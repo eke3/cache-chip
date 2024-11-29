@@ -40,7 +40,6 @@ architecture Structural of mux_16x1_8bit is
             in13   : in  std_logic;                                 -- Second 2-bit input
             in14   : in  std_logic;                                 -- First 2-bit input
             in15   : in  std_logic;                                 -- Second 2-bit input
-
             output : out std_logic_vector(15 downto 0)              -- Concatenated 4-bit output
         );
     end component concatenator_8bit;

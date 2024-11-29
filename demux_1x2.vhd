@@ -35,27 +35,23 @@ architecture Structural of demux_1x2 is
     -- Internal signal for the inverted selector bit
     signal sel_not : STD_LOGIC; -- NOT of sel
 
-    -- For the components
-    for inv0: inverter use entity work.inverter(Structural);
-    for and_gate_1, and_gate_2: and_2x1 use entity work.and_2x1(Structural);
-
 begin
     -- Instantiate the inverter for sel
-    inv0: component inverter
+    inv0: entity work.inverter(Structural)
     port map (
         input  => sel,
         output => sel_not
     );
 
     -- Instantiate the 2-input AND gates to route data_in to the outputs
-    and_gate_1: component and_2x1
+    and_gate_1: entity work.and_2x1(Structural)
     port map (
         A      => data_in,
         B      => sel_not,      -- AND with inverted sel for data_out_1
         output => data_out_1
     );
 
-    and_gate_2: component and_2x1
+    and_gate_2: entity work.and_2x1(Structural)
     port map (
         A      => data_in,
         B      => sel,          -- AND with sel for data_out_2

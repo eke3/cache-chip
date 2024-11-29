@@ -30,7 +30,7 @@ architecture Structural of mux_4x1_2bit is
     end component mux_4x1;
 
     -- Intermediate signals for the outputs of the two mux_4x1 instances
-    signal F_bit0, F_bit1 : STD_LOGIC;
+    signal mux_out : STD_LOGIC_VECTOR(1 downto 0);
 
 begin
     -- Instantiate the first mux_4x1 for the lower bit (bit 0)
@@ -41,7 +41,7 @@ begin
         read_data2 => read_data2(0),
         read_data3 => read_data3(0),
         sel        => sel,
-        F          => F_bit0
+        F          => mux_out(0)
     );
 
     -- Instantiate the second mux_4x1 for the higher bit (bit 1)
@@ -52,11 +52,9 @@ begin
         read_data2 => read_data2(1),
         read_data3 => read_data3(1),
         sel        => sel,
-        F          => F_bit1
+        F          => mux_out(1)
     );
 
-    -- Explicitly assign the individual bits of the 2-bit output F
-    F(0) <= F_bit0;
-    F(1) <= F_bit1;
+    F <= mux_out;
 
 end architecture Structural;

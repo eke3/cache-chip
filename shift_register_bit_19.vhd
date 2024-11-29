@@ -25,148 +25,82 @@ architecture Structural of shift_register_bit_19 is
         );
     end component dff_negedge;
 
-    for dff_1, dff_2, dff_3, dff_4, dff_5, dff_6, dff_7, dff_8, dff_9, dff_10, dff_11, dff_12, dff_13, dff_14, dff_15, dff_16, dff_17: dff_negedge use entity work.dff_negedge(Structural);
+    component shift_register_bit_3 is
+        port (
+            input  : in  std_logic;
+            clk    : in  std_logic;
+            output : out std_logic
+        );
+    end component shift_register_bit_3;
 
-    signal count_1, count_2, count_3, count_4, count_5, count_6, count_7, count_8, count_9, count_10, count_11,
-        count_12, count_13, count_14, count_15, count_16, count_17 : std_logic;
+    signal count_2, count_4, count_6, count_8, count_10, count_12, count_14, count_16, count_17 : std_logic;
 
 begin
 
-    dff_1: component dff_negedge
+    dff_1_2: entity work.shift_register_bit_3(Structural)
     port map (
-        d    => input,
-        clk  => clk,
-        q    => count_1,
-        qbar => open
+        input  => input,
+        clk    => clk,
+        output => count_2
     );
 
-    dff_2: component dff_negedge
+    dff_3_4: entity work.shift_register_bit_3(Structural)
     port map (
-        d    => count_1,
-        clk  => clk,
-        q    => count_2,
-        qbar => open
+        input  => count_2,
+        clk    => clk,
+        output => count_4
     );
 
-    dff_3: component dff_negedge
+    dff_5_6: entity work.shift_register_bit_3(Structural)
     port map (
-        d    => count_2,
-        clk  => clk,
-        q    => count_3,
-        qbar => open
+        input  => count_4,
+        clk    => clk,
+        output => count_6
     );
 
-    dff_4: component dff_negedge
+    dff_7_8: entity work.shift_register_bit_3(Structural)
     port map (
-        d    => count_3,
-        clk  => clk,
-        q    => count_4,
-        qbar => open
+        input  => count_6,
+        clk    => clk,
+        output => count_8
     );
 
-    dff_5: component dff_negedge
+    dff_9_10: entity work.shift_register_bit_3(Structural)
     port map (
-        d    => count_4,
-        clk  => clk,
-        q    => count_5,
-        qbar => open
+        input  => count_8,
+        clk    => clk,
+        output => count_10
     );
 
-    dff_6: component dff_negedge
+    dff_11_12: entity work.shift_register_bit_3(Structural)
     port map (
-        d    => count_5,
-        clk  => clk,
-        q    => count_6,
-        qbar => open
+        input  => count_10,
+        clk    => clk,
+        output => count_12
     );
 
-    dff_7: component dff_negedge
+    dff_13_14: entity work.shift_register_bit_3(Structural)
     port map (
-        d    => count_6,
-        clk  => clk,
-        q    => count_7,
-        qbar => open
+        input  => count_12,
+        clk    => clk,
+        output => count_14
     );
 
-    dff_8: component dff_negedge
+    dff_15_16: entity work.shift_register_bit_3(Structural)
     port map (
-        d    => count_7,
-        clk  => clk,
-        q    => count_8,
-        qbar => open
+        input  => count_14,
+        clk    => clk,
+        output => count_16
     );
 
-    dff_9: component dff_negedge
+    dff_17: entity work.dff_negedge(Structural)
     port map (
-        d    => count_8,
-        clk  => clk,
-        q    => count_9,
-        qbar => open
+        d      => count_16,
+        clk    => clk,
+        q      => count_17,
+        qbar   => open
     );
 
-    dff_10: component dff_negedge
-    port map (
-        d    => count_9,
-        clk  => clk,
-        q    => count_10,
-        qbar => open
-    );
-
-    dff_11: component dff_negedge
-    port map (
-        d    => count_10,
-        clk  => clk,
-        q    => count_11,
-        qbar => open
-    );
-
-    dff_12: component dff_negedge
-    port map (
-        d    => count_11,
-        clk  => clk,
-        q    => count_12,
-        qbar => open
-    );
-
-    dff_13: component dff_negedge
-    port map (
-        d    => count_12,
-        clk  => clk,
-        q    => count_13,
-        qbar => open
-    );
-
-    dff_14: component dff_negedge
-    port map (
-        d    => count_13,
-        clk  => clk,
-        q    => count_14,
-        qbar => open
-    );
-
-    dff_15: component dff_negedge
-    port map (
-        d    => count_14,
-        clk  => clk,
-        q    => count_15,
-        qbar => open
-    );
-
-    dff_16: component dff_negedge
-    port map (
-        d    => count_15,
-        clk  => clk,
-        q    => count_16,
-        qbar => open
-    );
-
-    dff_17: component dff_negedge
-    port map (
-        d    => count_16,
-        clk  => clk,
-        q    => output,
-        qbar => open
-    );
-
+    output <= count_17;
 
 end architecture Structural;

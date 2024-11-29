@@ -25,24 +25,24 @@ architecture Structural of shift_register_bit_3 is
         );
     end component dff_negedge;
 
-    for dff_1, dff_2: dff_negedge use entity work.dff_negedge(Structural);
-
     signal count_1 : std_logic;
 
 begin
 
-    dff_1: component dff_negedge
+    dff_1: entity work.dff_negedge(Structural)
     port map (
-        input,
-        clk,
-        count_1
+        d    => input,
+        clk  => clk,
+        q    => count_1,
+        qbar => open
     );
 
-    dff_2: component dff_negedge
+    dff_2: entity work.dff_negedge(Structural)
     port map (
-        count_1,
-        clk,
-        output
+        d    => count_1,
+        clk  => clk,
+        q    => output,
+        qbar => open
     );
 
 end architecture Structural;

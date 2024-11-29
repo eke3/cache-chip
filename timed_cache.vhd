@@ -23,7 +23,7 @@ entity timed_cache is
         mem_addr_output_enable : in  std_logic; -- from state machine
         mem_addr               : out std_logic_vector(5 downto 0); -- to memory
         read_cache             : out std_logic_vector(7 downto 0); -- to on-chip register, which will be released off chip by state machine's OUTPUT_ENABLE signal
-        hit_or_miss            : out std_logic  -- status signal going to state machine
+        hit_or_miss            : out std_logic -- status signal going to state machine
     );
 end entity timed_cache;
 
@@ -116,14 +116,6 @@ architecture Structural of timed_cache is
             output : out STD_LOGIC
         );
     end component tag_comparator_2x1;
-
-    component valid_comparator_2x1 is
-        port (
-            A      : in  STD_LOGIC;
-            B      : in  STD_LOGIC;
-            output : out STD_LOGIC
-        );
-    end component valid_comparator_2x1;
 
     component tag_vector is
         port (
@@ -316,7 +308,7 @@ begin
     );
 
     -- 1-bit comparator for valid bits to check for hit/miss.
-    valid_cmp: entity work.valid_comparator_2x1(Structural)
+    valid_cmp: entity work.and_2x1(Structural)
     port map (
         A            => vdd,
         B            => read_valid,

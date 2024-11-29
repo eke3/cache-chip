@@ -54,8 +54,6 @@ architecture Structural of demux_1x16_8bit is
         );
     end component demux_1x16;
 
-    --    for demux: demux_1x16 use entity work.demux_1x16(Structural);
-
 begin
     -- Generate block to instantiate demux_1x16 for each bit of the 8-bit input data
     gen_demux_1x16: for i in 0 to 7 generate

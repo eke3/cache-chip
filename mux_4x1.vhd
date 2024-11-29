@@ -50,30 +50,25 @@ architecture Structural of mux_4x1 is
     signal and_out0, and_out1, and_out2, and_out3 : STD_LOGIC;
     -- Intermediate signal for inverted sel bit
     signal sel_not0, sel_not1                     : STD_LOGIC;
-    signal outline                                : std_logic;
-
-
-    for sel_inverter0, sel_inverter1: inverter use entity work.inverter(Structural);
-    for and_gate0, and_gate1, and_gate2, and_gate3: and_3x1 use entity work.and_3x1(Structural);
-    for or_gate: or_4x1 use entity work.or_4x1(Structural);
+    signal mux_out                                : std_logic;
 
 begin
 
     -- Instantiate the inverter to generate sel_not signal
-    sel_inverter0: component inverter
+    sel_inverter0: entity work.inverter(Structural)
     port map (
         input  => sel(0),
         output => sel_not0
     );
 
-    sel_inverter1: component inverter
+    sel_inverter1: entity work.inverter(Structural)
     port map (
         input  => sel(1),
         output => sel_not1
     );
 
     -- Instantiate the and_3x1 gates to enable each read_data input based on sel signal
-    and_gate0: component and_3x1
+    and_gate0: entity work.and_3x1(Structural)
     port map (
         A      => read_data0,
         B      => sel_not1,
@@ -81,7 +76,7 @@ begin
         output => and_out0
     );
 
-    and_gate1: component and_3x1
+    and_gate1: entity work.and_3x1(Structural)
     port map (
         A      => read_data1,
         B      => sel_not1,
@@ -89,7 +84,7 @@ begin
         output => and_out1
     );
 
-    and_gate2: component and_3x1
+    and_gate2: entity work.and_3x1(Structural)
     port map (
         A      => read_data2,
         B      => sel(1),
@@ -97,7 +92,7 @@ begin
         output => and_out2
     );
 
-    and_gate3: component and_3x1
+    and_gate3: entity work.and_3x1(Structural)
     port map (
         A      => read_data3,
         B      => sel(1),
@@ -106,15 +101,15 @@ begin
     );
 
     -- Instantiate the or_4x1 gate to combine the outputs of the and gates
-    or_gate: component or_4x1
+    or_gate: entity work.or_4x1(Structural)
     port map (
         A      => and_out0,
         B      => and_out1,
         C      => and_out2,
         D      => and_out3,
-        output => outline
+        output => mux_out
     );
 
-    F <= outline;
+    F <= mux_out;
 
 end architecture Structural;

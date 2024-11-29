@@ -44,22 +44,12 @@ architecture Structural of shift_register_bit_8 is
         );
     end component and_2x1;
 
-    component nand_2x1 is
-        port (
-            A      : in  STD_LOGIC;
-            B      : in  STD_LOGIC;
-            output : out STD_LOGIC
-        );
-    end component nand_2x1;
-
     component inverter is
         port (
             input  : in  std_logic;
             output : out std_logic
         );
     end component inverter;
-
-    for dff_1, dff_2, dff_3, dff_4, dff_5, dff_6, dff_7, dff_8: dff_negedge use entity work.dff_negedge(Structural);
 
     signal count_1, count_2, count_3, count_4, count_5, count_6, count_7, output_sig : std_logic;
     signal addr_0, addr_1, addr_2, addr_3, input_sig                                 : std_logic;
@@ -205,10 +195,7 @@ begin
         output => count_7_inv
     );
 
-    addr_en_encode(0) <= addr_0;
-    addr_en_encode(1) <= addr_1;
-    addr_en_encode(2) <= addr_2;
-    addr_en_encode(3) <= addr_3;
-    output            <= output_sig;
+    addr_en_encode <= (addr_3, addr_2, addr_1, addr_0);
+    output         <= output_sig;
 
 end architecture Structural;

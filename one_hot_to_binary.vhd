@@ -22,7 +22,6 @@ architecture Structural of one_hot_to_binary is
     end component or_2x1;
 
 begin
-
     -- Convert one-hot input to binary output
 
     -- Binary bit 1 (MSB): '1' if one_hot(2) or one_hot(3) is active

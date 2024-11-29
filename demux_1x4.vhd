@@ -35,57 +35,49 @@ architecture Structural of demux_1x4 is
     end component and_3x1;
 
     -- Internal signals
-    signal sel_not0 : STD_LOGIC; -- NOT of sel(0)
-    signal sel_not1 : STD_LOGIC; -- NOT of sel(1)
-
-    for inv0, inv1: inverter use entity work.inverter(Structural);
-    for and_gate_0, and_gate_1, and_gate_2, and_gate_3: and_3x1 use entity work.and_3x1(Structural);
+    signal sel_not : STD_LOGIC_VECTOR(1 downto 0);
 
 begin
     -- Instantiate the two inverters for sel(0) and sel(1)
-    inv0: component inverter
-    port map (
-        input  => sel(0),
-        output => sel_not0
-    );
-
-    inv1: component inverter
-    port map (
-        input  => sel(1),
-        output => sel_not1
-    );
+    gen_inv: for i in 0 to 1 generate
+        inv: entity work.inverter(Structural)
+        port map (
+            input  => sel(i),
+            output => sel_not(i)
+        );
+    end generate;
 
     -- Instantiate the three 3-input AND gates for outputs
-    and_gate_0: component and_3x1
+    and_gate_0: entity work.and_3x1(Structural)
     port map (
-        A      => data_in,
-        B      => sel_not1,
-        C      => sel_not0,
-        output => data_out_0
+        A          => data_in,
+        B          => sel_not(1),
+        C          => sel_not(0),
+        output     => data_out_0
     );
 
-    and_gate_1: component and_3x1
+    and_gate_1: entity work.and_3x1(Structural)
     port map (
-        A      => data_in,
-        B      => sel_not1,
-        C      => sel(0),
-        output => data_out_1
+        A          => data_in,
+        B          => sel_not(1),
+        C          => sel(0),
+        output     => data_out_1
     );
 
-    and_gate_2: component and_3x1
+    and_gate_2: entity work.and_3x1(Structural)
     port map (
-        A      => data_in,
-        B      => sel(1),
-        C      => sel_not0,
-        output => data_out_2
+        A          => data_in,
+        B          => sel(1),
+        C          => sel_not(0),
+        output     => data_out_2
     );
 
-    and_gate_3: component and_3x1
+    and_gate_3: entity work.and_3x1(Structural)
     port map (
-        A      => data_in,
-        B      => sel(1),
-        C      => sel(0),
-        output => data_out_3
+        A          => data_in,
+        B          => sel(1),
+        C          => sel(0),
+        output     => data_out_3
     );
 
 end architecture Structural;

@@ -23,7 +23,6 @@ entity state_machine is
         reset_in             : in  std_logic;
         hit_miss             : in  std_logic;
         R_W                  : in  std_logic;
-
         cache_RW             : out std_logic;
         valid_WE             : out std_logic;
         tag_WE               : out std_logic;
@@ -107,13 +106,14 @@ architecture Structural of state_machine is
         );
     end component mux_2x1;
 
-    component shift_register_bit_2 is
+    component dff_negedge is
         port (
-            input  : in  std_logic;
-            clk    : in  std_logic;
-            output : out std_logic
+            d    : in  std_logic;
+            clk  : in  std_logic;
+            q    : out std_logic;
+            qbar : out std_logic
         );
-    end component shift_register_bit_2;
+    end component dff_negedge;
 
     component shift_register_bit_3 is
         port (
@@ -314,11 +314,12 @@ begin
 
     -- shift register timer for a write operation. Used to hold busy signal high
     -- for the correct amount of clock signals
-    shift_reg_2_0: entity work.shift_register_bit_2(Structural)
+    shift_reg_2_0: entity work.dff_negedge(Structural)
     port map (
-        input       => write_count_criteria,
+        d           => write_count_criteria,
         clk         => clk,
-        output      => write_count     -- will be U until propogated out (bcuz counter)
+        q           => write_count,    -- will be U until propogated out (bcuz counter)
+        qbar        => open
     );
 
     -- shift register timer for a read miss operation. Used to hold busy signal high
