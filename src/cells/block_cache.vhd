@@ -59,13 +59,14 @@ architecture Structural of block_cache is
         );
     end component mux_16x1_8bit;
 
-    component and_2x1 is
+    component and_3x1 is
         port (
             A      : in  STD_LOGIC;
             B      : in  STD_LOGIC;
+            C      : in  STD_LOGIC;
             output : out STD_LOGIC
         );
-    end component and_2x1;
+    end component and_3x1;
 
     component one_hot_to_binary is
         port (
@@ -89,6 +90,15 @@ architecture Structural of block_cache is
         );
     end component inverter;
 
+    component tx_8bit is
+        port (
+            sel    : in  std_logic;                         -- Selector signal
+            selnot : in  std_logic;                         -- Inverted selector signal
+            input  : in  STD_LOGIC_VECTOR(7 downto 0);
+            output : out STD_LOGIC_VECTOR(7 downto 0)
+        );
+    end component tx_8bit;
+
     signal CE                          : std_logic_vector(15 downto 0);
     signal demux_out                   : std_logic_vector(127 downto 0);
     signal read_array                  : std_logic_vector(127 downto 0);
@@ -96,8 +106,15 @@ architecture Structural of block_cache is
     signal block_off_bin, byte_off_bin : std_logic_vector(1 downto 0);
     signal cache_RW                    : std_logic;
     signal RW_not, RW_nand_out         : std_logic;
+    signal read_out                    : std_logic_vector(7 downto 0);
 
 begin
+
+    hit_miss_inverter: entity work.inverter(Structural)
+    port map (
+        input           => hit_miss,
+        output          => cache_RW
+    );
 
     rw_inverter: entity work.inverter(Structural)
     port map (
@@ -113,43 +130,47 @@ begin
     );
 
     gen_cell_1: for i in 0 to 3 generate
-        and_1: entity work.and_2x1
+        and_1: entity work.and_3x1(Structural)
         port map (
             A           => block_offset(0),
             B           => byte_offset(i),
+            C           => hit_miss,
             output      => CE(15 - (i * 1))
         );
     end generate;
 
     gen_cell_2: for i in 0 to 3 generate
-        and_2: entity work.and_2x1
+        and_2: entity work.and_3x1(Structural)
         port map (
             A           => block_offset(1),
             B           => byte_offset(i),
+            C           => hit_miss,
             output      => CE(11 - (i * 1))
         );
     end generate;
 
     gen_cell_3: for i in 0 to 3 generate
-        and_3: entity work.and_2x1
+        and_3: entity work.and_3x1(Structural)
         port map (
             A           => block_offset(2),
             B           => byte_offset(i),
+            C           => hit_miss,
             output      => CE(7 - (i * 1))
         );
     end generate;
 
     gen_cell_4: for i in 0 to 3 generate
-        and_4: entity work.and_2x1
+        and_4: entity work.and_3x1(Structural)
         port map (
             A           => block_offset(3),
             B           => byte_offset(i),
+            C           => hit_miss,
             output      => CE(3 - (i * 1))
         );
     end generate;
 
     gen_cell_5: for i in 0 to 3 generate
-        block_cell_1: entity work.cache_cell_8bit
+        block_cell_1: entity work.cache_cell_8bit(Structural)
         port map (
             write_data  => demux_out(127 - (8 * i) downto 127 - (8 * i) - 7),
             chip_enable => CE(15 - ((i) * 1)),
@@ -159,7 +180,7 @@ begin
     end generate;
 
     gen_cell_6: for i in 0 to 3 generate
-        block_cell_2: entity work.cache_cell_8bit
+        block_cell_2: entity work.cache_cell_8bit(Structural)
         port map (
             write_data  => demux_out(95 - (8 * i) downto 95 - (8 * i) - 7),
             chip_enable => CE(11 - ((i) * 1)),
@@ -169,7 +190,7 @@ begin
     end generate;
 
     gen_cell_7: for i in 0 to 3 generate
-        block_cell_3: entity work.cache_cell_8bit
+        block_cell_3: entity work.cache_cell_8bit(Structural)
         port map (
             write_data  => demux_out(63 - (8 * i) downto 63 - (8 * i) - 7),
             chip_enable => CE(7 - ((i) * 1)),
@@ -179,7 +200,7 @@ begin
     end generate;
 
     gen_cell_8: for i in 0 to 3 generate
-        block_cell_4: entity work.cache_cell_8bit
+        block_cell_4: entity work.cache_cell_8bit(Structural)
         port map (
             write_data  => demux_out(31 - (8 * i) downto 31 - (8 * i) - 7),
             chip_enable => CE(3 - ((i) * 1)),
@@ -215,7 +236,7 @@ begin
         inputs          => read_array,
         sel             => CE,
         sel_4bit        => comb_addr,
-        output          => read_data
+        output          => read_out
     );
 
     convert_1: entity work.one_hot_to_binary(Structural)
@@ -228,6 +249,14 @@ begin
     port map (
         one_hot         => byte_offset,
         binary          => byte_off_bin
+    );
+
+    output_tx: entity work.tx_8bit(Structural)
+    port map (
+        sel    => hit_miss,
+        selnot => (not hit_miss),
+        input  => read_out,
+        output => read_data
     );
 
     comb_addr(3 downto 2) <= block_off_bin;
