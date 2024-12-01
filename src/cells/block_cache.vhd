@@ -68,15 +68,6 @@ architecture Structural of block_cache is
         );
     end component and_3x1;
 
-    component and_3x1 is
-        port (
-            A      : in  STD_LOGIC;
-            B      : in  STD_LOGIC;
-            C      : in  STD_LOGIC;
-            output : out STD_LOGIC
-        );
-    end component and_3x1;
-
     component one_hot_to_binary is
         port (
             one_hot : in  STD_LOGIC_VECTOR(3 downto 0);     -- One-hot encoded input
@@ -116,13 +107,14 @@ architecture Structural of block_cache is
     signal cache_RW                    : std_logic;
     signal RW_not, RW_nand_out         : std_logic;
     signal read_out                    : std_logic_vector(7 downto 0);
+    signal not_hit_miss                : std_logic;
 
 begin
 
     hit_miss_inverter: entity work.inverter(Structural)
     port map (
         input           => hit_miss,
-        output          => cache_RW
+        output          => not_hit_miss
     );
 
     rw_inverter: entity work.inverter(Structural)
@@ -263,7 +255,7 @@ begin
     output_tx: entity work.tx_8bit(Structural)
     port map (
         sel             => hit_miss,
-        selnot          => (not hit_miss),
+        selnot          => not_hit_miss,
         input           => read_out,
         output          => read_data
     );
