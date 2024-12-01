@@ -1,8 +1,10 @@
 -- Entity: tb_timed_cache
 -- Architecture: Test
+-- Note: Run for 2500 ns
 
 library IEEE;
 use IEEE.std_logic_1164.all;
+use ieee.std_logic_textio.all;
 
 entity tb_timed_cache is
 end entity tb_timed_cache;
@@ -22,6 +24,7 @@ architecture Test of tb_timed_cache is
             tag_WE                 : in  std_logic;                    -- from state machine
             output_enable          : in  std_logic;
             RW_cache               : in  std_logic;                    -- from reg
+            busy                   : in  std_logic;
             decoder_enable         : in  std_logic;                    -- from state machine
             mem_addr_output_enable : in  std_logic;
             mem_addr               : out std_logic_vector(5 downto 0); -- to memory
@@ -31,8 +34,6 @@ architecture Test of tb_timed_cache is
     end component timed_cache;
 
     -- system inputs
-    signal vdd                                                                                     : std_logic := '1';
-    signal gnd                                                                                     : STD_LOGIC := '0';
     signal clk, reset                                                                              : STD_LOGIC;
 
     -- signal from cpu/memory
@@ -59,8 +60,8 @@ begin
 
     cache: entity work.timed_cache(Structural)
     port map (
-        vdd                    => vdd,
-        gnd                    => gnd,
+        vdd                    => '1',
+        gnd                    => '0',
         clk                    => clk,
         reset                  => reset,
         write_cache            => write_cache,
@@ -71,6 +72,7 @@ begin
         tag_WE                 => tag_WE,
         output_enable          => output_enable,
         RW_cache               => RW_cache,
+        busy                   => BUSY,
         decoder_enable         => decoder_enable,
         mem_addr_output_enable => mem_addr_output_enable,
         mem_addr               => mem_addr,
@@ -87,9 +89,8 @@ begin
         wait for 10 ns;
     end process clk_gen;
 
-
+    -- Stimulus process
     stim: process
-
         -- write miss procedure
         procedure write_miss_test is
         begin
@@ -193,22 +194,20 @@ begin
 
             RW_cache               <= '1';
             decoder_enable         <= '1';
-            byte_offset            <= "01";                            -- ***re-selecting original byte might not be automated yet? if not, needs implementation outside the timed_cache block***
-            write_cache            <= "XXXXXXXX";
+            byte_offset            <= "00";                            
+            write_cache            <= "ZZZZZZZZ";
             wait for 20 ns;
 
-            -- ***decoder_enable and RW switching during this operation should be controlled by state machine***
-            -- ***decoder_enable needs to stay high through the end of read miss operation (so it cant just track BUSY)***
             BUSY                   <= '0';
             decoder_enable         <= '1';
             output_enable          <= '1';
             -- data becomes available on a positive edge. on the subsequent negative edge, OUTPUT_ENABLE goes high for 1 cycle and it gets transmitted to the cpu
             wait for 20 ns;
-
-            output_enable          <= '0';
-            decoder_enable         <= '0';
-            RW_cache               <= 'X';
-            byte_offset            <= "XX";
+            assert (read_cache = X"AB") report "Read miss failed." severity warning;
+            output_enable          <= 'Z';
+            -- decoder_enable         <= '0';
+            -- RW_cache               <= 'Z';
+            -- byte_offset            <= "ZZ";
 
         end procedure read_miss_test;
 
@@ -219,16 +218,16 @@ begin
             -- initialize values
             START                  <= '0';
             BUSY                   <= '0';
-            write_cache            <= "XXXXXXXX";                      -- cpu data
-            block_offset           <= "XX";
-            byte_offset            <= "XX";
-            tag                    <= "XX";
-            valid_WE               <= 'X';
-            tag_WE                 <= 'X';
-            output_enable          <= 'X';
-            RW_cache               <= 'X';
-            decoder_enable         <= 'X';
-            mem_addr_output_enable <= 'X';
+            write_cache            <= "ZZZZZZZZ";                      -- cpu data
+            block_offset           <= "ZZ";
+            byte_offset            <= "ZZ";
+            tag                    <= "ZZ";
+            valid_WE               <= 'Z';
+            tag_WE                 <= 'Z';
+            output_enable          <= 'Z';
+            RW_cache               <= 'Z';
+            decoder_enable         <= 'Z';
+            mem_addr_output_enable <= 'Z';
             wait for 40 ns;
 
             START                  <= '1';
@@ -237,7 +236,7 @@ begin
             BUSY                   <= '1';
             tag                    <= "01";
             block_offset           <= "01";
-            byte_offset            <= "01";                            -- trying to read the "CD" written during the read miss
+            byte_offset            <= "01";                            
             valid_WE               <= '0';
             tag_WE                 <= '0';
             decoder_enable         <= '1';                             -- signal goes high on the negative clock edge
@@ -255,39 +254,39 @@ begin
 
         procedure system_reset is
         begin
+
+            -- initialize values
+            START                  <= 'Z';
+            BUSY                   <= 'Z';
+            write_cache            <= "ZZZZZZZZ";                      -- cpu data
+            block_offset           <= "ZZ";
+            byte_offset            <= "ZZ";
+            tag                    <= "ZZ";
+            valid_WE               <= 'Z';
+            tag_WE                 <= 'Z';
+            output_enable          <= 'Z';
+            RW_cache               <= 'Z';
+            decoder_enable         <= 'Z';
+            mem_addr_output_enable <= 'Z';
+            reset                  <= 'Z';
+            wait for 200 ns;
             -- hold reset for 2 cycles
             reset                  <= '1';
             wait for 40 ns;
-            -- initialize values
-            START                  <= '0';
-            BUSY                   <= '0';
-            write_cache            <= "XXXXXXXX";                      -- cpu data
-            block_offset           <= "XX";
-            byte_offset            <= "XX";
-            tag                    <= "XX";
-            valid_WE               <= 'X';
-            tag_WE                 <= 'X';
-            output_enable          <= 'X';
-            RW_cache               <= 'X';
-            decoder_enable         <= 'X';
-            mem_addr_output_enable <= 'X';
             reset                  <= '0';
-            wait for 20 ns;
-
-
         end procedure system_reset;
 
 
     begin
-        -- ***To do all these tests in the same run, set simulation time to at least 1700 ns***
+        -- ***To do all these tests in the same run, set simulation time to at least 2500 ns***
 
         -- THIS BLOCK TESTS WRITE MISS
         system_reset;
         write_miss_test;
         -- write miss is over, now try to read it
-        -- "UU" should be read from the cache, because nothing was written
+        -- "ZZZZZZZZ" should be read from the cache, because nothing was written
         read_hit_test;
-
+        assert (read_cache = "ZZZZZZZZ") report "Write miss test failed." severity warning;
 
         -- THIS BLOCK TESTS READ MISS AND READ HIT
         system_reset;
@@ -296,16 +295,21 @@ begin
         -- read miss is over, now try to read one of the values written by the read miss
         -- "CD" should be read from the cache
         read_hit_test;
-
+        assert (read_cache = X"CD") report "Read hit/miss test failed." severity warning;
 
         -- THIS BLOCK TESTS WRITE HIT
-        system_reset;
+        system_reset; wait for 10 ns;
         read_miss_test;
         write_hit_test;
         -- should write to one of the cells written and validated by the read miss
         -- "FF" should be read from the cache
         read_hit_test;
+        assert (read_cache = X"FF") report "Write hit test failed." severity warning;
 
+        wait for 10 ns;
+        system_reset;
+
+        report "Testbench completed.";
         wait;
     end process stim;
 

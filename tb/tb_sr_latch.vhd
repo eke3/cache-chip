@@ -1,3 +1,7 @@
+-- Entity: tb_sr_latch
+-- Architecture: Test
+-- Note: Run for 200 ns
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 

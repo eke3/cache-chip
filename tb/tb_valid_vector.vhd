@@ -1,18 +1,28 @@
-library ieee;
-use ieee.std_logic_1164.all;
+-- Entity: tb_valid_vector
+-- Architecture: Test
+-- Note: Run for 100 ns
+
+library IEEE;
+use IEEE.std_logic_1164.all;
+use IEEE.std_logic_textio.all;
+use IEEE.std_logic_arith.all;
+use STD.textio.all;
 
 entity tb_valid_vector is
 end entity tb_valid_vector;
 
 architecture Test of tb_valid_vector is
+    -- Component declaration for valid_vector entity
     component valid_vector is
         port (
-            write_data  : in  std_logic;
-            reset       : in  std_logic;
-            chip_enable : in  std_logic_vector(3 downto 0);
-            RW          : in  std_logic;
-            sel         : in  std_logic_vector(1 downto 0);
-            read_data   : out std_logic
+            vdd         : in  STD_LOGIC; -- Power supply
+            gnd         : in  STD_LOGIC; -- Ground
+            write_data  : in  STD_LOGIC; -- Shared write data for demux
+            reset       : in  STD_LOGIC; -- Shared reset signal for all cells
+            chip_enable : in  STD_LOGIC_VECTOR(3 downto 0); -- 4-bit chip enable (1 bit per cell)
+            RW          : in  STD_LOGIC; -- Shared Read/Write signal for all cells
+            sel         : in  STD_LOGIC_VECTOR(1 downto 0); -- 2-bit selector for demux, comes from decoder input
+            read_data   : out STD_LOGIC -- Read data output for cell 3
         );
     end component valid_vector;
 
@@ -21,9 +31,34 @@ architecture Test of tb_valid_vector is
     signal sel                   : std_logic_vector(1 downto 0);
     signal read_data             : std_logic;
 
+    procedure print_output is
+        variable out_line : line;
+    begin
+        write(out_line, string'(" Reset: "));
+        write(out_line, reset);
+        write(out_line, string'(" Write Data "));
+        write(out_line, write_data);
+        write(out_line, string'(" Read/Write: "));
+        write(out_line, RW);
+        write(out_line, string'(" Chip Enable: "));
+        write(out_line, chip_enable);
+        write(out_line, string'(" Sel: "));
+        write(out_line, sel);
+        writeline(output, out_line);
+
+        write(out_line, string'(" Read Data: "));
+        write(out_line, read_data);
+        writeline(output, out_line);
+
+        write(out_line, string'(" ----------------------------------------------"));
+        writeline(output, out_line);
+    end procedure print_output;
+
 begin
-    uut: entity work.valid_vector(Structural)
+    DUT: entity work.valid_vector(Structural)
     port map (
+        vdd         => '1',
+        gnd         => '0',
         write_data  => write_data,
         reset       => reset,
         chip_enable => chip_enable,
@@ -32,124 +67,65 @@ begin
         read_data   => read_data
     );
 
-    process
+    stim: process
     begin
 
-        write_data  <= 'X';
-        chip_enable <= "0001";
-        sel         <= "00";
-        RW          <= '1';
-        reset       <= '0';
+        -- Initialize inputs
+        write_data  <= 'Z';
+        reset       <= 'Z';
+        chip_enable <= "ZZZZ";
+        RW          <= 'Z';
+        sel         <= "ZZ";
         wait for 10 ns;
 
-        -- Reset
+        -- Test Case 1: Apply reset = 1 (Expect read_data = Z)
         reset       <= '1';
-        write_data  <= '0';
-        chip_enable <= "0000";
-        RW          <= '0'; -- RW=0 for reset
-        sel         <= "00";
         wait for 10 ns;
-
-        -- Release reset
+        assert (read_data = 'X') report "Test Case 1 failed." severity warning;
+        print_output;
         reset       <= '0';
         wait for 10 ns;
-
-        RW          <= '1';
+        assert (read_data = 'X') report "Test Case 1 failed." severity warning;
+        print_output;
+        -- Read a cell after reset
+        RW          <= '1'; 
         chip_enable <= "0001";
-        wait for 10 ns;
-
-
-        -- Write 1 to cell 0
-        write_data  <= '1';
-        chip_enable <= "0001";
-        RW          <= '0'; -- RW=1 for write
         sel         <= "00";
         wait for 10 ns;
+        assert (read_data = '0') report "Test Case 1 failed." severity warning;
+        print_output;
 
-
-        -- Read from cell 0
-        chip_enable <= "0001";
-        RW          <= '1'; -- RW=0 for read
-        wait for 10 ns;
-        report "Read data from cell 0: " & std_logic'image(read_data);
-
-
-        -- Write 1 to cell 1
+        -- Test Case 2: Write 1 to a cell
         write_data  <= '1';
-        chip_enable <= "0010";
-        RW          <= '0'; -- RW=1 for write
-        sel         <= "01";
-        wait for 10 ns;
-
-        --        -- Read from cell 0
-        --        chip_enable <= "0001";
-        --        RW <= '1'; -- RW=0 for read
-        --        wait for 10 ns;
-        --        report "Read data from cell 0: " & std_logic'image(read_data_0);
-
-
-        -- Read from cell 1
-        chip_enable <= "0010";
-        RW          <= '1'; -- RW=0 for read
-        wait for 10 ns;
-        report "Read data from cell 1: " & std_logic'image(read_data);
-
-
-        -- Read from cell 0
-        --sel <= "00";
-        chip_enable <= "0001";
-        RW          <= '1'; -- RW=0 for read
-        wait for 10 ns;
-        report "Read data from cell 0: " & std_logic'image(read_data);
-
-        -- ... (similarly for cells 2 and 3)
-
-        --        -- Final reset
-        --        reset <= '1';
-        --        wait for 20 ns;
-
-        -- Read from cell 1
-        chip_enable <= "0010";
-        RW          <= '1'; -- RW=0 for read
-        wait for 10 ns;
-        report "Read data from cell 1: " & std_logic'image(read_data);
-
-
-        -- Read from cell 0
-        --sel <= "00";
-        chip_enable <= "0001";
-        RW          <= '1'; -- RW=0 for read
-        wait for 10 ns;
-        report "Read data from cell 0: " & std_logic'image(read_data);
-
-        -- Reset
-        reset       <= '1';
-        write_data  <= '0';
-        chip_enable <= "0000";
-        RW          <= '0'; -- RW=0 for reset
-        sel         <= "00";
-        wait for 10 ns;
-
-        -- Release reset
         reset       <= '0';
-
-        wait for 20 ns;
-
-        -- Read from cell 1
-        chip_enable <= "0010";
-        RW          <= '1'; -- RW=0 for read
-        wait for 10 ns;
-        report "Read data from cell 1: " & std_logic'image(read_data);
-
-
-        -- Read from cell 0
-        --sel <= "00";
         chip_enable <= "0001";
-        RW          <= '1'; -- RW=0 for read
+        RW          <= '0'; -- Write mode
+        sel         <= "00";
         wait for 10 ns;
-        report "Read data from cell 0: " & std_logic'image(read_data);
+        assert (read_data = 'X') report "Test Case 2 failed." severity warning;
+        print_output;
+        -- Read cell after writing 1
+        write_data <= 'Z';
+        reset <= '0';
+        chip_enable <= "0001";
+        RW <= '1';
+        sel <= "00";
+        wait for 10 ns;
+        assert (read_data = '1') report "Test Case 2 failed." severity warning;
+        print_output;
 
+        -- Test Case 3: Read a different cell (read_data = 0 expected)
+        write_data <= 'Z';
+        reset <= '0';
+        chip_enable <= "0010";
+        RW <= '1';
+        sel <= "01";
+        wait for 10 ns;
+        assert (read_data = '0') report "Test Case 3 failed." severity warning;
+        print_output;
+
+        report "Testbench completed.";
         wait;
-    end process;
+    end process stim;
 
 end architecture Test;

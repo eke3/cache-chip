@@ -1,4 +1,6 @@
--- tb_demux_1x16.vhd
+-- Entity: tb_demux_1x16
+-- Architecture: Test
+-- Note: Run for 700 ns
 
 library IEEE;
 use IEEE.std_logic_1164.all;
