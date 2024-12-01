@@ -68,6 +68,15 @@ architecture Structural of block_cache is
         );
     end component and_3x1;
 
+    component and_3x1 is
+        port (
+            A      : in  STD_LOGIC;
+            B      : in  STD_LOGIC;
+            C      : in  STD_LOGIC;
+            output : out STD_LOGIC
+        );
+    end component and_3x1;
+
     component one_hot_to_binary is
         port (
             one_hot : in  STD_LOGIC_VECTOR(3 downto 0);     -- One-hot encoded input
