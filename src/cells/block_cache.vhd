@@ -253,10 +253,10 @@ begin
 
     output_tx: entity work.tx_8bit(Structural)
     port map (
-        sel    => hit_miss,
-        selnot => (not hit_miss),
-        input  => read_out,
-        output => read_data
+        sel             => hit_miss,
+        selnot          => (not hit_miss),
+        input           => read_out,
+        output          => read_data
     );
 
     comb_addr(3 downto 2) <= block_off_bin;

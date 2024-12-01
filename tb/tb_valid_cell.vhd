@@ -21,7 +21,7 @@ architecture Test of tb_valid_cell is
             reset       : in  std_logic; -- Reset signal
             chip_enable : in  std_logic; -- Chip enable signal
             RW          : in  std_logic; -- Read/Write signal
-            read_data   : out std_logic -- Read data output
+            read_data   : out std_logic  -- Read data output
         );
     end component valid_cell;
 
@@ -97,12 +97,12 @@ begin
         -- Test Case 2: Write 1 to the cell
         write_data  <= '1';
         chip_enable <= '1';
-        RW          <= '0'; -- Write mode
+        RW          <= '0';              -- Write mode
         wait for 10 ns;
         assert (read_data = 'Z') report "Test Case 2 failed." severity warning;
         print_output;
         -- Read the cell after writing 1
-        RW          <= '1'; -- Read mode
+        RW          <= '1';              -- Read mode
         wait for 10 ns;
         assert (read_data = '1') report "Test Case 2 failed." severity warning;
         print_output;

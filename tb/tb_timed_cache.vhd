@@ -194,7 +194,7 @@ begin
 
             RW_cache               <= '1';
             decoder_enable         <= '1';
-            byte_offset            <= "00";                            
+            byte_offset            <= "00";
             write_cache            <= "ZZZZZZZZ";
             wait for 20 ns;
 
@@ -236,7 +236,7 @@ begin
             BUSY                   <= '1';
             tag                    <= "01";
             block_offset           <= "01";
-            byte_offset            <= "01";                            
+            byte_offset            <= "01";
             valid_WE               <= '0';
             tag_WE                 <= '0';
             decoder_enable         <= '1';                             -- signal goes high on the negative clock edge
@@ -298,7 +298,8 @@ begin
         assert (read_cache = X"CD") report "Read hit/miss test failed." severity warning;
 
         -- THIS BLOCK TESTS WRITE HIT
-        system_reset; wait for 10 ns;
+        system_reset;
+        wait for 10 ns;
         read_miss_test;
         write_hit_test;
         -- should write to one of the cells written and validated by the read miss

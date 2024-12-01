@@ -15,14 +15,14 @@ architecture Test of tb_valid_vector is
     -- Component declaration for valid_vector entity
     component valid_vector is
         port (
-            vdd         : in  STD_LOGIC; -- Power supply
-            gnd         : in  STD_LOGIC; -- Ground
-            write_data  : in  STD_LOGIC; -- Shared write data for demux
-            reset       : in  STD_LOGIC; -- Shared reset signal for all cells
+            vdd         : in  STD_LOGIC;                    -- Power supply
+            gnd         : in  STD_LOGIC;                    -- Ground
+            write_data  : in  STD_LOGIC;                    -- Shared write data for demux
+            reset       : in  STD_LOGIC;                    -- Shared reset signal for all cells
             chip_enable : in  STD_LOGIC_VECTOR(3 downto 0); -- 4-bit chip enable (1 bit per cell)
-            RW          : in  STD_LOGIC; -- Shared Read/Write signal for all cells
+            RW          : in  STD_LOGIC;                    -- Shared Read/Write signal for all cells
             sel         : in  STD_LOGIC_VECTOR(1 downto 0); -- 2-bit selector for demux, comes from decoder input
-            read_data   : out STD_LOGIC -- Read data output for cell 3
+            read_data   : out STD_LOGIC                     -- Read data output for cell 3
         );
     end component valid_vector;
 
@@ -88,7 +88,7 @@ begin
         assert (read_data = 'X') report "Test Case 1 failed." severity warning;
         print_output;
         -- Read a cell after reset
-        RW          <= '1'; 
+        RW          <= '1';
         chip_enable <= "0001";
         sel         <= "00";
         wait for 10 ns;
@@ -99,27 +99,27 @@ begin
         write_data  <= '1';
         reset       <= '0';
         chip_enable <= "0001";
-        RW          <= '0'; -- Write mode
+        RW          <= '0';                                 -- Write mode
         sel         <= "00";
         wait for 10 ns;
         assert (read_data = 'X') report "Test Case 2 failed." severity warning;
         print_output;
         -- Read cell after writing 1
-        write_data <= 'Z';
-        reset <= '0';
+        write_data  <= 'Z';
+        reset       <= '0';
         chip_enable <= "0001";
-        RW <= '1';
-        sel <= "00";
+        RW          <= '1';
+        sel         <= "00";
         wait for 10 ns;
         assert (read_data = '1') report "Test Case 2 failed." severity warning;
         print_output;
 
         -- Test Case 3: Read a different cell (read_data = 0 expected)
-        write_data <= 'Z';
-        reset <= '0';
+        write_data  <= 'Z';
+        reset       <= '0';
         chip_enable <= "0010";
-        RW <= '1';
-        sel <= "01";
+        RW          <= '1';
+        sel         <= "01";
         wait for 10 ns;
         assert (read_data = '0') report "Test Case 3 failed." severity warning;
         print_output;
