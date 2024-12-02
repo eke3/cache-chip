@@ -7,10 +7,19 @@ use STD.textio.all;
 use IEEE.numeric_std.all;
 
 entity tb_decoder_2x4 is
-
-end entity tb_decoder_2x4;
+end tb_decoder_2x4;
 
 architecture Test of tb_decoder_2x4 is
+    -- Component declaration for the Unit Under Test (UUT)
+    component decoder_2x4
+        port (
+            A : in  std_logic_vector(1 downto 0);
+            E : in  std_logic;
+            Y : out std_logic_vector(3 downto 0)
+        );
+    end component;
+
+    for all: decoder_2x4 use entity work.decoder_2x4(Structural);
 
     -- Signals for the decoder inputs and outputs
     signal A            : std_logic_vector(1 downto 0);
@@ -21,7 +30,7 @@ architecture Test of tb_decoder_2x4 is
     signal input_vector : unsigned(2 downto 0) := "000";
 
     -- Procedure to print the inputs and outputs of the decoder
-    procedure print_output is
+    procedure print_output 
         variable out_line : line;
 
     begin
@@ -40,12 +49,12 @@ architecture Test of tb_decoder_2x4 is
         write(out_line, std_logic'image(Y(0)));
 
         writeline(output, out_line);
-    end procedure print_output;
+    end print_output;
 
 begin
 
     -- Instantiate the decoder_2x4 entity
-    DUT: entity work.decoder_2x4
+    DUT: decoder_2x4
     port map (
         A => A,
         E => E,
@@ -84,7 +93,7 @@ begin
         print_output;
 
         --        -- End simulation
-        wait;
-    end process stimulus_process;
+        assert false report "Test bench completed." severity failure;
+    end process;
 
-end architecture Test;
+end Test;

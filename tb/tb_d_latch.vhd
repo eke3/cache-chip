@@ -5,15 +5,26 @@ use STD.textio.all;
 use IEEE.numeric_std.all;
 
 entity tb_d_latch is
-end entity tb_d_latch;
+end tb_d_latch;
 
 architecture Test of tb_d_latch is
+    -- Component declaration for the Unit Under Test (UUT)
+    component d_latch
+        port (
+            d    : in  std_logic;
+            clk  : in  std_logic;
+            q    : out std_logic;
+            qbar : out std_logic
+        );
+    end component;
+
+    for all: d_latch use entity work.d_latch(Structural);
 
     signal d, clk, q, qbar : std_logic;
     signal create_input    : std_logic := '0';
 
     -- procedure to print output to stdout
-    procedure print_output is
+    procedure print_output 
         variable out_line : line;
     begin
         -- print inputs
@@ -30,11 +41,11 @@ architecture Test of tb_d_latch is
         write(out_line, std_logic'image(qbar)); -- Fixed type conversion
 
         writeline(output, out_line);
-    end procedure print_output;
+    end print_output;
 
 begin
 
-    latch: entity work.d_latch
+    latch: d_latch
     port map (
         d    => d,
         clk  => clk,
@@ -51,7 +62,7 @@ begin
             clk <= '1';
             wait for 10 ns;
         end loop;
-    end process clk_process;
+    end process;
 
     -- Stimulus generation process
     stimulus_process: process
@@ -82,7 +93,8 @@ begin
         print_output;                           -- 6. Print the output after changing d
         wait for 60 ns;
         print_output;
-        wait;                                   -- End the process (or keep waiting for further input)
-    end process stimulus_process;
 
-end architecture Test;
+        assert false report "Test bench completed." severity failure;
+    end process;
+
+end Test;

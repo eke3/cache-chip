@@ -6,13 +6,11 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 
 entity tb_demux_1x16_8bit is
-    -- No ports for a testbench
-end entity tb_demux_1x16_8bit;
+end tb_demux_1x16_8bit;
 
 architecture Test of tb_demux_1x16_8bit is
-
     -- Component declaration
-    component demux_1x16_8bit is
+    component demux_1x16_8bit 
         port (
             data_in     : in  STD_LOGIC_VECTOR(7 downto 0);
             sel         : in  STD_LOGIC_VECTOR(3 downto 0);
@@ -33,7 +31,9 @@ architecture Test of tb_demux_1x16_8bit is
             data_out_14 : out STD_LOGIC_VECTOR(7 downto 0);
             data_out_15 : out STD_LOGIC_VECTOR(7 downto 0)
         );
-    end component demux_1x16_8bit;
+    end component;
+
+    for all: demux_1x16_8bit use entity work.demux_1x16_8bit(Structural);
 
     -- Testbench signals
     signal data_in : STD_LOGIC_VECTOR(7 downto 0) := (others => '0');
@@ -44,7 +44,7 @@ architecture Test of tb_demux_1x16_8bit is
 
 begin
     -- Instantiate the Unit Under Test (UUT)
-    DUT: entity work.demux_1x16_8bit(Structural)
+    DUT: demux_1x16_8bit
     port map (
         data_in     => data_in,
         sel         => sel,
@@ -155,8 +155,7 @@ begin
         wait for 10 ns;        -- Allow time for propagation
         assert (data_out_15 = "10101010") report "Output mismatch for selector 1111" severity failure;
 
-        report "Testbench completed.";
-        wait;                  -- Stop the process
-    end process stimulus_process;
+        assert false report "Testbench completed." severity failure;
+    end process;
 
-end architecture Test;
+end Test;

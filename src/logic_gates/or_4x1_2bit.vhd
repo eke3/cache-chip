@@ -26,7 +26,7 @@ architecture Structural of or_4x1_2bit is
         );
     end component;
 
-    for u_or: or_4x1 use entity work.or_4x1(Structural);
+    for all: or_4x1 use entity work.or_4x1(Structural);
 
 begin
 

@@ -55,7 +55,7 @@ architecture Structural of valid_vector is
         );
     end component;
 
-    for cell: valid_cell use entity work.valid_cell(Structural);
+    for all: valid_cell use entity work.valid_cell(Structural);
     for all: demux_1x4 use entity work.demux_1x4(Structural);
     for all: mux_4x1 use entity work.mux_4x1(Structural);
 

@@ -25,7 +25,7 @@ architecture Structural of mux_2x1_8bit is
         );
     end component;
 
-    for mux_2x1_inst: mux_2x1 use entity work.mux_2x1(Structural);
+    for all: mux_2x1 use entity work.mux_2x1(Structural);
 
     signal mux_out : STD_LOGIC_VECTOR(7 downto 0);
 

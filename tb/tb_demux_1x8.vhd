@@ -7,10 +7,26 @@ use STD.textio.all;
 use IEEE.numeric_std.all;
 
 entity tb_demux_1x8 is
-
-end entity tb_demux_1x8;
+end tb_demux_1x8;
 
 architecture Test of tb_demux_1x8 is
+    -- Component declaration for demux_1x8
+    component demux_1x8
+        port (
+            data_in    : in  std_logic;
+            sel        : in  std_logic_vector(2 downto 0);
+            data_out_0 : out std_logic;
+            data_out_1 : out std_logic;
+            data_out_2 : out std_logic;
+            data_out_3 : out std_logic;
+            data_out_4 : out std_logic;
+            data_out_5 : out std_logic;
+            data_out_6 : out std_logic;
+            data_out_7 : out std_logic
+        );
+    end component;
+
+    for all: demux_1x8 use entity work.demux_1x8(Structural);
 
     -- Signals for the demux_1x8 inputs and outputs
     signal data_in      : std_logic;
@@ -28,7 +44,7 @@ architecture Test of tb_demux_1x8 is
     signal input_vector : unsigned(3 downto 0) := "0000";
 
     -- Procedure to print the inputs and outputs of the demux_1x8
-    procedure print_output is
+    procedure print_output 
         variable out_line        : line;
         variable output_sequence : std_logic_vector(7 downto 0); -- to hold concatenated outputs
     begin
@@ -51,12 +67,12 @@ architecture Test of tb_demux_1x8 is
         end loop;
 
         writeline(output, out_line);
-    end procedure print_output;
+    end print_output;
 
 begin
 
     -- Instantiate the demux_1x8 entity
-    DUT: entity work.demux_1x8
+    DUT: demux_1x8
     port map (
         data_in    => data_in,
         sel        => sel,
@@ -102,7 +118,7 @@ begin
         print_output;
 
         -- End simulation
-        wait;
-    end process stimulus_process;
+        assert false report "Test bench completed." severity failure;
+    end process;
 
-end architecture Test;
+end Test;

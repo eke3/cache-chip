@@ -8,23 +8,25 @@ use IEEE.STD_LOGIC_TEXTIO.all;
 use STD.TEXTIO.all;
 
 entity tb_byte_selector is
-end entity tb_byte_selector;
+end tb_byte_selector;
 
 architecture Test of tb_byte_selector is
     -- Component declaration for byte_selector
-    component byte_selector is
+    component byte_selector
         port (
             vdd                 : in  std_logic;
             gnd                 : in  std_logic;
             shift_register_data : in  std_logic_vector(7 downto 0);
             byte_offset         : out std_logic_vector(1 downto 0)
         );
-    end component byte_selector;
+    end component;
+
+    for all: byte_selector use entity work.byte_selector(Structural);
 
     signal shift_register_data : std_logic_vector(7 downto 0);
     signal byte_offset         : std_logic_vector(1 downto 0);
 
-    procedure print_output is
+    procedure print_output
         variable out_line : line;
     begin
         write(out_line, string'(" Input: "));
@@ -35,18 +37,17 @@ architecture Test of tb_byte_selector is
 
         write(out_line, string'(" ----------------------------------------------"));
         writeline(output, out_line);
-    end procedure print_output;
+    end print_output;
 
 begin
     -- Instantiate the byte_selector component
-    byte_selector_inst: entity work.byte_selector(Structural)
+    byte_selector_inst: byte_selector
     port map (
         vdd                 => '1',
         gnd                 => '0',
         shift_register_data => shift_register_data,
         byte_offset         => byte_offset
     );
-
 
     -- Stimulus process
     stim: process
@@ -96,8 +97,7 @@ begin
         print_output;
 
         -- End simulation
-        report "Test bench completed.";
-        wait;
-    end process stim;
+        assert false report "Test bench completed." severity failure;
+    end process;
 
-end architecture Test;
+end Test;

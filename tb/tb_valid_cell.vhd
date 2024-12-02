@@ -8,12 +8,11 @@ use IEEE.STD_LOGIC_TEXTIO.all;
 use STD.TEXTIO.all;
 
 entity tb_valid_cell is
-end entity tb_valid_cell;
+end tb_valid_cell;
 
 architecture Test of tb_valid_cell is
-
     -- Component declaration for the valid_cell entity
-    component valid_cell is
+    component valid_cell 
         port (
             vdd         : in  std_logic;
             gnd         : in  std_logic;
@@ -23,7 +22,9 @@ architecture Test of tb_valid_cell is
             RW          : in  std_logic; -- Read/Write signal
             read_data   : out std_logic  -- Read data output
         );
-    end component valid_cell;
+    end component;
+
+    for all: valid_cell use entity work.valid_cell(Structural);
 
     -- Signals to connect to the valid_cell inputs and outputs
     signal write_data  : std_logic;
@@ -33,7 +34,7 @@ architecture Test of tb_valid_cell is
     signal read_data   : std_logic;
 
     -- Procedure to print current input and output values
-    procedure print_output is
+    procedure print_output 
         variable out_line : line;
     begin
         -- Print the input values
@@ -52,12 +53,12 @@ architecture Test of tb_valid_cell is
 
         -- Write to stdout
         writeline(output, out_line);
-    end procedure print_output;
+    end print_output;
 
 begin
 
     -- Instantiate the valid_cell entity
-    DUT: entity work.valid_cell
+    DUT: valid_cell
     port map (
         vdd         => '1',
         gnd         => '0',
@@ -108,8 +109,7 @@ begin
         print_output;
 
         -- End simulation
-        report "Testbench completed.";
-        wait;
-    end process stimulus_process;
+        assert false report "Testbench completed." severity failure;
+    end process;
 
-end architecture Test;
+end Test;

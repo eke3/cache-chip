@@ -11,6 +11,17 @@ entity tb_cache_cell is
 end entity tb_cache_cell;
 
 architecture Test of tb_cache_cell is
+    -- Component declaration for cache_cell
+    component cache_cell
+        port (
+            write_data  : in  std_logic;
+            chip_enable : in  std_logic;
+            RW          : in  std_logic;
+            read_data   : out std_logic
+        );
+    end component;
+
+    for all: cache_cell use entity work.cache_cell(Structural);
 
     -- Signals to connect to the cache_cell inputs and outputs
     signal write_data  : std_logic;
@@ -19,7 +30,7 @@ architecture Test of tb_cache_cell is
     signal read_data   : std_logic;
 
     -- Procedure to print current input and output values
-    procedure print_output is
+    procedure print_output 
         variable out_line : line;
     begin
         -- Print the input values
@@ -36,12 +47,12 @@ architecture Test of tb_cache_cell is
 
         -- Write to stdout
         writeline(output, out_line);
-    end procedure print_output;
+    end print_output;
 
 begin
 
     -- Instantiate the cache_cell entity
-    DUT: entity work.cache_cell
+    DUT: cache_cell
     port map (
         write_data  => write_data,
         chip_enable => chip_enable,
@@ -96,8 +107,7 @@ begin
         print_output;
 
         -- End simulation
-        report "Test bench completed successfully.";
-        wait;
-    end process stimulus_process;
+        assert false report "Test bench completed." severity failure;
+    end process;
 
-end architecture Test;
+end Test;

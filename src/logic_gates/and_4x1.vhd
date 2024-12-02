@@ -35,8 +35,8 @@ architecture Structural of and_4x1 is
         );
     end component;
 
-    for and3: and_3x1 use entity work.and_3x1(Structural);
-    for and2: and_2x1 use entity work.and_2x1(Structural);
+    for all: and_3x1 use entity work.and_3x1(Structural);
+    for all: and_2x1 use entity work.and_2x1(Structural);
     -- Intermediate signals
     signal and_abc : STD_LOGIC; -- Intermediate signal for A, B, and C AND
 

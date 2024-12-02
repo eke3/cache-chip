@@ -21,7 +21,7 @@ architecture Structural of dff_negedge_8bit is
         );
     end component;
     
-    for dff: dff_negedge_2bit use entity work.dff_negedge_2bit(Structural);
+    for all: dff_negedge_2bit use entity work.dff_negedge_2bit(Structural);
 
 begin
 

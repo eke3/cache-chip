@@ -9,11 +9,11 @@ use IEEE.std_logic_arith.all;
 use STD.textio.all;
 
 entity tb_valid_vector is
-end entity tb_valid_vector;
+end tb_valid_vector;
 
 architecture Test of tb_valid_vector is
     -- Component declaration for valid_vector entity
-    component valid_vector is
+    component valid_vector 
         port (
             vdd         : in  STD_LOGIC;                    -- Power supply
             gnd         : in  STD_LOGIC;                    -- Ground
@@ -24,14 +24,16 @@ architecture Test of tb_valid_vector is
             sel         : in  STD_LOGIC_VECTOR(1 downto 0); -- 2-bit selector for demux, comes from decoder input
             read_data   : out STD_LOGIC                     -- Read data output for cell 3
         );
-    end component valid_vector;
+    end component;
+
+    for all: valid_vector use entity work.valid_vector(Structural);
 
     signal write_data, reset, RW : std_logic;
     signal chip_enable           : std_logic_vector(3 downto 0);
     signal sel                   : std_logic_vector(1 downto 0);
     signal read_data             : std_logic;
 
-    procedure print_output is
+    procedure print_output 
         variable out_line : line;
     begin
         write(out_line, string'(" Reset: "));
@@ -52,10 +54,10 @@ architecture Test of tb_valid_vector is
 
         write(out_line, string'(" ----------------------------------------------"));
         writeline(output, out_line);
-    end procedure print_output;
+    end print_output;
 
 begin
-    DUT: entity work.valid_vector(Structural)
+    DUT: valid_vector
     port map (
         vdd         => '1',
         gnd         => '0',
@@ -69,7 +71,6 @@ begin
 
     stim: process
     begin
-
         -- Initialize inputs
         write_data  <= 'Z';
         reset       <= 'Z';
@@ -124,8 +125,7 @@ begin
         assert (read_data = '0') report "Test Case 3 failed." severity warning;
         print_output;
 
-        report "Testbench completed.";
-        wait;
-    end process stim;
+        assert false report "Testbench completed." severity failure;
+    end process;
 
-end architecture Test;
+end Test;

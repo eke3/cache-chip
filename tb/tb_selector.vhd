@@ -11,6 +11,17 @@ entity tb_selector is
 end entity tb_selector;
 
 architecture Test of tb_selector is
+    -- Component declaration for selector
+    component selector
+        port (
+            chip_enable  : in  std_logic;
+            RW           : in  std_logic;
+            read_enable  : out std_logic;
+            write_enable : out std_logic
+        );
+    end component;
+
+    for all: selector use entity work.selector(Structural);
 
     -- Signals to connect to the selector inputs and outputs
     signal chip_enable    : std_logic;
@@ -31,7 +42,7 @@ architecture Test of tb_selector is
     signal test_index     : integer           := 0;
 
     -- Procedure to print current input and output values
-    procedure print_output is
+    procedure print_output 
         variable out_line : line;
     begin
         write(out_line, string'("Inputs - Chip Enable: "));
@@ -45,12 +56,12 @@ architecture Test of tb_selector is
         write(out_line, std_logic'image(write_enable));
 
         writeline(output, out_line);
-    end procedure print_output;
+    end print_output;
 
 begin
 
     -- Instantiate the selector entity
-    DUT: entity work.selector
+    DUT: selector
     port map (
         chip_enable  => chip_enable,
         RW           => RW,
@@ -78,7 +89,7 @@ begin
         end loop;
 
         -- End simulation
-        wait;
-    end process stimulus_process;
+        assert false report "Testbench completed" severity failure;
+    end process;
 
-end architecture Test;
+end Test;

@@ -21,7 +21,7 @@ architecture Structural of dff_posedge_4bit is
         );
     end component;
 
-    for bits: dff_posedge use entity work.dff_posedge(Structural);
+    for all: dff_posedge use entity work.dff_posedge(Structural);
 
 begin
 

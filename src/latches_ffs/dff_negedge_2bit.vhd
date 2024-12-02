@@ -21,7 +21,7 @@ architecture Structural of dff_negedge_2bit is
         );
     end component;
 
-    for bits: dff_negedge use entity work.dff_negedge(Structural);
+    for all: dff_negedge use entity work.dff_negedge(Structural);
 
 begin
 

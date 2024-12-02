@@ -6,18 +6,20 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 
 entity tb_sr_latch is
-end entity tb_sr_latch;
+end tb_sr_latch;
 
 architecture Test of tb_sr_latch is
     -- Component declaration for sr_latch
-    component sr_latch is
+    component sr_latch
         port (
             S  : in    std_logic;    -- Set input
             R  : in    std_logic;    -- Reset input
             Q  : inout std_logic;    -- Output Q
             Qn : inout std_logic     -- Complement of Q
         );
-    end component sr_latch;
+    end component;
+
+    for all: sr_latch use entity work.sr_latch(Structural);
 
     -- Test bench signals
     signal tb_S  : std_logic := '0'; -- Initialize S to 0
@@ -27,7 +29,7 @@ architecture Test of tb_sr_latch is
 
 begin
     -- Instantiate the sr_latch
-    uut: entity work.sr_latch(Structural)
+    DUT: sr_latch
     port map (
         S  => tb_S,
         R  => tb_R,
@@ -64,8 +66,7 @@ begin
         wait for 20 ns;
 
         -- Finish simulation
-        assert false report "Simulation completed" severity note;
-        wait;
-    end process stimulus_process;
+        assert false report "Testbench completed." severity failure;
+    end process;
 
-end architecture Test;
+end Test;

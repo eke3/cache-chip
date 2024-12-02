@@ -37,9 +37,9 @@ architecture Structural of xor_2x1 is
         );
     end component;
 
-    for not_A_gate, not_B_gate: inverter use entity work.inverter(Structural);
-    for and1_gate, and2_gate: and_2x1 use entity work.and_2x1(Structural);
-    for or_gate: or_2x1 use entity work.or_2x1(Structural);
+    for all: inverter use entity work.inverter(Structural);
+    for all: and_2x1 use entity work.and_2x1(Structural);
+    for all: or_2x1 use entity work.or_2x1(Structural);
 
     -- Intermediate signals for AND, OR, and NOT gates
     signal not_A    : STD_LOGIC;

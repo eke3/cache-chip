@@ -47,8 +47,8 @@ architecture Structural of mux_16x1_8bit is
     signal bits : std_logic_vector(127 downto 0);
 
     -- Bind components
-    for select_out : mux_16x1 use entity work.mux_16x1(Structural);
-    for concat : concatenator_8bit use entity work.concatenator_8bit(Structural);
+    for all : mux_16x1 use entity work.mux_16x1(Structural);
+    for all : concatenator_8bit use entity work.concatenator_8bit(Structural);
 
 begin
 

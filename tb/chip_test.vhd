@@ -10,12 +10,11 @@ use IEEE.std_logic_arith.all;
 use STD.textio.all;
 
 entity chip_test is
-
-end entity chip_test;
+end chip_test;
 
 architecture Test of chip_test is
 
-    component chip is
+    component chip
         port (
             cpu_add    : in    std_logic_vector(5 downto 0);
             cpu_data   : inout std_logic_vector(7 downto 0);
@@ -30,10 +29,9 @@ architecture Test of chip_test is
             mem_en     : out   std_logic;
             mem_add    : out   std_logic_vector(5 downto 0)
         );
-    end component chip;
+    end component;
 
-
-    for c1 : chip use entity work.chip(Structural);
+    for all : chip use entity work.chip(Structural);
 
     signal Vdd, Gnd                                           : std_logic;
     signal cpu_data, mem_data                                 : std_logic_vector(7 downto 0);
@@ -42,7 +40,7 @@ architecture Test of chip_test is
 
     signal clk_count                                          : integer := 0;
 
-    procedure print_output is
+    procedure print_output 
         variable out_line : line;
 
     begin
@@ -81,7 +79,7 @@ architecture Test of chip_test is
         writeline(output, out_line);
 
 
-    end procedure print_output;
+    end print_output;
 
 
 begin
@@ -90,7 +88,7 @@ begin
     Gnd                <= '0';
     clk                <= clock;
 
-    c1: component chip
+    c1: chip
     port map (
         cpu_add,
         cpu_data,
@@ -159,9 +157,9 @@ begin
             print_output;
 
         end loop;
-        wait;
+        
+        assert false report "Testbench completed" severity failure;
 
-    end process io_process;
+    end process;
 
-
-end architecture Test;
+end Test;

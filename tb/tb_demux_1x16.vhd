@@ -9,9 +9,34 @@ use STD.textio.all;
 use IEEE.numeric_std.all;
 
 entity tb_demux_1x16 is
-end entity tb_demux_1x16;
+end tb_demux_1x16;
 
 architecture Test of tb_demux_1x16 is
+    -- Component declaration for the Unit Under Test (UUT)
+    component demux_1x16
+        port (
+            data_in     : in  std_logic;
+            sel         : in  std_logic_vector(3 downto 0);
+            data_out_0  : out std_logic;
+            data_out_1  : out std_logic;
+            data_out_2  : out std_logic;
+            data_out_3  : out std_logic;
+            data_out_4  : out std_logic;
+            data_out_5  : out std_logic;    
+            data_out_6  : out std_logic;
+            data_out_7  : out std_logic;
+            data_out_8  : out std_logic;
+            data_out_9  : out std_logic;
+            data_out_10 : out std_logic;
+            data_out_11 : out std_logic;
+            data_out_12 : out std_logic;
+            data_out_13 : out std_logic;
+            data_out_14 : out std_logic;
+            data_out_15 : out std_logic
+        );
+    end component;
+
+    for all: demux_1x16 use entity work.demux_1x16(Structural);
 
     -- Signals for the demux_1x16 inputs and outputs
     signal data_in      : std_logic;
@@ -37,7 +62,7 @@ architecture Test of tb_demux_1x16 is
     signal input_vector : unsigned(4 downto 0) := "00000";
 
     -- Procedure to print the inputs and outputs of the demux_1x16
-    procedure print_output is
+    procedure print_output 
         variable out_line        : line;
         variable output_sequence : std_logic_vector(15 downto 0); -- Concatenated outputs
     begin
@@ -61,12 +86,12 @@ architecture Test of tb_demux_1x16 is
         end loop;
 
         writeline(output, out_line);
-    end procedure print_output;
+    end print_output;
 
 begin
 
     -- Instantiate the demux_1x16 entity
-    DUT: entity work.demux_1x16
+    DUT: demux_1x16
     port map (
         data_in     => data_in,
         sel         => sel,
@@ -120,7 +145,7 @@ begin
         print_output;
 
         -- End simulation
-        wait;
-    end process stimulus_process;
+        assert false report "Test bench completed." severity failure;
+    end process;
 
-end architecture Test;
+end Test;

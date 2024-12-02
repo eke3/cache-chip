@@ -21,7 +21,7 @@ architecture Structural of dff_posedge_8bit is
         );
     end component;
 
-    for dff: dff_posedge_4bit use entity work.dff_posedge_4bit(Structural);
+    for all: dff_posedge_4bit use entity work.dff_posedge_4bit(Structural);
 
 begin
 

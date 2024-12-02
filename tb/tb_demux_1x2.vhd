@@ -11,6 +11,17 @@ entity tb_demux_1x2 is
 end entity tb_demux_1x2;
 
 architecture Test of tb_demux_1x2 is
+    -- Component declaration for the demux_1x2 entity
+    component demux_1x2
+        port (
+            data_in    : in  std_logic;
+            sel        : in  std_logic;
+            data_out_1 : out std_logic;
+            data_out_2 : out std_logic
+        );
+    end component;
+    
+    for all: demux_1x2 use entity work.demux_1x2(Structural);
 
     -- Signals for the demux_1x2 inputs and outputs
     signal data_in      : std_logic;
@@ -22,7 +33,7 @@ architecture Test of tb_demux_1x2 is
     signal input_vector : unsigned(1 downto 0) := "00";
 
     -- Procedure to print the inputs and outputs of the demux_1x2
-    procedure print_output is
+    procedure print_output 
         variable out_line : line;
     begin
         -- Print the current value of the inputs
@@ -38,12 +49,12 @@ architecture Test of tb_demux_1x2 is
         write(out_line, std_logic'image(data_out_2));
 
         writeline(output, out_line);
-    end procedure print_output;
+    end print_output;
 
 begin
 
     -- Instantiate the demux_1x2 entity
-    DUT: entity work.demux_1x2
+    DUT: demux_1x2
     port map (
         data_in    => data_in,
         sel        => sel,
@@ -83,7 +94,7 @@ begin
         print_output;
 
         -- End simulation
-        wait;
-    end process stimulus_process;
+        assert false report "Test bench completed." severity failure;
+    end process;
 
-end architecture Test;
+end Test;

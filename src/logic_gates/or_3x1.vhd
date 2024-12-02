@@ -23,7 +23,7 @@ architecture Structural of or_3x1 is
         );
     end component;
 
-    for or_1, or_2: or_2x1 use entity work.or_2x1(Structural);
+    for all: or_2x1 use entity work.or_2x1(Structural);
 
     signal or_2x1_out, or_3x1_out : STD_LOGIC; -- Intermediate signal for OR operation
 

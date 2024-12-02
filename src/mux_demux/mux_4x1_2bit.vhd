@@ -29,7 +29,7 @@ architecture Structural of mux_4x1_2bit is
         );
     end component;
 
-    for mux_bit0, mux_bit1: mux_4x1 use entity work.mux_4x1(Structural);
+    for all: mux_4x1 use entity work.mux_4x1(Structural);
 
     -- Internal signal for the outputs of the two mux_4x1 instances
     signal mux_out : STD_LOGIC_VECTOR(1 downto 0);

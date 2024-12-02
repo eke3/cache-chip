@@ -71,7 +71,7 @@ architecture Test of chip_test_stdout is
         writeline(output, out_line);
     end print_output;
 
-	for c1: chip use entity work.chip(Structural);
+	for all: chip use entity work.chip(Structural);
 
 begin
     clk               <= clock;

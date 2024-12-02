@@ -6,12 +6,12 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 
 entity tb_block_cache is
-end entity tb_block_cache;
+end tb_block_cache;
 
 architecture Test of tb_block_cache is
 
     -- Component declaration for block_cache
-    component block_cache is
+    component block_cache 
         port (
             write_cache  : in  std_logic_vector(7 downto 0);
             hit_miss     : in  std_logic;
@@ -20,7 +20,9 @@ architecture Test of tb_block_cache is
             block_offset : in  std_logic_vector(3 downto 0);
             read_data    : out std_logic_vector(7 downto 0)
         );
-    end component block_cache;
+    end component;
+
+    for all: block_cache use entity work.block_cache(Structural);
 
     -- Test signals
     signal hit_miss     : std_logic;
@@ -32,7 +34,7 @@ architecture Test of tb_block_cache is
 
 begin
 
-    DUT: entity work.block_cache
+    DUT: block_cache
     port map (
         hit_miss     => hit_miss,
         R_W          => R_W,
@@ -96,10 +98,9 @@ begin
         byte_offset  <= "1000";
         block_offset <= "1000";
         wait for 10 ns;
-        assert (read_data = X"AB") report "Read hit test failed." severity warning;
+        assert (read_data = "10101011") report "Read hit test failed." severity warning;
 
-        report "Testbench completed.";
-        wait;
-    end process stim;
+        assert false report "Testbench completed." severity failure;
+    end process;
 
-end architecture Test;
+end Test;

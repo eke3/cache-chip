@@ -6,12 +6,12 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 
 entity tb_state_machine is
-end entity tb_state_machine;
+end tb_state_machine;
 
 architecture Test of tb_state_machine is
 
     -- Component declaration for state_machine
-    component state_machine is
+    component state_machine
         port (
             vdd                  : in  std_logic;
             gnd                  : in  std_logic;
@@ -31,7 +31,9 @@ architecture Test of tb_state_machine is
             output_enable        : out std_logic;
             shift_reg_out        : out std_logic_vector(7 downto 0)
         );
-    end component state_machine;
+    end component;
+
+    for all: state_machine use entity work.state_machine(Structural);
 
     -- Test bench signals
     signal tb_clk                  : std_logic                    := '0';
@@ -56,7 +58,7 @@ architecture Test of tb_state_machine is
 begin
 
     -- Instantiate the state_machine
-    uut: entity work.state_machine(Structural)
+    DUT: state_machine
     port map (
         vdd                  => '1',
         gnd                  => '0',
@@ -82,7 +84,7 @@ begin
         wait for 10 ns;
         tb_clk            <= '1';
         wait for 10 ns;
-    end process clk_gen;
+    end process;
     -- Stimulus process
     stimulus_process: process
     begin
@@ -164,10 +166,8 @@ begin
         tb_mem_addr_ready <= '1';
         wait for 500 ns;
 
-
         -- End simulation
-        assert false report "Simulation completed" severity note;
-        wait;
-    end process stimulus_process;
+        assert false report "Simulation completed" severity failure;
+    end process;
 
-end architecture Test;
+end Test;

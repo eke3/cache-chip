@@ -30,7 +30,7 @@ architecture Structural of demux_1x4_2bit is
     end component;
 
     -- Component binding statements
-    for demux : demux_1x4 use entity work.demux_1x4(Structural);
+    for all : demux_1x4 use entity work.demux_1x4(Structural);
 
 begin
     -- Instantiate the demux_1x4 components for both bits of data_in

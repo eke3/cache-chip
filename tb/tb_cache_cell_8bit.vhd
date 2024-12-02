@@ -2,19 +2,20 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 
 entity tb_cache_cell_8bit is
-    -- Test bench has no ports
-end entity tb_cache_cell_8bit;
+end tb_cache_cell_8bit;
 
 architecture Test of tb_cache_cell_8bit is
     -- Component declaration for the Unit Under Test (UUT)
-    component cache_cell_8bit is
+    component cache_cell_8bit
         port (
             write_data  : in  std_logic_vector(7 downto 0);
             chip_enable : in  std_logic;
             RW          : in  std_logic;
             read_data   : out std_logic_vector(7 downto 0)
         );
-    end component cache_cell_8bit;
+    end component;
+
+    for all: cache_cell_8bit use entity work.cache_cell_8bit(Structural);
 
     -- Signals to connect to UUT
     signal tb_write_data  : std_logic_vector(7 downto 0) := (others => '0');
@@ -24,7 +25,7 @@ architecture Test of tb_cache_cell_8bit is
 
 begin
     -- Instantiate the Unit Under Test (UUT)
-    uut: component cache_cell_8bit
+    uut: cache_cell_8bit
     port map (
         write_data  => tb_write_data,
         chip_enable => tb_chip_enable,
@@ -69,4 +70,4 @@ begin
         wait;
     end process;
 
-end architecture Test;
+end Test;

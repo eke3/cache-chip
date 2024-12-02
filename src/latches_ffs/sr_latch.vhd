@@ -21,7 +21,7 @@ architecture Structural of sr_latch is
         );
     end component;
 
-    for nor1, nor2: nor_2x1 use entity work.nor_2x1(Structural);
+    for all: nor_2x1 use entity work.nor_2x1(Structural);
 
 begin
     -- First NOR gate for Q
