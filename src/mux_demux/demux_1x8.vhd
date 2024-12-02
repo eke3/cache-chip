@@ -18,11 +18,11 @@ entity demux_1x8 is
         data_out_6 : out STD_LOGIC; -- Output for selection "110"
         data_out_7 : out STD_LOGIC -- Output for selection "111"
     );
-end entity demux_1x8;
+end demux_1x8;
 
 architecture Structural of demux_1x8 is
-    -- Component declarations
-    component and_4x1 is
+    -- Declare the components for inverter and and_4x1
+    component and_4x1
         port (
             A      : in  STD_LOGIC;
             B      : in  STD_LOGIC;
@@ -30,30 +30,34 @@ architecture Structural of demux_1x8 is
             D      : in  STD_LOGIC;
             output : out STD_LOGIC
         );
-    end component and_4x1;
+    end component;
 
-    component inverter is
+    component inverter
         port (
             input  : in  STD_LOGIC;
             output : out STD_LOGIC
         );
-    end component inverter;
+    end component;
 
-    -- Intermediate signals for the inverted select bits
+    -- Internal signal for the inverted selector bits
     signal sel_not : STD_LOGIC_VECTOR(2 downto 0);
+
+    -- Component binding
+    for all : and_4x1 use entity work.and_4x1(Structural);
+    for all : inverter use entity work.inverter(Structural);
 
 begin
     -- Instantiate inverters for each bit of the selector `sel`
     gen_inv: for i in 0 to 2 generate
-        inv: entity work.inverter(Structural)
+        inv: inverter
         port map (
             input  => sel(i),
             output => sel_not(i)
         );
     end generate;
 
-    -- Instantiate 8 instances of and_4x1 to control each output
-    and0: entity work.and_4x1(Structural)
+    -- Instantiate 8 instances of and_4x1 for controlling each output
+    and0: and_4x1
     port map (
         A          => data_in,
         B          => sel_not(2),
@@ -62,7 +66,7 @@ begin
         output     => data_out_0
     );
 
-    and1: entity work.and_4x1(Structural)
+    and1: and_4x1
     port map (
         A          => data_in,
         B          => sel_not(2),
@@ -71,7 +75,7 @@ begin
         output     => data_out_1
     );
 
-    and2: entity work.and_4x1(Structural)
+    and2: and_4x1
     port map (
         A          => data_in,
         B          => sel_not(2),
@@ -80,7 +84,7 @@ begin
         output     => data_out_2
     );
 
-    and3: entity work.and_4x1(Structural)
+    and3: and_4x1
     port map (
         A          => data_in,
         B          => sel_not(2),
@@ -89,7 +93,7 @@ begin
         output     => data_out_3
     );
 
-    and4: entity work.and_4x1(Structural)
+    and4: and_4x1
     port map (
         A          => data_in,
         B          => sel(2),
@@ -98,7 +102,7 @@ begin
         output     => data_out_4
     );
 
-    and5: entity work.and_4x1(Structural)
+    and5: and_4x1
     port map (
         A          => data_in,
         B          => sel(2),
@@ -107,7 +111,7 @@ begin
         output     => data_out_5
     );
 
-    and6: entity work.and_4x1(Structural)
+    and6: and_4x1
     port map (
         A          => data_in,
         B          => sel(2),
@@ -116,7 +120,7 @@ begin
         output     => data_out_6
     );
 
-    and7: entity work.and_4x1(Structural)
+    and7: and_4x1
     port map (
         A          => data_in,
         B          => sel(2),
@@ -125,4 +129,5 @@ begin
         output     => data_out_7
     );
 
-end architecture Structural;
+end Structural;
+

@@ -7,25 +7,27 @@ entity one_hot_to_binary is
         one_hot : in  STD_LOGIC_VECTOR(3 downto 0); -- One-hot encoded input
         binary  : out STD_LOGIC_VECTOR(1 downto 0) -- 2-bit binary output
     );
-end entity one_hot_to_binary;
+end one_hot_to_binary;
 
 -- Architecture: Structural
 architecture Structural of one_hot_to_binary is
 
     -- Component declarations for OR gates
-    component or_2x1 is
+    component or_2x1
         port (
             A      : in  STD_LOGIC;
             B      : in  STD_LOGIC;
             output : out STD_LOGIC
         );
-    end component or_2x1;
+    end component;
+
+    for all: or_2x1 use entity work.or_2x1(Structural);
 
 begin
     -- Convert one-hot input to binary output
 
     -- Binary bit 1 (MSB): '1' if one_hot(2) or one_hot(3) is active
-    or_gate_msb: entity work.or_2x1(Structural)
+    or_gate_msb: or_2x1
     port map (
         A      => one_hot(2),
         B      => one_hot(3),
@@ -33,11 +35,11 @@ begin
     );
 
     -- Binary bit 0 (LSB): '1' if one_hot(1) or one_hot(3) is active
-    or_gate_lsb: entity work.or_2x1(Structural)
+    or_gate_lsb: or_2x1
     port map (
         A      => one_hot(1),
         B      => one_hot(3),
         output => binary(0)
     );
 
-end architecture Structural;
+end Structural;

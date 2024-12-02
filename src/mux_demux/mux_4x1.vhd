@@ -14,21 +14,20 @@ entity mux_4x1 is
         sel        : in  STD_LOGIC_VECTOR(1 downto 0); -- 2-bit sel signal
         F          : out STD_LOGIC -- Output of the multiplexer
     );
-end entity mux_4x1;
+end mux_4x1;
 
 architecture Structural of mux_4x1 is
-    -- Declare the and_3x1 component
-    component and_3x1 is
+    -- Component declarations
+    component and_3x1
         port (
             A      : in  STD_LOGIC;
             B      : in  STD_LOGIC;
             C      : in  STD_LOGIC;
             output : out STD_LOGIC
         );
-    end component and_3x1;
+    end component;
 
-    -- Declare the or_4x1 component
-    component or_4x1 is
+    component or_4x1
         port (
             A      : in  STD_LOGIC;
             B      : in  STD_LOGIC;
@@ -36,35 +35,37 @@ architecture Structural of mux_4x1 is
             D      : in  STD_LOGIC;
             output : out STD_LOGIC
         );
-    end component or_4x1;
+    end component;
 
-    -- Declare the inverter component
-    component inverter is
+    component inverter
         port (
             input  : in  STD_LOGIC;
             output : out STD_LOGIC
         );
-    end component inverter;
+    end component;
 
-    -- Intermediate signals for outputs of the 4 and_3x1 gates
+    for all: inverter use entity work.inverter(Structural);
+    for all: and_3x1 use entity work.and_3x1(Structural);
+    for all: or_4x1 use entity work.or_4x1(Structural);
+
+    -- Internal signals
     signal and_out : STD_LOGIC_VECTOR(3 downto 0);
-    -- Intermediate signal for inverted sel bit
     signal sel_not : STD_LOGIC_VECTOR(1 downto 0);
-    signal mux_out : std_logic;
+    signal mux_out : STD_LOGIC;
 
 begin
 
-    -- Instantiate the inverter to generate sel_not signal
+    -- Instantiate inverters for sel signal
     gen_inverters: for i in 0 to 1 generate
-        sel_inverter: entity work.inverter(Structural)
+        sel_inverter: inverter
         port map (
             input  => sel(i),
             output => sel_not(i)
         );
     end generate;
 
-    -- Instantiate the and_3x1 gates to enable each read_data input based on sel signal
-    and_gate0: entity work.and_3x1(Structural)
+    -- Instantiate and_3x1 gates for each read_data input
+    and_gate0: and_3x1
     port map (
         A          => read_data0,
         B          => sel_not(1),
@@ -72,7 +73,7 @@ begin
         output     => and_out(0)
     );
 
-    and_gate1: entity work.and_3x1(Structural)
+    and_gate1: and_3x1
     port map (
         A          => read_data1,
         B          => sel_not(1),
@@ -80,7 +81,7 @@ begin
         output     => and_out(1)
     );
 
-    and_gate2: entity work.and_3x1(Structural)
+    and_gate2: and_3x1
     port map (
         A          => read_data2,
         B          => sel(1),
@@ -88,7 +89,7 @@ begin
         output     => and_out(2)
     );
 
-    and_gate3: entity work.and_3x1(Structural)
+    and_gate3: and_3x1
     port map (
         A          => read_data3,
         B          => sel(1),
@@ -96,8 +97,8 @@ begin
         output     => and_out(3)
     );
 
-    -- Instantiate the or_4x1 gate to combine the outputs of the and gates
-    or_gate: entity work.or_4x1(Structural)
+    -- Instantiate or_4x1 gate to combine outputs from and gates
+    or_gate: or_4x1
     port map (
         A          => and_out(0),
         B          => and_out(1),
@@ -106,6 +107,8 @@ begin
         output     => mux_out
     );
 
+    -- Assign mux output to F
     F <= mux_out;
 
-end architecture Structural;
+end Structural;
+

@@ -33,27 +33,27 @@ entity state_machine is
         output_enable        : out std_logic; -- cpu data output enable
         shift_reg_out        : out std_logic_vector(7 downto 0)
     );
-end entity state_machine;
+end state_machine;
 
 architecture Structural of state_machine is
-    component and_2x1 is
+    component and_2x1
         port (
             A      : in  STD_LOGIC;
             B      : in  STD_LOGIC;
             output : out STD_LOGIC
         );
-    end component and_2x1;
+    end component;
 
-    component and_3x1 is
+    component and_3x1
         port (
             A      : in  STD_LOGIC;    -- First input
             B      : in  STD_LOGIC;    -- Second input
             C      : in  STD_LOGIC;    -- Third input
             output : out STD_LOGIC     -- Output of the 3-input AND gate
         );
-    end component and_3x1;
+    end component;
 
-    component and_4x1 is
+    component and_4x1
         port (
             A      : in  STD_LOGIC;    -- First input
             B      : in  STD_LOGIC;    -- Second input
@@ -61,33 +61,24 @@ architecture Structural of state_machine is
             D      : in  STD_LOGIC;    -- Fourth input
             output : out STD_LOGIC     -- Output of the 4-input AND gate
         );
-    end component and_4x1;
+    end component;
 
-    component inverter is
+    component inverter
         port (
             input  : in  STD_LOGIC;
             output : out STD_LOGIC
         );
-    end component inverter;
+    end component;
 
-    component or_2x1 is
+    component or_2x1
         port (
             A      : in  STD_LOGIC;
             B      : in  STD_LOGIC;
             output : out STD_LOGIC
         );
-    end component or_2x1;
+    end component;
 
-    component or_3x1 is
-        port (
-            A      : in  STD_LOGIC;
-            B      : in  STD_LOGIC;
-            C      : in  STD_LOGIC;
-            output : out STD_LOGIC
-        );
-    end component or_3x1;
-
-    component or_4x1 is
+    component or_4x1 
         port (
             A      : in  STD_LOGIC;
             B      : in  STD_LOGIC;
@@ -95,59 +86,72 @@ architecture Structural of state_machine is
             D      : in  std_logic;
             output : out STD_LOGIC
         );
-    end component or_4x1;
+    end component;
 
-    component mux_2x1 is
+    component mux_2x1 
         port (
             A      : in  STD_LOGIC;    -- Input 0
             B      : in  STD_LOGIC;    -- Input 1
             sel    : in  STD_LOGIC;    -- sel signal
             output : out STD_LOGIC     -- Output of the multiplexer
         );
-    end component mux_2x1;
+    end component;
 
-    component dff_negedge is
+    component dff_negedge 
         port (
             d    : in  std_logic;
             clk  : in  std_logic;
             q    : out std_logic;
             qbar : out std_logic
         );
-    end component dff_negedge;
+    end component;
 
-    component shift_register_bit_3 is
+    component shift_register_bit_3 
         port (
             input  : in  std_logic;
             clk    : in  std_logic;
             output : out std_logic
         );
-    end component shift_register_bit_3;
+    end component;
 
-    component shift_register_bit_19 is
+    component shift_register_bit_19 
         port (
             input  : in  std_logic;
             clk    : in  std_logic;
             output : out std_logic
         );
-    end component shift_register_bit_19;
+    end component;
 
-    component sr_latch is
+    component sr_latch 
         port (
             S  : in    std_logic;      -- Set input
             R  : in    std_logic;      -- Reset input
             Q  : inout std_logic;      -- Output Q
             Qn : inout std_logic       -- Complement of Q
         );
-    end component sr_latch;
+    end component;
 
-    component shift_register_bit_7 is
+    component shift_register_bit_7
         port (
             input       : in  std_logic;
             clk         : in  std_logic;
             output      : out std_logic;
             full_output : out std_logic_vector(7 downto 0)
         );
-    end component shift_register_bit_7;
+    end component;
+
+    for all: and_2x1 use entity work.and_2x1(Structural);
+    for all: and_3x1 use entity work.and_3x1(Structural);
+    for all: and_4x1 use entity work.and_4x1(Structural);
+    for all: inverter use entity work.inverter(Structural);
+    for all: or_2x1 use entity work.or_2x1(Structural);
+    for all: or_4x1 use entity work.or_4x1(Structural);
+    for all: mux_2x1 use entity work.mux_2x1(Structural);
+    for all: dff_negedge use entity work.dff_negedge(Structural);
+    for all: shift_register_bit_3 use entity work.shift_register_bit_3(Structural);
+    for all: shift_register_bit_19 use entity work.shift_register_bit_19(Structural);
+    for all: sr_latch use entity work.sr_latch(Structural);
+    for all: shift_register_bit_7 use entity work.shift_register_bit_7(Structural);
 
     signal hit_miss_inv, RW_inv, not_busy, temp_oe_1, temp_oe_2, output_enable_temp, read_miss_count, read_hit_count,
         write_count : std_logic;
@@ -170,7 +174,7 @@ architecture Structural of state_machine is
 begin
 
     -- Drives cache_RW low when writing bytes from memory.
-    rw_mux: entity work.mux_2x1(Structural)
+    rw_mux: mux_2x1
     port map (
         A           => R_W_sig,
         B           => gnd,
@@ -179,7 +183,7 @@ begin
     );
 
     -- and gate for setting the R_W sr latch
-    and_for_RW: entity work.and_2x1(Structural)
+    and_for_RW: and_2x1
     port map (
         A           => start,
         B           => R_W,
@@ -187,7 +191,7 @@ begin
     );
 
     -- and gate for resetting the R_W sr latch
-    and_for_RW_2: entity work.and_2x1(Structural)
+    and_for_RW_2: and_2x1
     port map (
         A           => start,
         B           => R_W_inv,
@@ -195,7 +199,7 @@ begin
     );
 
     -- SR latch for hold chip R_W signal
-    hold_RW_SR_latch: entity work.sr_latch(Structural)
+    hold_RW_SR_latch: sr_latch
     port map (
         S           => RW_temp_1,
         R           => RW_temp_2,
@@ -203,7 +207,7 @@ begin
     );
 
     -- and gate for enabling the send of the memory address
-    and3_1: entity work.and_3x1(Structural)
+    and3_1: and_3x1
     port map (
         A           => valid_ready,
         B           => hit_miss_inv,
@@ -212,28 +216,28 @@ begin
     );
 
     -- inverts hit_miss signal for logical uses
-    inverter_1: entity work.inverter(Structural)
+    inverter_1: inverter
     port map (
         input       => hit_miss,
         output      => hit_miss_inv
     );
 
     -- inverts clk signal for logical uses
-    inverter_2: entity work.inverter(Structural)
+    inverter_2: inverter
     port map (
         input       => clk,
         output      => not_clk
     );
 
     --inverter for chip RW (used in SR latch for hold chip RW signal)
-    inverter_RW_in: entity work.inverter(Structural)
+    inverter_RW_in: inverter
     port map (
         input       => R_W,
         output      => R_W_inv
     );
 
     -- inverter for latched RW
-    inverter_3: entity work.inverter(Structural)
+    inverter_3: inverter
     port map (
         input       => R_W_sig,
         output      => RW_inv
@@ -244,7 +248,7 @@ begin
 
     -- the following nonsense with the output enables just makes sure
     -- it holds for the proper amount of time, feel free to make it better
-    or_1: entity work.or_2x1(Structural)
+    or_1: or_2x1
     port map (
         A           => read_hit_count,
         B           => read_miss_count,
@@ -259,7 +263,7 @@ begin
     --  );
 
     -- sr latch to trigger and hold decoder enable, triggered by high start bit
-    sr_latch_3: entity work.sr_latch(Structural)
+    sr_latch_3: sr_latch
     port map (
         S           => start,
         R           => reset,
@@ -268,7 +272,7 @@ begin
     );
 
     -- and gate checks for a valid read miss
-    and4_1: entity work.and_4x1(Structural)
+    and4_1: and_4x1
     port map (
         A           => hit_miss_inv,
         B           => R_W_sig,
@@ -278,7 +282,7 @@ begin
     );
 
     -- sets up temp logic for set of busy signal SR latch
-    and_5: entity work.and_2x1(Structural)
+    and_5: and_2x1
     port map (
         A           => start,
         B           => not_clk,
@@ -286,7 +290,7 @@ begin
     );
 
     -- sets up temp logic for reset of busy signal SR latch
-    and_6: entity work.and_2x1(Structural)
+    and_6: and_2x1
     port map (
         A           => start,
         B           => clk,
@@ -295,7 +299,7 @@ begin
 
     -- or gate to determine if the function has completed (according to necessary
     -- timing) and sets reset high for busy signal SR_latch
-    or4_1: entity work.or_4x1(Structural)
+    or4_1: or_4x1
     port map (
         A           => reset_criteria,
         B           => read_miss_count,
@@ -305,7 +309,7 @@ begin
     );
 
     -- criteria needed to trigger timer for a write operation
-    and_7: entity work.and_2x1(Structural)
+    and_7: and_2x1
     port map (
         A           => RW_inv,
         B           => valid_ready,
@@ -314,7 +318,7 @@ begin
 
     -- shift register timer for a write operation. Used to hold busy signal high
     -- for the correct amount of clock signals
-    shift_reg_2_0: entity work.dff_negedge(Structural)
+    shift_reg_2_0: dff_negedge
     port map (
         d           => write_count_criteria,
         clk         => clk,
@@ -324,7 +328,7 @@ begin
 
     -- shift register timer for a read miss operation. Used to hold busy signal high
     -- for the correct amount of clock signals
-    shift_reg_19: entity work.shift_register_bit_19(Structural)
+    shift_reg_19: shift_register_bit_19
     port map (
         input       => read_miss_trigger,
         clk         => clk,
@@ -333,7 +337,7 @@ begin
 
     -- logical crieteria to getermine if the read miss timer should be started.
     -- checls for a valid miss and a read
-    and3_3: entity work.and_3x1(Structural)
+    and3_3: and_3x1
     port map (
         A           => valid_ready,
         B           => hit_miss_inv,
@@ -344,7 +348,7 @@ begin
     -- read hit only needs to go high for one clock cycle, so instead of using
     -- a shift register, a simple and gate checks if a read hit has occured and
     -- sends a high signal for only one clock cycle
-    and3_4: entity work.and_3x1(Structural)
+    and3_4: and_3x1
     port map (
         A           => valid_ready,
         B           => hit_miss,
@@ -353,7 +357,7 @@ begin
     );
 
     -- SR latch for busy signal to stay high during operations
-    sr_latch_1: entity work.sr_latch(Structural)
+    sr_latch_1: sr_latch
     port map (
         S           => set,
         R           => reset,
@@ -362,7 +366,7 @@ begin
     );
 
     -- start and high clock indicates incoming signals are ready to use
-    shift_reg_3_2: entity work.shift_register_bit_3(Structural)
+    shift_reg_3_2: shift_register_bit_3
     port map (
         input       => start,
         clk         => clk,
@@ -370,14 +374,14 @@ begin
     );
 
     -- set_temp logic all just used to determine when to send busy signal high
-    shift_reg_3_3: entity work.shift_register_bit_3(Structural)
+    shift_reg_3_3: shift_register_bit_3
     port map (
         input       => set_temp,
         clk         => not_clk,
         output      => set_temp_2
     );
 
-    or_2x1_2: entity work.or_2x1(Structural)
+    or_2x1_2: or_2x1
     port map (
         A           => set_temp,
         B           => set_temp_2,
@@ -386,7 +390,7 @@ begin
 
     -- shift register to trigger memory data read enable after 8 clk cycles from
     -- mem_addr send enable
-    shift_reg_7: entity work.shift_register_bit_7(Structural)
+    shift_reg_7: shift_register_bit_7
     port map (
         input       => shift_7_enable,
         clk         => clk,
@@ -395,7 +399,7 @@ begin
     );
 
     -- latch to hold mem data read high for the correct timing
-    sr_latch_4: entity work.sr_latch(Structural)
+    sr_latch_4: sr_latch
     port map (
         S           => mem_data_read_enable_temp,
         R           => mem_data_read_disable,
@@ -404,14 +408,14 @@ begin
     );
 
     -- inverts busy signal for logical use
-    inv_5: entity work.inverter(Structural)
+    inv_5: inverter
     port map (
         input       => busy_sig,
         output      => busy_inv
     );
 
     -- shift register to disable memory read enable signal after 8 clock cycles
-    shift_reg_7_2: entity work.shift_register_bit_7(Structural)
+    shift_reg_7_2: shift_register_bit_7
     port map (
         input       => mem_data_read_enable_temp,
         clk         => clk,
@@ -421,21 +425,21 @@ begin
 
     -- triggers shift register to count out 8 cycles after memory address out
     -- enable goes high
-    or_3: entity work.or_2x1(Structural)
+    or_3: or_2x1
     port map (
         A           => mem_addr_out_enable_sig,
         B           => reset_in,
         output      => shift_7_enable
     );
 
-    shift_tag_valid: entity work.shift_register_bit_3(Structural)
+    shift_tag_valid: shift_register_bit_3
     port map (
         input       => mem_addr_out_enable_sig,
         clk         => clk,
         output      => tag_valid_WE
     );
 
-    decoder_enable_logic: entity work.or_2x1(Structural)
+    decoder_enable_logic: or_2x1
     port map (
         A           => busy_sig,
         B           => output_enable_temp,
@@ -449,4 +453,4 @@ begin
     mem_addr_out_enable  <= mem_addr_out_enable_sig;
     mem_data_read_enable <= mem_data_read_enable_sig;
 
-end architecture Structural;
+end Structural;

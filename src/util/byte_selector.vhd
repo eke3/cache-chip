@@ -11,27 +11,27 @@ entity byte_selector is
         shift_register_data : in  std_logic_vector(7 downto 0);
         byte_offset         : out std_logic_vector(1 downto 0)
     );
-end entity byte_selector;
+end byte_selector;
 
 architecture Structural of byte_selector is
-    component mux_2x1_2bit is
+    component mux_2x1_2bit 
         port (
             A      : in  std_logic_vector(1 downto 0);
             B      : in  std_logic_vector(1 downto 0);
             sel    : in  std_logic;
             output : out std_logic_vector(1 downto 0)
         );
-    end component mux_2x1_2bit;
+    end component;
 
-    component or_2x1 is
+    component or_2x1 
         port (
             A      : in  std_logic;
             B      : in  std_logic;
             output : out std_logic
         );
-    end component or_2x1;
+    end component;
 
-    component or_4x1_2bit is
+    component or_4x1_2bit 
         port (
             A      : in  std_logic_vector(1 downto 0);
             B      : in  std_logic_vector(1 downto 0);
@@ -39,12 +39,17 @@ architecture Structural of byte_selector is
             D      : in  std_logic_vector(1 downto 0);
             output : out std_logic_vector(1 downto 0)
         );
-    end component or_4x1_2bit;
+    end component;
 
     signal or1_out, or2_out, or3_out, or4_out     : std_logic;
     signal s1, s2, s3, s4                         : std_logic_vector(1 downto 0); -- bytes to transmit
     signal mux1_out, mux2_out, mux3_out, mux4_out : std_logic_vector(1 downto 0);
     signal or_out                                 : std_logic_vector(1 downto 0);
+
+    -- Component binding statements
+    for all : or_2x1 use entity work.or_2x1(Structural);
+    for all : mux_2x1_2bit use entity work.mux_2x1_2bit(Structural);
+    for all : or_4x1_2bit use entity work.or_4x1_2bit(Structural);
 
 begin
 
@@ -53,35 +58,35 @@ begin
     s3          <= (vdd, gnd);                                                    -- 10
     s4          <= (vdd, vdd);                                                    -- 11
 
-    or1: entity work.or_2x1(Structural)
+    or1: or_2x1
     port map (
         A      => shift_register_data(0),
         B      => shift_register_data(1),
         output => or1_out
     );
 
-    or2: entity work.or_2x1(Structural)
+    or2: or_2x1
     port map (
         A      => shift_register_data(2),
         B      => shift_register_data(3),
         output => or2_out
     );
 
-    or3: entity work.or_2x1(Structural)
+    or3: or_2x1
     port map (
         A      => shift_register_data(4),
         B      => shift_register_data(5),
         output => or3_out
     );
 
-    or4: entity work.or_2x1(Structural)
+    or4: or_2x1
     port map (
         A      => shift_register_data(6),
         B      => shift_register_data(7),
         output => or4_out
     );
 
-    mux1: entity work.mux_2x1_2bit(Structural)
+    mux1: mux_2x1_2bit
     port map (
         A      => s1,
         B      => s1,
@@ -89,7 +94,7 @@ begin
         output => mux1_out
     );
 
-    mux2: entity work.mux_2x1_2bit(Structural)
+    mux2: mux_2x1_2bit
     port map (
         A      => s1,
         B      => s2,
@@ -97,7 +102,7 @@ begin
         output => mux2_out
     );
 
-    mux3: entity work.mux_2x1_2bit(Structural)
+    mux3: mux_2x1_2bit
     port map (
         A      => s1,
         B      => s3,
@@ -105,7 +110,7 @@ begin
         output => mux3_out
     );
 
-    mux4: entity work.mux_2x1_2bit(Structural)
+    mux4: mux_2x1_2bit
     port map (
         A      => s1,
         B      => s4,
@@ -113,7 +118,7 @@ begin
         output => mux4_out
     );
 
-    or_gate: entity work.or_4x1_2bit(Structural)
+    or_gate: or_4x1_2bit
     port map (
         A      => mux1_out,
         B      => mux2_out,
@@ -124,4 +129,5 @@ begin
 
     byte_offset <= or_out;
 
-end architecture Structural;
+end Structural;
+

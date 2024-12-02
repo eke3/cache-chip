@@ -16,11 +16,11 @@ entity valid_vector is
         sel         : in  STD_LOGIC_VECTOR(1 downto 0); -- 2-bit selector for demux, comes from decoder input
         read_data   : out STD_LOGIC -- Read data output for cell 3
     );
-end entity valid_vector;
+end valid_vector;
 
 architecture Structural of valid_vector is
     -- Declare the valid_cell component
-    component valid_cell is
+    component valid_cell 
         port (
             vdd         : in  STD_LOGIC;
             gnd         : in  STD_LOGIC;
@@ -30,10 +30,10 @@ architecture Structural of valid_vector is
             RW          : in  STD_LOGIC;
             read_data   : out STD_LOGIC
         );
-    end component valid_cell;
+    end component;
 
     -- Declare the demux_1x4 component
-    component demux_1x4 is
+    component demux_1x4 
         port (
             data_in    : in  STD_LOGIC;                    -- 1-bit input
             sel        : in  STD_LOGIC_VECTOR(1 downto 0); -- 2-bit selector
@@ -42,9 +42,9 @@ architecture Structural of valid_vector is
             data_out_1 : out STD_LOGIC;                    -- Output for selection "01"
             data_out_0 : out STD_LOGIC                     -- Output for selection "00"
         );
-    end component demux_1x4;
+    end component;
 
-    component mux_4x1 is
+    component mux_4x1 
         port (
             read_data0 : in  STD_LOGIC;                    -- Input 0
             read_data1 : in  STD_LOGIC;                    -- Input 1
@@ -53,7 +53,11 @@ architecture Structural of valid_vector is
             sel        : in  STD_LOGIC_VECTOR(1 downto 0); -- 2-bit sel signal
             F          : out STD_LOGIC                     -- Output of the multiplexer
         );
-    end component mux_4x1;
+    end component;
+
+    for cell: valid_cell use entity work.valid_cell(Structural);
+    for all: demux_1x4 use entity work.demux_1x4(Structural);
+    for all: mux_4x1 use entity work.mux_4x1(Structural);
 
     -- Internal signals for demux outputs
     signal demux_out      : STD_LOGIC_VECTOR(3 downto 0);
@@ -63,7 +67,7 @@ architecture Structural of valid_vector is
 begin
 
     -- Instantiate the demux_1x4 and connect the shared write_data and sel
-    demux: entity work.demux_1x4(Structural)
+    demux: demux_1x4
     port map (
         data_in         => write_data,                     -- Shared write data input
         sel             => sel,                            -- 2-bit selector input
@@ -75,7 +79,7 @@ begin
 
     -- Instantiate each valid_cell and connect signals as required
     gen_valid_cells: for i in 0 to 3 generate
-        cell: entity work.valid_cell(Structural)
+        cell: valid_cell
         port map (
             vdd         => vdd,
             gnd         => gnd,
@@ -88,7 +92,7 @@ begin
     end generate;
 
     -- get only the output you want
-    mux: entity work.mux_4x1(Structural)
+    mux: mux_4x1
     port map (
         read_data0      => read_valid_out(0),
         read_data1      => read_valid_out(1),
@@ -100,4 +104,4 @@ begin
 
     read_data <= read_data_out;
 
-end architecture Structural;
+end Structural;

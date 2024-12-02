@@ -13,23 +13,25 @@ entity cache_cell_8bit is
         RW          : in  std_logic;
         read_data   : out std_logic_vector(7 downto 0)
     );
-end entity cache_cell_8bit;
+end cache_cell_8bit;
 
 architecture Structural of cache_cell_8bit is
 
-    component cache_cell_2bit is
+    component cache_cell_2bit 
         port (
             write_data  : in  std_logic_vector(1 downto 0);
             chip_enable : in  std_logic;
             RW          : in  std_logic;
             read_data   : out std_logic_vector(1 downto 0)
         );
-    end component cache_cell_2bit;
+    end component;
+
+    for all: cache_cell_2bit use entity work.cache_cell_2bit(Structural);
 
 begin
 
     gen_cache_cells: for i in 0 to 3 generate
-        cache_cell_inst: entity work.cache_cell_2bit(Structural)
+        cache_cell_inst: cache_cell_2bit
         port map (
             write_data  => write_data((2 * i + 1) downto 2 * i),
             chip_enable => chip_enable,
@@ -38,4 +40,4 @@ begin
         );
     end generate;
 
-end architecture Structural;
+end Structural;

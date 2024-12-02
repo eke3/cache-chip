@@ -9,25 +9,28 @@ entity decoder_2x4 is
         E : in  STD_LOGIC;
         Y : out STD_LOGIC_VECTOR(3 downto 0)
     );
-end entity decoder_2x4;
+end decoder_2x4;
 
 architecture Structural of decoder_2x4 is
 
     -- Declare the components
-    component inverter is
+    component inverter
         port (
             input  : in  STD_LOGIC;
             output : out STD_LOGIC
         );
-    end component inverter;
+    end component;
 
-    component and_2x1 is
+    component and_2x1
         port (
             A      : in  STD_LOGIC;
             B      : in  STD_LOGIC;
             output : out STD_LOGIC
         );
-    end component and_2x1;
+    end component;
+
+    for all: inverter use entity work.inverter(Structural);
+    for all: and_2x1 use entity work.and_2x1(Structural);
 
     -- Intermediate signals
     signal not_A   : STD_LOGIC_VECTOR(1 downto 0);
@@ -37,35 +40,35 @@ begin
 
     -- Instantiate components
     gen_inv: for i in 0 to 1 generate
-        inv: entity work.inverter(Structural)
+        inv: inverter
         port map (
             input  => A(i),
             output => not_A(i)
         );
     end generate;
 
-    AND1: entity work.and_2x1(Structural)
+    AND1: and_2x1
     port map (
         A          => A(1),
         B          => A(0),
         output     => and_vec(3)
     );
 
-    AND2: entity work.and_2x1(Structural)
+    AND2: and_2x1
     port map (
         A          => A(1),
         B          => not_A(0),
         output     => and_vec(2)
     );
 
-    AND3: entity work.and_2x1(Structural)
+    AND3: and_2x1
     port map (
         A          => not_A(1),
         B          => A(0),
         output     => and_vec(1)
     );
 
-    AND4: entity work.and_2x1(Structural)
+    AND4: and_2x1
     port map (
         A          => not_A(1),
         B          => not_A(0),
@@ -73,7 +76,7 @@ begin
     );
 
     gen_and: for i in 0 to 3 generate
-        ANDX: entity work.and_2x1(Structural)
+        ANDX: and_2x1
         port map (
             A      => and_vec(i),
             B      => E,
@@ -81,4 +84,4 @@ begin
         );
     end generate;
 
-end architecture Structural;
+end Structural;

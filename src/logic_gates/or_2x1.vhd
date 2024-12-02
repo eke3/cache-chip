@@ -10,11 +10,11 @@ entity or_2x1 is
         B      : in  STD_LOGIC;
         output : out STD_LOGIC
     );
-end entity or_2x1;
+end or_2x1;
 
 architecture Structural of or_2x1 is
 
 begin
     output <= A or B;
 
-end architecture Structural;
+end Structural;

@@ -13,7 +13,7 @@ entity dff_posedge is
         q    : out std_logic;
         qbar : out std_logic
     );
-end entity dff_posedge;
+end dff_posedge;
 
 architecture Structural of dff_posedge is
 
@@ -26,4 +26,4 @@ begin
         qbar <= not d;
     end process output;
 
-end architecture Structural;
+end Structural;

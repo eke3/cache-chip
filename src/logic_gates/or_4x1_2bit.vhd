@@ -12,11 +12,11 @@ entity or_4x1_2bit is
         D      : in  std_logic_vector(1 downto 0);
         output : out std_logic_vector(1 downto 0)
     );
-end entity or_4x1_2bit;
+end or_4x1_2bit;
 
 architecture Structural of or_4x1_2bit is
 
-    component or_4x1 is
+    component or_4x1
         port (
             A      : in  std_logic;
             B      : in  std_logic;
@@ -24,12 +24,14 @@ architecture Structural of or_4x1_2bit is
             D      : in  std_logic;
             output : out std_logic
         );
-    end component or_4x1;
+    end component;
+
+    for u_or: or_4x1 use entity work.or_4x1(Structural);
 
 begin
 
     or_gen: for i in 0 to 1 generate
-        u_or: entity work.or_4x1(Structural)
+        u_or: or_4x1
         port map (
             A(i),
             B(i),
@@ -39,4 +41,4 @@ begin
         );
     end generate;
 
-end architecture Structural;
+end Structural;

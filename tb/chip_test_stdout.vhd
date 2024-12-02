@@ -5,11 +5,11 @@ use IEEE.std_logic_arith.all;
 use STD.textio.all;
 
 entity chip_test_stdout is
-end entity chip_test_stdout;
+end chip_test_stdout;
 
 architecture Test of chip_test_stdout is
 
-    component chip is
+    component chip 
         port (
             cpu_add    : in    std_logic_vector(5 downto 0);
             cpu_data   : inout std_logic_vector(7 downto 0);
@@ -24,7 +24,7 @@ architecture Test of chip_test_stdout is
             mem_en     : out   std_logic;
             mem_add    : out   std_logic_vector(5 downto 0)
         );
-    end component chip;
+    end component;
 
     signal Vdd                                                : std_logic                    := '1';
     signal Gnd                                                : std_logic                    := '0';
@@ -69,11 +69,13 @@ architecture Test of chip_test_stdout is
 
         write(out_line, string'(" ----------------------------------------------"));
         writeline(output, out_line);
-    end procedure print_output;
+    end print_output;
+
+	for c1: chip use entity work.chip(Structural);
 
 begin
     clk               <= clock;
-    c1: entity work.chip(Structural)
+    c1: chip
     port map (
         cpu_add    => cpu_add,
         cpu_data   => cpu_data,
@@ -99,7 +101,7 @@ begin
             clk_count <= clk_count + 1;
         end if;
         wait for 5 ns;
-    end process clking;
+    end process;
 
     -- Internal Input Generation and Logging
     io_process: process
@@ -113,7 +115,7 @@ begin
         -- Simulating input values from `chip_in.txt`
         -- Replace each sequence below with patterns derived from the file
         cpu_add       <= "000000";
-        cpu_data      <= X"AB";
+        cpu_data      <= "10101011";
         cpu_rd_wrn    <= '0';
         start         <= '1';
         reset         <= '0';
@@ -347,7 +349,7 @@ begin
         print_output;
 
         cpu_add       <= "000011";
-        cpu_data      <= X"FF";
+        cpu_data      <= "11111111";
         cpu_rd_wrn    <= '0';
         start         <= '1';
         reset         <= '0';
@@ -410,7 +412,7 @@ begin
         print_output;
 
         cpu_add       <= "111111";
-        cpu_data      <= X"AA";
+        cpu_data      <= "10101010";
         cpu_rd_wrn    <= '0';
         start         <= '1';
         reset         <= '0';
@@ -531,7 +533,7 @@ begin
         cpu_rd_wrn    <= 'Z';
         start         <= '0';
         reset         <= '0';
-        mem_data      <= X"DD";
+        mem_data      <= "11011101";
         wait for 10 ns;
         print_output;
 
@@ -540,7 +542,7 @@ begin
         cpu_rd_wrn    <= 'Z';
         start         <= '0';
         reset         <= '0';
-        mem_data      <= X"DD";
+        mem_data      <= "11011101";
         wait for 10 ns;
         print_output;
 
@@ -549,7 +551,7 @@ begin
         cpu_rd_wrn    <= 'Z';
         start         <= '0';
         reset         <= '0';
-        mem_data      <= X"DC";
+        mem_data      <= "11011100";
         wait for 10 ns;
         print_output;
 
@@ -558,7 +560,7 @@ begin
         cpu_rd_wrn    <= 'Z';
         start         <= '0';
         reset         <= '0';
-        mem_data      <= X"DC";
+        mem_data      <= "11011100";
         wait for 10 ns;
         print_output;
 
@@ -567,7 +569,7 @@ begin
         cpu_rd_wrn    <= 'Z';
         start         <= '0';
         reset         <= '0';
-        mem_data      <= X"DB";
+        mem_data      <= "11011011";
         wait for 10 ns;
         print_output;
 
@@ -576,7 +578,7 @@ begin
         cpu_rd_wrn    <= 'Z';
         start         <= '0';
         reset         <= '0';
-        mem_data      <= X"DB";
+        mem_data      <= "11011011";
         wait for 10 ns;
         print_output;
 
@@ -585,7 +587,7 @@ begin
         cpu_rd_wrn    <= 'Z';
         start         <= '0';
         reset         <= '0';
-        mem_data      <= X"DA";
+        mem_data      <= "11011010";
         wait for 10 ns;
         print_output;
 
@@ -594,7 +596,7 @@ begin
         cpu_rd_wrn    <= 'Z';
         start         <= '0';
         reset         <= '0';
-        mem_data      <= X"DA";
+        mem_data      <= "11011010";
         wait for 10 ns;
         print_output;
 
@@ -651,7 +653,9 @@ begin
         mem_data      <= "ZZZZZZZZ";
         wait for 10 ns;
         print_output;
-        wait;
-    end process io_process;
 
-end architecture Test;
+	assert false report "End Simulation" severity failure;
+        --wait;
+    end process;
+
+end Test;

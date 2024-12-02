@@ -13,45 +13,48 @@ entity selector is
         read_enable  : out std_logic;
         write_enable : out std_logic
     );
-end entity selector;
+end selector;
 
 architecture Structural of selector is
-    component and_2x1 is
+    component and_2x1 
         port (
             A      : in  std_logic;
             B      : in  std_logic;
             output : out std_logic
         );
-    end component and_2x1;
+    end component;
 
-    component inverter is
+    component inverter 
         port (
             input  : in  std_logic;
             output : out std_logic
         );
-    end component inverter;
+    end component;
+
+    for all: and_2x1 use entity work.and_2x1(Structural);
+    for all: inverter use entity work.inverter(Structural);
 
     signal write_inv : std_logic;
 
 begin
-    and_1: entity work.and_2x1(Structural)
+    and_1: and_2x1
     port map (
         A      => chip_enable,
         B      => RW,
         output => read_enable
     );
 
-    inverter_1: entity work.inverter(Structural)
+    inverter_1: inverter
     port map (
         input  => RW,
         output => write_inv
     );
 
-    and_2: entity work.and_2x1(Structural)
+    and_2: and_2x1
     port map (
         A      => chip_enable,
         B      => write_inv,
         output => write_enable
     );
 
-end architecture Structural;
+end Structural;

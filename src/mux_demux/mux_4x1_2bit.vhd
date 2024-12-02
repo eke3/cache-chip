@@ -14,11 +14,11 @@ entity mux_4x1_2bit is
         sel        : in  STD_LOGIC_VECTOR(1 downto 0); -- 2-bit sel signal
         F          : out STD_LOGIC_VECTOR(1 downto 0) -- 2-bit output of the multiplexer
     );
-end entity mux_4x1_2bit;
+end mux_4x1_2bit;
 
 architecture Structural of mux_4x1_2bit is
     -- Declare the mux_4x1 component
-    component mux_4x1 is
+    component mux_4x1
         port (
             read_data0 : in  STD_LOGIC;
             read_data1 : in  STD_LOGIC;
@@ -27,14 +27,16 @@ architecture Structural of mux_4x1_2bit is
             sel        : in  STD_LOGIC_VECTOR(1 downto 0);
             F          : out STD_LOGIC
         );
-    end component mux_4x1;
+    end component;
 
-    -- Intermediate signals for the outputs of the two mux_4x1 instances
+    for mux_bit0, mux_bit1: mux_4x1 use entity work.mux_4x1(Structural);
+
+    -- Internal signal for the outputs of the two mux_4x1 instances
     signal mux_out : STD_LOGIC_VECTOR(1 downto 0);
 
 begin
     -- Instantiate the first mux_4x1 for the lower bit (bit 0)
-    mux_bit0: entity work.mux_4x1(Structural)
+    mux_bit0: mux_4x1
     port map (
         read_data0 => read_data0(0),
         read_data1 => read_data1(0),
@@ -45,7 +47,7 @@ begin
     );
 
     -- Instantiate the second mux_4x1 for the higher bit (bit 1)
-    mux_bit1: entity work.mux_4x1(Structural)
+    mux_bit1: mux_4x1
     port map (
         read_data0 => read_data0(1),
         read_data1 => read_data1(1),
@@ -57,4 +59,5 @@ begin
 
     F <= mux_out;
 
-end architecture Structural;
+end Structural;
+

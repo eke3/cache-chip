@@ -8,23 +8,25 @@ entity dff_posedge_8bit is
         q    : out STD_LOGIC_VECTOR(7 downto 0);
         qbar : out STD_LOGIC_VECTOR(7 downto 0)
     );
-end entity dff_posedge_8bit;
+end dff_posedge_8bit;
 
 architecture Structural of dff_posedge_8bit is
 
-    component dff_posedge_4bit is
+    component dff_posedge_4bit 
         port (
             d    : in  STD_LOGIC_VECTOR(3 downto 0);
             clk  : in  STD_LOGIC;
             q    : out STD_LOGIC_VECTOR(3 downto 0);
             qbar : out STD_LOGIC_VECTOR(3 downto 0)
         );
-    end component dff_posedge_4bit;
+    end component;
+
+    for dff: dff_posedge_4bit use entity work.dff_posedge_4bit(Structural);
 
 begin
 
     gen_dffs: for i in 0 to 1 generate
-        dff: entity work.dff_posedge_4bit(Structural)
+        dff: dff_posedge_4bit
         port map (
             d    => d(4 * i + 3 downto 4 * i),
             clk  => clk,
@@ -33,4 +35,4 @@ begin
         );
     end generate;
 
-end architecture Structural;
+end Structural;

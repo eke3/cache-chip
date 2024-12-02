@@ -8,34 +8,38 @@ entity xor_2x1 is
         B      : in  STD_LOGIC; -- Input 1
         output : out STD_LOGIC -- Output of the XOR gate
     );
-end entity xor_2x1;
+end xor_2x1;
 
 -- Architecture: Structural
 architecture Structural of xor_2x1 is
 
     -- Declare components for AND, OR, and NOT gates
-    component and_2x1 is
+    component and_2x1
         port (
             A      : in  STD_LOGIC;
             B      : in  STD_LOGIC;
             output : out STD_LOGIC
         );
-    end component and_2x1;
+    end component;
 
-    component or_2x1 is
+    component or_2x1
         port (
             A      : in  STD_LOGIC;
             B      : in  STD_LOGIC;
             output : out STD_LOGIC
         );
-    end component or_2x1;
+    end component;
 
-    component inverter is
+    component inverter
         port (
             input  : in  STD_LOGIC;
             output : out STD_LOGIC
         );
-    end component inverter;
+    end component;
+
+    for not_A_gate, not_B_gate: inverter use entity work.inverter(Structural);
+    for and1_gate, and2_gate: and_2x1 use entity work.and_2x1(Structural);
+    for or_gate: or_2x1 use entity work.or_2x1(Structural);
 
     -- Intermediate signals for AND, OR, and NOT gates
     signal not_A    : STD_LOGIC;
@@ -46,20 +50,20 @@ architecture Structural of xor_2x1 is
 
 begin
     -- Invert the inputs A and B
-    not_A_gate: entity work.inverter(Structural)
+    not_A_gate: inverter
     port map (
         input  => A,
         output => not_A
     );
 
-    not_B_gate: entity work.inverter(Structural)
+    not_B_gate: inverter
     port map (
         input  => B,
         output => not_B
     );
 
     -- First AND gate: A AND NOT B
-    and1_gate: entity work.and_2x1(Structural)
+    and1_gate: and_2x1
     port map (
         A      => A,
         B      => not_B,
@@ -67,7 +71,7 @@ begin
     );
 
     -- Second AND gate: NOT A AND B
-    and2_gate: entity work.and_2x1(Structural)
+    and2_gate: and_2x1
     port map (
         A      => not_A,
         B      => B,
@@ -75,11 +79,11 @@ begin
     );
 
     -- OR gate: (A AND NOT B) OR (NOT A AND B)
-    or_gate: entity work.or_2x1(Structural)
+    or_gate: or_2x1
     port map (
         A      => and1_out,
         B      => and2_out,
         output => output
     );
 
-end architecture Structural;
+end Structural;

@@ -8,23 +8,25 @@ entity dff_negedge_8bit is
         q    : out STD_LOGIC_VECTOR(7 downto 0);
         qbar : out STD_LOGIC_VECTOR(7 downto 0)
     );
-end entity dff_negedge_8bit;
+end dff_negedge_8bit;
 
 architecture Structural of dff_negedge_8bit is
 
-    component dff_negedge_2bit is
+    component dff_negedge_2bit
         port (
             d    : in  STD_LOGIC_VECTOR(1 downto 0);
             clk  : in  STD_LOGIC;
             q    : out STD_LOGIC_VECTOR(1 downto 0);
             qbar : out STD_LOGIC_VECTOR(1 downto 0)
         );
-    end component dff_negedge_2bit;
+    end component;
+    
+    for dff: dff_negedge_2bit use entity work.dff_negedge_2bit(Structural);
 
 begin
 
     gen_dffs: for i in 0 to 3 generate
-        dff: entity work.dff_negedge_2bit(Structural)
+        dff: dff_negedge_2bit
         port map (
             d    => d(2 * i + 1 downto 2 * i),
             clk  => clk,
@@ -33,4 +35,4 @@ begin
         );
     end generate;
 
-end architecture Structural;
+end Structural;

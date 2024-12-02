@@ -12,34 +12,38 @@ entity mux_2x1 is
         sel    : in  STD_LOGIC; -- sel signal
         output : out STD_LOGIC -- Output of the multiplexer
     );
-end entity mux_2x1;
+end mux_2x1;
 
 architecture Structural of mux_2x1 is
     -- Declare the and_2x1 component
-    component and_2x1 is
+    component and_2x1
         port (
             A      : in  STD_LOGIC;
             B      : in  STD_LOGIC;
             output : out STD_LOGIC
         );
-    end component and_2x1;
+    end component;
 
     -- Declare the or_2x1 component
-    component or_2x1 is
+    component or_2x1
         port (
             A      : in  STD_LOGIC;
             B      : in  STD_LOGIC;
             output : out STD_LOGIC
         );
-    end component or_2x1;
+    end component;
 
     -- Declare the inverter component
-    component inverter is
+    component inverter
         port (
             input  : in  STD_LOGIC;
             output : out STD_LOGIC
         );
-    end component inverter;
+    end component;
+
+    for all: inverter use entity work.inverter(Structural);
+    for all: and_2x1 use entity work.and_2x1(Structural);
+    for all: or_2x1 use entity work.or_2x1(Structural);
 
     -- Intermediate signals for outputs of the and_2x1 gates
     signal and_out0, and_out1 : STD_LOGIC;
@@ -50,21 +54,21 @@ architecture Structural of mux_2x1 is
 begin
 
     -- Instantiate the inverter to generate sel_not signal
-    sel_inverter: entity work.inverter(Structural)
+    sel_inverter: inverter
     port map (
         input  => sel,
         output => sel_not
     );
 
     -- Instantiate the and_2x1 gates to enable each data input based on sel signal
-    and_gate0: entity work.and_2x1(Structural)
+    and_gate0: and_2x1
     port map (
         A      => A,
         B      => sel_not,
         output => and_out0
     );
 
-    and_gate1: entity work.and_2x1(Structural)
+    and_gate1: and_2x1
     port map (
         A      => B,
         B      => sel,
@@ -72,7 +76,7 @@ begin
     );
 
     -- Instantiate the or_2x1 gate to combine the outputs of the and gates
-    or_gate: entity work.or_2x1(Structural)
+    or_gate: or_2x1
     port map (
         A      => and_out0,
         B      => and_out1,
@@ -82,4 +86,4 @@ begin
     -- Assign the output of the multiplexer to the output port
     output <= mux_out;
 
-end architecture Structural;
+end Structural;

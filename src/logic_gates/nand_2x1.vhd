@@ -10,32 +10,36 @@ entity nand_2x1 is
         B      : in  STD_LOGIC;
         output : out STD_LOGIC
     );
-end entity nand_2x1;
+end nand_2x1;
 
 architecture Structural of nand_2x1 is
     -- Declare the and_2x1 component
-    component and_2x1 is
+    component and_2x1
         port (
             A      : in  STD_LOGIC;
             B      : in  STD_LOGIC;
             output : out STD_LOGIC
         );
-    end component and_2x1;
+    end component;
 
     -- Declare the inverter component
-    component inverter is
+    component inverter
         port (
             input  : in  STD_LOGIC;
             output : out STD_LOGIC
         );
-    end component inverter;
+    end component;
 
-    -- intermediate signal
+    -- Intermediate signal
     signal and_out : STD_LOGIC;
+
+    -- Use the work library components
+    for and_gate: and_2x1 use entity work.and_2x1(Structural);
+    for inv_gate: inverter use entity work.inverter(Structural);
 
 begin
     -- Instantiate the and_2x1 gate to calculate A and B
-    and_gate: entity work.and_2x1(Structural)
+    and_gate: and_2x1
     port map (
         A      => A,
         B      => B,
@@ -43,10 +47,11 @@ begin
     );
 
     -- Instantiate the inverter to invert the output of the and_2x1 gate
-    inv_gate: entity work.inverter(Structural)
+    inv_gate: inverter
     port map (
         input  => and_out,
         output => output
     );
 
-end architecture Structural;
+end Structural;
+

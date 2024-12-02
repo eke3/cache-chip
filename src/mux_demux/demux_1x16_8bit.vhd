@@ -2,7 +2,6 @@
 -- Architecture: Structural
 -- Author:
 
-library STD;
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 
@@ -25,13 +24,13 @@ entity demux_1x16_8bit is
         data_out_12 : out STD_LOGIC_VECTOR(7 downto 0); -- Output for selection "1100"
         data_out_13 : out STD_LOGIC_VECTOR(7 downto 0); -- Output for selection "1101"
         data_out_14 : out STD_LOGIC_VECTOR(7 downto 0); -- Output for selection "1110"
-        data_out_15 : out STD_LOGIC_VECTOR(7 downto 0) -- Output for selection "1111"
+        data_out_15 : out STD_LOGIC_VECTOR(7 downto 0)  -- Output for selection "1111"
     );
-end entity demux_1x16_8bit;
+end demux_1x16_8bit;
 
 architecture Structural of demux_1x16_8bit is
     -- Declare the demux_1x16 component
-    component demux_1x16 is
+    component demux_1x16 
         port (
             data_in     : in  STD_LOGIC;                    -- 1-bit input data
             sel         : in  STD_LOGIC_VECTOR(3 downto 0); -- 4-bit selector (S3, S2, S1, S0)
@@ -52,13 +51,15 @@ architecture Structural of demux_1x16_8bit is
             data_out_14 : out STD_LOGIC;                    -- Output for selection "1110"
             data_out_15 : out STD_LOGIC                     -- Output for selection "1111"
         );
-    end component demux_1x16;
+    end component;
+
+    for demux: demux_1x16 use entity work.demux_1x16(Structural);
 
 begin
     -- Generate block to instantiate demux_1x16 for each bit of the 8-bit input data
     gen_demux_1x16: for i in 0 to 7 generate
         -- Instantiate demux_1x16 for each bit of data_in
-        demux: entity work.demux_1x16(Structural)
+        demux: demux_1x16
         port map (
             data_in     => data_in(i),                      -- i-th bit of the input data
             sel         => sel,                             -- 4-bit selector
@@ -81,4 +82,5 @@ begin
         );
     end generate;
 
-end architecture Structural;
+end Structural;
+

@@ -14,13 +14,13 @@ entity tx is
         input  : in  std_logic;
         output : out std_logic
     );
-end entity tx;
+end tx;
 
 architecture Structural of tx is
 
 begin
 
-    txprocess: process (sel, selnot, input) is
+    txprocess: process (sel, selnot, input)
     begin
         if (sel = '1' and selnot = '0') then
             output <= input;
@@ -29,4 +29,4 @@ begin
         end if;
     end process txprocess;
 
-end architecture Structural;
+end Structural;

@@ -11,18 +11,20 @@ entity mux_2x1_2bit is
         sel    : in  STD_LOGIC; -- sel signal
         output : out STD_LOGIC_VECTOR(1 downto 0) -- Output of the multiplexer
     );
-end entity mux_2x1_2bit;
+end mux_2x1_2bit;
 
 architecture Structural of mux_2x1_2bit is
     -- Declare the mux_2x1 component
-    component mux_2x1 is
+    component mux_2x1
         port (
             A      : in  STD_LOGIC;
             B      : in  STD_LOGIC;
             sel    : in  STD_LOGIC;
             output : out STD_LOGIC
         );
-    end component mux_2x1;
+    end component;
+
+    for mux_2x1_inst: mux_2x1 use entity work.mux_2x1(Structural);
 
     signal mux_out : STD_LOGIC_VECTOR(1 downto 0);
 
@@ -30,7 +32,7 @@ begin
 
     -- Instantiate the mux_2x1 for each bit
     gen_mux_2x1: for i in 0 to 1 generate
-        mux_2x1_inst: entity work.mux_2x1(Structural)
+        mux_2x1_inst: mux_2x1
         port map (
             A      => A(i),
             B      => B(i),
@@ -41,4 +43,5 @@ begin
 
     output <= mux_out;
 
-end architecture Structural;
+end Structural;
+

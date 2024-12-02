@@ -9,12 +9,13 @@ entity inverter is
         input  : in  STD_LOGIC;
         output : out STD_LOGIC
     );
-end entity inverter;
+end inverter;
 
 architecture Structural of inverter is
 
 begin
 
-    output <= not (input);
+    output <= not input;
 
-end architecture Structural;
+end Structural;
+

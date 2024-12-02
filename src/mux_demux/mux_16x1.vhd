@@ -8,20 +8,20 @@ entity mux_16x1 is
         sel_one_hot : in  STD_LOGIC_VECTOR(15 downto 0); -- 1-hot encoded select signal
         output      : out STD_LOGIC -- Output of the multiplexer
     );
-end entity mux_16x1;
+end mux_16x1;
 
 architecture Structural of mux_16x1 is
 
     -- Declare the 2x1 multiplexer component
-    component and_2x1 is
+    component and_2x1
         port (
             A      : in  STD_LOGIC;
             B      : in  STD_LOGIC;
             output : out STD_LOGIC
         );
-    end component and_2x1;
+    end component;
 
-    component or_16x1 is
+    component or_16x1
         port (
             input0  : in  STD_LOGIC;                -- Input 0
             input1  : in  STD_LOGIC;                -- Input 1
@@ -41,16 +41,20 @@ architecture Structural of mux_16x1 is
             input15 : in  STD_LOGIC;                -- Input 15
             output  : out STD_LOGIC                 -- Single OR output
         );
-    end component or_16x1;
+    end component;
 
     -- Intermediate signals for the 1-hot encoded AND gates
     signal and_out : STD_LOGIC_VECTOR(15 downto 0); -- For each AND gate's output
+
+    -- Component binding
+    for all : and_2x1 use entity work.and_2x1(Structural);
+    for all : or_16x1 use entity work.or_16x1(Structural);
 
 begin
 
     -- Stage 1: 16 AND gates to implement 1-hot selection
     gen_and: for i in 0 to 15 generate
-        and_gate: entity work.and_2x1(Structural)
+        and_gate: and_2x1
         port map (
             A      => inputs(i),
             B      => sel_one_hot(i),
@@ -58,7 +62,8 @@ begin
         );
     end generate;
 
-    or_gate: entity work.or_16x1(Structural)
+    -- Stage 2: OR gate to combine the AND gate outputs
+    or_gate: or_16x1
     port map (
         input0     => and_out(0),
         input1     => and_out(1),
@@ -79,4 +84,5 @@ begin
         output     => output
     );
 
-end architecture Structural;
+end Structural;
+

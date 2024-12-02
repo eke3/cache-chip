@@ -21,11 +21,11 @@ entity or_16x1 is
         input15 : in  STD_LOGIC; -- Input 15
         output  : out STD_LOGIC -- Single OR output
     );
-end entity or_16x1;
+end or_16x1;
 
 architecture Structural of or_16x1 is
 
-    component or_8x1 is
+    component or_8x1
         port (
             A      : in  STD_LOGIC;                           -- Input A
             B      : in  STD_LOGIC;                           -- Input B
@@ -37,23 +37,26 @@ architecture Structural of or_16x1 is
             H      : in  STD_LOGIC;                           -- Input H
             output : out STD_LOGIC                            -- Output of the OR gate
         );
-    end component or_8x1;
+    end component;
 
     -- Declare the 2x1 OR gate component
-    component or_2x1 is
+    component or_2x1
         port (
             A      : in  STD_LOGIC;                           -- Input A
             B      : in  STD_LOGIC;                           -- Input B
             output : out STD_LOGIC                            -- Output of the OR gate
         );
-    end component or_2x1;
+    end component;
+
+    for or_1, or_2: or_8x1 use entity work.or_8x1(Structural);
+    for or_3: or_2x1 use entity work.or_2x1(Structural);
 
     -- Signals for intermediate connections
     signal or_8x1_out1, or_8x1_out2, or_16x1_out : STD_LOGIC; -- Intermediate signals for OR operations
 
 begin
 
-    or_1: entity work.or_8x1(Structural)
+    or_1: or_8x1
     port map (
         A      => input0,
         B      => input1,
@@ -66,7 +69,7 @@ begin
         output => or_8x1_out1
     );
 
-    or_2: entity work.or_8x1(Structural)
+    or_2: or_8x1
     port map (
         A      => input8,
         B      => input9,
@@ -79,7 +82,7 @@ begin
         output => or_8x1_out2
     );
 
-    or_3: entity work.or_2x1(Structural)
+    or_3: or_2x1
     port map (
         A      => or_8x1_out1,
         B      => or_8x1_out2,
@@ -88,4 +91,4 @@ begin
 
     output <= or_16x1_out;
 
-end architecture Structural;
+end Structural;

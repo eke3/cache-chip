@@ -22,7 +22,7 @@ entity concatenator_8bit is
         in15   : in  std_logic;
         output : out std_logic_vector(15 downto 0)
     );
-end entity concatenator_8bit;
+end concatenator_8bit;
 
 -- Architecture using Structural approach
 architecture Structural of concatenator_8bit is
@@ -31,4 +31,4 @@ begin
 
     output <= (in15, in14, in13, in12, in11, in10, in9, in8, in7, in6, in5, in4, in3, in2, in1, in0);
 
-end architecture Structural;
+end Structural;

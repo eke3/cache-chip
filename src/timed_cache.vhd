@@ -25,81 +25,55 @@ entity timed_cache is
         read_cache             : out std_logic_vector(7 downto 0); -- to on-chip register, which will be released off chip by state machine's OUTPUT_ENABLE signal
         hit_or_miss            : out std_logic -- status signal going to state machine
     );
-end entity timed_cache;
+end timed_cache;
 
 architecture Structural of timed_cache is
     -- Component declarations.
-    component dff_posedge is
+    component dff_posedge 
         port (
             d    : in  std_logic;
             clk  : in  std_logic;
             q    : out std_logic;
             qbar : out std_logic
         );
-    end component dff_posedge;
+    end component;
 
-    component dff_negedge is
-        port (
-            d    : in  std_logic;
-            clk  : in  std_logic;
-            q    : out std_logic;
-            qbar : out std_logic
-        );
-    end component dff_negedge;
-
-    component dff_negedge_2bit is
-        port (
-            d    : in  STD_LOGIC_VECTOR(1 downto 0);
-            clk  : in  STD_LOGIC;
-            q    : out STD_LOGIC_VECTOR(1 downto 0);
-            qbar : out STD_LOGIC_VECTOR(1 downto 0)
-        );
-    end component dff_negedge_2bit;
-
-    component dff_posedge_4bit is
+    component dff_posedge_4bit 
         port (
             d    : in  STD_LOGIC_VECTOR(3 downto 0);
             clk  : in  STD_LOGIC;
             q    : out STD_LOGIC_VECTOR(3 downto 0);
             qbar : out STD_LOGIC_VECTOR(3 downto 0)
         );
-    end component dff_posedge_4bit;
+    end component;
 
-    component dff_posedge_8bit is
+
+    component dff_negedge_8bit 
         port (
             d    : in  STD_LOGIC_VECTOR(7 downto 0);
             clk  : in  STD_LOGIC;
             q    : out STD_LOGIC_VECTOR(7 downto 0);
             qbar : out STD_LOGIC_VECTOR(7 downto 0)
         );
-    end component dff_posedge_8bit;
+    end component;
 
-    component dff_negedge_8bit is
-        port (
-            d    : in  STD_LOGIC_VECTOR(7 downto 0);
-            clk  : in  STD_LOGIC;
-            q    : out STD_LOGIC_VECTOR(7 downto 0);
-            qbar : out STD_LOGIC_VECTOR(7 downto 0)
-        );
-    end component dff_negedge_8bit;
-
-    component decoder_2x4 is
+    component decoder_2x4 
         port (
             A : in  STD_LOGIC_VECTOR(1 downto 0);
             E : in  STD_LOGIC;
             Y : out STD_LOGIC_VECTOR(3 downto 0)
         );
-    end component decoder_2x4;
+    end component;
 
-    component tag_comparator_2x1 is
+    component tag_comparator_2x1 
         port (
             A      : in  STD_LOGIC_VECTOR(1 downto 0);
             B      : in  STD_LOGIC_VECTOR(1 downto 0);
             output : out STD_LOGIC
         );
-    end component tag_comparator_2x1;
+    end component;
 
-    component tag_vector is
+    component tag_vector 
         port (
             write_data  : in  STD_LOGIC_VECTOR(1 downto 0); -- 2-bit shared write data
             chip_enable : in  STD_LOGIC_VECTOR(3 downto 0); -- 4-bit chip enable (1 bit per cell)
@@ -107,9 +81,9 @@ architecture Structural of timed_cache is
             sel         : in  STD_LOGIC_VECTOR(1 downto 0); -- 2-bit selector for demux
             read_data   : out STD_LOGIC_VECTOR(1 downto 0)  -- Read data output for cell 3
         );
-    end component tag_vector;
+    end component;
 
-    component valid_vector is
+    component valid_vector 
         port (
             vdd         : in  STD_LOGIC;                    -- Power supply
             gnd         : in  STD_LOGIC;                    -- Ground
@@ -120,9 +94,9 @@ architecture Structural of timed_cache is
             sel         : in  STD_LOGIC_VECTOR(1 downto 0); -- 2-bit selector for demux, comes from decoder input
             read_data   : out STD_LOGIC                     -- Read data output for cell 3
         );
-    end component valid_vector;
+    end component;
 
-    component block_cache is
+    component block_cache 
         port (
             write_cache  : in  std_logic_vector(7 downto 0);
             hit_miss     : in  std_logic;
@@ -131,40 +105,53 @@ architecture Structural of timed_cache is
             block_offset : in  std_logic_vector(3 downto 0);
             read_data    : out std_logic_vector(7 downto 0)
         );
-    end component block_cache;
+    end component;
 
-    component and_2x1 is
+    component and_2x1 
         port (
             A      : in  STD_LOGIC;
             B      : in  STD_LOGIC;
             output : out STD_LOGIC
         );
-    end component and_2x1;
+    end component;
 
-    component inverter is
+    component inverter 
         port (
             input  : in  STD_LOGIC;
             output : out STD_LOGIC
         );
-    end component inverter;
+    end component;
 
-    component tx_8bit is
+    component tx_8bit 
         port (
             sel    : in  std_logic;                         -- Selector signal
             selnot : in  std_logic;                         -- Inverted selector signal
             input  : in  std_logic_vector(7 downto 0);      -- 8-bit input data
             output : out std_logic_vector(7 downto 0)       -- 8-bit output data
         );
-    end component tx_8bit;
+    end component;
 
-    component tx_6bit is
+    component tx_6bit 
         port (
             sel    : in  std_logic;                         -- Selector signal
             selnot : in  std_logic;                         -- Inverted selector signal
             input  : in  std_logic_vector(5 downto 0);      -- 6-bit input data
             output : out std_logic_vector(5 downto 0)       -- 6-bit output data
         );
-    end component tx_6bit;
+    end component;
+
+    for all: dff_posedge use entity work.dff_posedge(Structural);
+    for all: dff_posedge_4bit use entity work.dff_posedge_4bit(Structural);
+    for all: dff_negedge_8bit use entity work.dff_negedge_8bit(Structural);
+    for all: decoder_2x4 use entity work.decoder_2x4(Structural);
+    for all: tag_comparator_2x1 use entity work.tag_comparator_2x1(Structural);
+    for all: tag_vector use entity work.tag_vector(Structural);
+    for all: valid_vector use entity work.valid_vector(Structural);
+    for all: block_cache use entity work.block_cache(Structural);
+    for all: and_2x1 use entity work.and_2x1(Structural);
+    for all: inverter use entity work.inverter(Structural);
+    for all: tx_8bit use entity work.tx_8bit(Structural);
+    for all: tx_6bit use entity work.tx_6bit(Structural);
 
     -- Intermediate signals
     signal read_valid                                    : std_logic;
@@ -182,32 +169,32 @@ architecture Structural of timed_cache is
 
 begin
     -- Input signal inverters
-    output_enable_inv: entity work.inverter(Structural)
+    output_enable_inv: inverter
     port map (
         input        => output_enable,
         output       => output_enable_not
     );
 
-    mem_addr_output_enable_inv: entity work.inverter(Structural)
+    mem_addr_output_enable_inv: inverter
     port map (
         input        => mem_addr_output_enable,
         output       => mem_addr_output_enable_not
     );
 
-    rw_valid_inv: entity work.inverter(Structural)
+    rw_valid_inv: inverter
     port map (
         input        => valid_WE,
         output       => RW_valid
     );
 
-    rw_tag_inv: entity work.inverter(Structural)
+    rw_tag_inv: inverter
     port map (
         input        => tag_WE,
         output       => RW_tag
     );
 
     -- First input data register.
-    data_ff: entity work.dff_negedge_8bit(Structural)
+    data_ff: dff_negedge_8bit
     port map (
         d            => write_cache,
         clk          => clk,
@@ -216,7 +203,7 @@ begin
     );
 
     -- Second Input data register.
-    data_ff2: entity work.dff_posedge_8bit(Structural)
+    data_ff2: dff_negedge_8bit
     port map (
         d            => data_reg1,
         clk          => clk,
@@ -225,7 +212,7 @@ begin
     );
 
     -- Block offset decoder.
-    block_decoder: entity work.decoder_2x4(Structural)
+    block_decoder: decoder_2x4
     port map (
         A            => block_offset,
         E            => decoder_enable,
@@ -233,7 +220,7 @@ begin
     );
 
     -- Byte offset decoder.
-    byte_decoder: entity work.decoder_2x4(Structural)
+    byte_decoder: decoder_2x4
     port map (
         A            => byte_offset,
         E            => decoder_enable,
@@ -241,7 +228,7 @@ begin
     );
 
     -- Register holding decoded byte offset.
-    byte_decoder_ff: entity work.dff_posedge_4bit(Structural)
+    byte_decoder_ff: dff_posedge_4bit
     port map (
         d            => byte_decoder_out,
         clk          => clk,
@@ -250,7 +237,7 @@ begin
     );
 
     -- Register holding decoded block offset.
-    block_decoder_ff: entity work.dff_posedge_4bit(Structural)
+    block_decoder_ff: dff_posedge_4bit
     port map (
         d            => block_decoder_out,
         clk          => clk,
@@ -259,7 +246,7 @@ begin
     );
 
     -- Vertical vector of four 2-bit tag cells.
-    tag_vec: entity work.tag_vector(Structural)
+    tag_vec: tag_vector
     port map (
         write_data   => tag,
         chip_enable  => block_decoder_out,
@@ -269,7 +256,7 @@ begin
     );
 
     -- Vertical vector of four 1-bit valid cells.
-    valid_vec: entity work.valid_vector(Structural)
+    valid_vec: valid_vector
     port map (
         vdd          => vdd,
         gnd          => gnd,
@@ -282,7 +269,7 @@ begin
     );
 
     -- 2-bit comparator for tags to check for hit/miss.
-    tag_cmp: entity work.tag_comparator_2x1(Structural)
+    tag_cmp: tag_comparator_2x1
     port map (
         A            => tag,
         B            => read_tag,
@@ -290,7 +277,7 @@ begin
     );
 
     -- 1-bit comparator for valid bits to check for hit/miss.
-    valid_cmp: entity work.and_2x1(Structural)
+    valid_cmp: and_2x1
     port map (
         A            => vdd,
         B            => read_valid,
@@ -298,7 +285,7 @@ begin
     );
 
     -- 1-bit AND gate to check for hit/miss using tag and valid match results.
-    hit_miss_cmp: entity work.and_2x1(Structural)
+    hit_miss_cmp: and_2x1
     port map (
         A            => cmp_tag,
         B            => cmp_valid,
@@ -306,7 +293,7 @@ begin
     );
 
     -- Register holding hit/miss signal.
-    hit_miss_ff: entity work.dff_posedge(Structural)
+    hit_miss_ff: dff_posedge
     port map (
         d            => hit_miss,
         clk          => clk,
@@ -315,7 +302,7 @@ begin
     );
 
     -- 4x4 Cache array holding 8-bit data.
-    cache: entity work.block_cache(Structural)
+    cache: block_cache
     port map (
         write_cache  => data_reg2,
         hit_miss     => hit_miss_reg,
@@ -326,7 +313,7 @@ begin
     );
 
     -- Register that loads data read from the cache into a transmission gate when BUSY goes low.
-    data_out_ff: entity work.dff_negedge_8bit(Structural)
+    data_out_ff: dff_negedge_8bit
     port map (
         d            => read_cache_data_out,
         clk          => busy,
@@ -341,7 +328,7 @@ begin
     mem_addr_tx_in(0)          <= gnd;
 
     -- Transmission gate for memory address going to memory, gated by mem_addr_output_enable.
-    mem_addr_tx: entity work.tx_6bit(Structural)
+    mem_addr_tx: tx_6bit
     port map (
         sel          => mem_addr_output_enable,
         selnot       => mem_addr_output_enable_not,
@@ -350,7 +337,7 @@ begin
     );
 
     -- Transmission gate for read cache data going back to the CPU, gated by output_enable.
-    read_data_tx: entity work.tx_8bit(Structural)
+    read_data_tx: tx_8bit
     port map (
         sel          => output_enable,
         selnot       => output_enable_not,
@@ -362,4 +349,4 @@ begin
     mem_addr                   <= mem_addr_tx_out;
     hit_or_miss                <= hit_miss_reg;             -- output for state machine, tells it whether there was a hit or miss in the current operation
 
-end architecture Structural;
+end Structural;

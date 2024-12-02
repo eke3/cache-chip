@@ -10,11 +10,11 @@ entity and_2x1 is
         B      : in  STD_LOGIC;
         output : out STD_LOGIC
     );
-end entity and_2x1;
+end and_2x1;
 
 architecture Structural of and_2x1 is
 
 begin
     output <= A and B;
 
-end architecture Structural;
+end Structural;

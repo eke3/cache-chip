@@ -15,13 +15,13 @@ entity d_latch is
         q    : out std_logic;
         qbar : out std_logic
     );
-end entity d_latch;
+end d_latch;
 
 architecture Structural of d_latch is
 
 begin
 
-    output: process (d, clk) is
+    output: process (d, clk)
 
     begin
         if clk = '1' then
@@ -30,4 +30,4 @@ begin
         end if;
     end process output;
 
-end architecture Structural;
+end Structural;

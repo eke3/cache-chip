@@ -12,28 +12,31 @@ entity valid_cell is
         RW          : in  std_logic; -- Read/Write signal
         read_data   : out std_logic -- Read data output
     );
-end entity valid_cell;
+end valid_cell;
 
 architecture Structural of valid_cell is
     -- Declare the cache_cell component
-    component cache_cell is
+    component cache_cell 
         port (
             write_data  : in  std_logic;    -- 1-bit write data
             chip_enable : in  std_logic;    -- 1-bit chip enable
             RW          : in  std_logic;    -- 1-bit Read/Write signal
             read_data   : out std_logic     -- 1-bit read data
         );
-    end component cache_cell;
+    end component;
 
     -- Declare the mux_2x1 component for write_data, chip_enable, and RW
-    component mux_2x1 is
+    component mux_2x1 
         port (
             A      : in  std_logic;         -- Input 0
             B      : in  std_logic;         -- Input 1
             sel    : in  std_logic;         -- sel signal
             output : out std_logic          -- Output of the multiplexer
         );
-    end component mux_2x1;
+    end component;
+
+    for all: cache_cell use entity work.cache_cell(Structural);
+    for all: mux_2x1 use entity work.mux_2x1(Structural);
 
     -- Signals to wire the muxes
     signal mux_write_data_out  : std_logic; -- Output of the mux for write_data
@@ -44,7 +47,7 @@ architecture Structural of valid_cell is
 begin
 
     -- Instantiate mux for write_data (pass 0 if reset = 1, otherwise pass write_data)
-    mux_write_data: entity work.mux_2x1(Structural)
+    mux_write_data: mux_2x1
     port map (
         A           => write_data,          -- When reset = 0, pass write_data
         B           => gnd,                 -- When reset = 1, pass 0
@@ -53,7 +56,7 @@ begin
     );
 
     -- Instantiate mux for chip_enable (pass 1 if reset = 1, otherwise pass chip_enable)
-    mux_chip_enable: entity work.mux_2x1(Structural)
+    mux_chip_enable: mux_2x1
     port map (
         A           => chip_enable,         -- When reset = 0, pass chip_enable
         B           => vdd,                 -- When reset = 1, pass 1
@@ -62,7 +65,7 @@ begin
     );
 
     -- Instantiate mux for RW (pass 0 if reset = 1, otherwise pass RW)
-    mux_rw: entity work.mux_2x1(Structural)
+    mux_rw: mux_2x1
     port map (
         A           => RW,                  -- When reset = 0, pass RW
         B           => gnd,                 -- When reset = 1, pass 0
@@ -71,7 +74,7 @@ begin
     );
 
     -- Instantiate the cache_cell component
-    cache_cell_inst: entity work.cache_cell(Structural)
+    cache_cell_inst: cache_cell
     port map (
         write_data  => mux_write_data_out,  -- Connected to mux output
         chip_enable => mux_chip_enable_out, -- Connected to mux output
@@ -81,4 +84,4 @@ begin
 
     read_data <= outline;
 
-end architecture Structural;
+end Structural;

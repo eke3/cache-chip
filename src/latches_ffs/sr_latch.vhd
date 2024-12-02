@@ -8,22 +8,24 @@ entity sr_latch is
         Q  : inout std_logic; -- Output Q
         Qn : inout std_logic -- Complement of Q
     );
-end entity sr_latch;
+end sr_latch;
 
 architecture Structural of sr_latch is
 
     -- Declare the nor_2x1 component
-    component nor_2x1 is
+    component nor_2x1
         port (
             A      : in  std_logic; -- Input A
             B      : in  std_logic; -- Input B
             output : out std_logic  -- NOR output
         );
-    end component nor_2x1;
+    end component;
+
+    for nor1, nor2: nor_2x1 use entity work.nor_2x1(Structural);
 
 begin
     -- First NOR gate for Q
-    nor1: entity work.nor_2x1(Structural)
+    nor1: nor_2x1
     port map (
         A      => R,
         B      => Qn,
@@ -31,11 +33,11 @@ begin
     );
 
     -- Second NOR gate for Qn
-    nor2: entity work.nor_2x1(Structural)
+    nor2: nor_2x1
     port map (
         A      => S,
         B      => Q,
         output => Qn
     );
 
-end architecture Structural;
+end Structural;

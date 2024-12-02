@@ -12,23 +12,25 @@ entity tx_6bit is
         input  : in  std_logic_vector(5 downto 0); -- 6-bit input data
         output : out std_logic_vector(5 downto 0) -- 6-bit output data
     );
-end entity tx_6bit;
+end tx_6bit;
 
 architecture Structural of tx_6bit is
 
-    component tx is
+    component tx
         port (
             sel    : in  std_logic; -- Selector signal
             selnot : in  std_logic; -- Inverted selector signal
             input  : in  std_logic; -- 1-bit input data
             output : out std_logic  -- 1-bit output data
         );
-    end component tx;
+    end component;
+
+    for all: tx use entity work.tx(Structural);
 
 begin
 
     gen_tx: for i in 0 to 5 generate
-        tx_instance: entity work.tx(Structural)
+        tx_instance: tx
         port map (
             sel    => sel,
             selnot => selnot,
@@ -37,4 +39,4 @@ begin
         );
     end generate;
 
-end architecture Structural;
+end Structural;

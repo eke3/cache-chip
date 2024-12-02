@@ -12,24 +12,26 @@ entity and_3x1 is
         C      : in  STD_LOGIC; -- Third input
         output : out STD_LOGIC -- Output of the 3-input AND gate
     );
-end entity and_3x1;
+end and_3x1;
 
 architecture Structural of and_3x1 is
     -- Declare the and_2x1 component
-    component and_2x1 is
+    component and_2x1 
         port (
             A      : in  STD_LOGIC;
             B      : in  STD_LOGIC;
             output : out STD_LOGIC
         );
-    end component and_2x1;
+    end component;
 
+
+    for and_gate1, and_gate2: and_2x1 use entity work.and_2x1(Structural);
     -- Intermediate signal to hold the result of the first and_2x1 gate
     signal intermediate : STD_LOGIC;
 
 begin
     -- Instantiate the first and_2x1 gate to AND inputs A and B
-    and_gate1: entity work.and_2x1
+    and_gate1: and_2x1
     port map (
         A      => A,
         B      => B,
@@ -37,11 +39,11 @@ begin
     );
 
     -- Instantiate the second and_2x1 gate to AND intermediate with C
-    and_gate2: entity work.and_2x1
+    and_gate2: and_2x1
     port map (
         A      => intermediate,
         B      => C,
         output => output
     );
 
-end architecture Structural;
+end Structural;
