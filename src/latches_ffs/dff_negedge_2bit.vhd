@@ -25,14 +25,20 @@ architecture Structural of dff_negedge_2bit is
 
 begin
 
-    gen_bit: for i in 0 to 1 generate
-        bits: dff_negedge
-        port map (
-            d    => d(i),
-            clk  => clk,
-            q    => q(i),
-            qbar => qbar(i)
-        );
-    end generate;
+    bits0: dff_negedge
+    port map (
+        d    => d(0),
+        clk  => clk,
+        q    => q(0),
+        qbar => qbar(0)
+    );
+
+    bits1: dff_negedge
+    port map (
+        d    => d(1),
+        clk  => clk,
+        q    => q(1),
+        qbar => qbar(1)
+    );
 
 end Structural;

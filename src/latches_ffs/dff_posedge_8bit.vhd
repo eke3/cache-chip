@@ -25,14 +25,20 @@ architecture Structural of dff_posedge_8bit is
 
 begin
 
-    gen_dffs: for i in 0 to 1 generate
-        dff: dff_posedge_4bit
-        port map (
-            d    => d(4 * i + 3 downto 4 * i),
-            clk  => clk,
-            q    => q(4 * i + 3 downto 4 * i),
-            qbar => qbar(4 * i + 3 downto 4 * i)
-        );
-    end generate;
+    dff0: dff_posedge_4bit
+    port map (
+        d    => d(3 downto 0),
+        clk  => clk,
+        q    => q(3 downto 0),
+        qbar => qbar(3 downto 0)
+    );
+
+    dff1: dff_posedge_4bit
+    port map (
+        d    => d(7 downto 4),
+        clk  => clk,
+        q    => q(7 downto 4),
+        qbar => qbar(7 downto 4)
+    );
 
 end Structural;

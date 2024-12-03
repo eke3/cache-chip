@@ -25,14 +25,36 @@ architecture Structural of dff_posedge_4bit is
 
 begin
 
-    gen_bit: for i in 0 to 3 generate
-        bits: dff_posedge
-        port map (
-            d    => d(i),
-            clk  => clk,
-            q    => q(i),
-            qbar => qbar(i)
-        );
-    end generate;
+    bits0: dff_posedge
+    port map (
+        d    => d(0),
+        clk  => clk,
+        q    => q(0),
+        qbar => qbar(0)
+    );
+
+    bits1: dff_posedge
+    port map (
+        d    => d(1),
+        clk  => clk,
+        q    => q(1),
+        qbar => qbar(1)
+    );
+
+    bits2: dff_posedge
+    port map (
+        d    => d(2),
+        clk  => clk,
+        q    => q(2),
+        qbar => qbar(2)
+    );
+
+    bits3: dff_posedge
+    port map (
+        d    => d(3),
+        clk  => clk,
+        q    => q(3),
+        qbar => qbar(3)
+    );
 
 end Structural;

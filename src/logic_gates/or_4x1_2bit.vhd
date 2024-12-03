@@ -30,15 +30,22 @@ architecture Structural of or_4x1_2bit is
 
 begin
 
-    or_gen: for i in 0 to 1 generate
-        u_or: or_4x1
-        port map (
-            A(i),
-            B(i),
-            C(i),
-            D(i),
-            output(i)
-        );
-    end generate;
+    u_or0: or_4x1
+    port map (
+        A(0),
+        B(0),
+        C(0),
+        D(0),
+        output(0)
+    );
+
+    u_or1: or_4x1
+    port map (
+        A(1),
+        B(1),
+        C(1),
+        D(1),
+        output(1)
+    );
 
 end Structural;
