@@ -43,13 +43,17 @@ architecture Structural of demux_1x4 is
 
 begin
     -- Instantiate the two inverters for sel(0) and sel(1)
-    gen_inv: for i in 0 to 1 generate
-        inv: inverter
-        port map (
-            input  => sel(i),
-            output => sel_not(i)
-        );
-    end generate;
+    inv0: inverter
+    port map (
+        input  => sel(0),
+        output => sel_not(0)
+    );
+
+    inv1: inverter
+    port map (
+        input  => sel(1),
+        output => sel_not(1)
+    );
 
     -- Instantiate the three 3-input AND gates for outputs
     and_gate_0: and_3x1

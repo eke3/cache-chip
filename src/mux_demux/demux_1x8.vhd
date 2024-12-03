@@ -48,13 +48,23 @@ architecture Structural of demux_1x8 is
 
 begin
     -- Instantiate inverters for each bit of the selector `sel`
-    gen_inv: for i in 0 to 2 generate
-        inv: inverter
-        port map (
-            input  => sel(i),
-            output => sel_not(i)
-        );
-    end generate;
+    inv0: inverter
+    port map (
+        input  => sel(0),
+        output => sel_not(0)
+    );
+
+    inv1: inverter
+    port map (
+        input  => sel(1),
+        output => sel_not(1)
+    );
+
+    inv2: inverter
+    port map (
+        input  => sel(2),
+        output => sel_not(2)
+    );
 
     -- Instantiate 8 instances of and_4x1 for controlling each output
     and0: and_4x1

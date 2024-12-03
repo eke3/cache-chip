@@ -53,14 +53,117 @@ architecture Structural of mux_16x1 is
 begin
 
     -- Stage 1: 16 AND gates to implement 1-hot selection
-    gen_and: for i in 0 to 15 generate
-        and_gate: and_2x1
-        port map (
-            A      => inputs(i),
-            B      => sel_one_hot(i),
-            output => and_out(i)
-        );
-    end generate;
+    and_gate0: and_2x1
+    port map (
+        A      => inputs(0),
+        B      => sel_one_hot(0),
+        output => and_out(0)
+    );
+
+    and_gate1: and_2x1
+    port map (
+        A      => inputs(1),
+        B      => sel_one_hot(1),
+        output => and_out(1)
+    );
+
+    and_gate2: and_2x1
+    port map (
+        A      => inputs(2),
+        B      => sel_one_hot(2),
+        output => and_out(2)
+    );
+
+    and_gate3: and_2x1
+    port map (
+        A      => inputs(3),
+        B      => sel_one_hot(3),
+        output => and_out(3)
+    );
+
+    and_gate4: and_2x1
+    port map (
+        A      => inputs(4),
+        B      => sel_one_hot(4),
+        output => and_out(4)
+    );
+
+    and_gate5: and_2x1
+    port map (
+        A      => inputs(5),
+        B      => sel_one_hot(5),
+        output => and_out(5)
+    );
+
+    and_gate6: and_2x1
+    port map (
+        A      => inputs(6),
+        B      => sel_one_hot(6),
+        output => and_out(6)
+    );
+
+    and_gate7: and_2x1
+    port map (
+        A      => inputs(7),
+        B      => sel_one_hot(7),
+        output => and_out(7)
+    );
+
+    and_gate8: and_2x1
+    port map (
+        A      => inputs(8),
+        B      => sel_one_hot(8),
+        output => and_out(8)
+    );
+
+    and_gate9: and_2x1
+    port map (
+        A      => inputs(9),
+        B      => sel_one_hot(9),
+        output => and_out(9)
+    );
+
+    and_gate10: and_2x1
+    port map (
+        A      => inputs(10),
+        B      => sel_one_hot(10),
+        output => and_out(10)
+    );
+
+    and_gate11: and_2x1
+    port map (
+        A      => inputs(11),
+        B      => sel_one_hot(11),
+        output => and_out(11)
+    );
+
+    and_gate12: and_2x1
+    port map (
+        A      => inputs(12),
+        B      => sel_one_hot(12),
+        output => and_out(12)
+    );
+
+    and_gate13: and_2x1
+    port map (
+        A      => inputs(13),
+        B      => sel_one_hot(13),
+        output => and_out(13)
+    );
+
+    and_gate14: and_2x1
+    port map (
+        A      => inputs(14),
+        B      => sel_one_hot(14),
+        output => and_out(14)
+    );
+
+    and_gate15: and_2x1
+    port map (
+        A      => inputs(15),
+        B      => sel_one_hot(15),
+        output => and_out(15)
+    );
 
     -- Stage 2: OR gate to combine the AND gate outputs
     or_gate: or_16x1

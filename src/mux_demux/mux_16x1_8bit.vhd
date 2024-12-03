@@ -53,15 +53,69 @@ begin
     end generate;
 
     -- Generate block for multiplexers
-    gen_2: for i in 0 to 7 generate
-        select_out: mux_16x1
-        port map (
-            inputs      => bits(127 - (16 * i) downto 127 - (16 * i) - 15),
-            sel         => sel_4bit,
-            sel_one_hot => sel,
-            output      => output(7 - i)
-        );
-    end generate;
+    select_out0: mux_16x1
+    port map (
+        inputs      => bits(127 downto 112),
+        sel         => sel_4bit,
+        sel_one_hot => sel,
+        output      => output(7)
+    );
+
+    select_out1: mux_16x1
+    port map (
+        inputs      => bits(111 downto 96),
+        sel         => sel_4bit,
+        sel_one_hot => sel,
+        output      => output(6)
+    );
+
+    select_out2: mux_16x1
+    port map (
+        inputs      => bits(95 downto 80),
+        sel         => sel_4bit,
+        sel_one_hot => sel,
+        output      => output(5)
+    );
+
+    select_out3: mux_16x1
+    port map (
+        inputs      => bits(79 downto 64),
+        sel         => sel_4bit,
+        sel_one_hot => sel,
+        output      => output(4)
+    );
+
+    select_out4: mux_16x1
+    port map (
+        inputs      => bits(63 downto 48),
+        sel         => sel_4bit,
+        sel_one_hot => sel,
+        output      => output(3)
+    );
+
+    select_out5: mux_16x1
+    port map (
+        inputs      => bits(47 downto 32),
+        sel         => sel_4bit,
+        sel_one_hot => sel,
+        output      => output(2)
+    );
+
+    select_out6: mux_16x1
+    port map (
+        inputs      => bits(31 downto 16),
+        sel         => sel_4bit,
+        sel_one_hot => sel,
+        output      => output(1)
+    );
+
+    select_out7: mux_16x1
+    port map (
+        inputs      => bits(15 downto 0),
+        sel         => sel_4bit,
+        sel_one_hot => sel,
+        output      => output(0)
+    );
 
 end Structural;
 

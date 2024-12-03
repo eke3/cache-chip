@@ -32,15 +32,69 @@ architecture Structural of mux_2x1_8bit is
 begin
 
     -- Instantiate the mux_2x1 for each bit
-    gen_mux_2x1: for i in 0 to 7 generate
-        mux_2x1_inst: mux_2x1
-        port map (
-            A      => A(i),
-            B      => B(i),
-            sel    => sel,
-            output => mux_out(i)
-        );
-    end generate;
+    mux_2x1_inst_0: mux_2x1
+    port map (
+        A      => A(0),
+        B      => B(0),
+        sel    => sel,
+        output => mux_out(0)
+    );
+
+    mux_2x1_inst_1: mux_2x1
+    port map (
+        A      => A(1),
+        B      => B(1),
+        sel    => sel,
+        output => mux_out(1)
+    );
+
+    mux_2x1_inst_2: mux_2x1
+    port map (
+        A      => A(2),
+        B      => B(2),
+        sel    => sel,
+        output => mux_out(2)
+    );
+
+    mux_2x1_inst_3: mux_2x1
+    port map (
+        A      => A(3),
+        B      => B(3),
+        sel    => sel,
+        output => mux_out(3)
+    );
+
+    mux_2x1_inst_4: mux_2x1
+    port map (
+        A      => A(4),
+        B      => B(4),
+        sel    => sel,
+        output => mux_out(4)
+    );
+
+    mux_2x1_inst_5: mux_2x1
+    port map (
+        A      => A(5),
+        B      => B(5),
+        sel    => sel,
+        output => mux_out(5)
+    );
+
+    mux_2x1_inst_6: mux_2x1
+    port map (
+        A      => A(6),
+        B      => B(6),
+        sel    => sel,
+        output => mux_out(6)
+    );
+
+    mux_2x1_inst_7: mux_2x1
+    port map (
+        A      => A(7),
+        B      => B(7),
+        sel    => sel,
+        output => mux_out(7)
+    );
 
     output <= mux_out;
 

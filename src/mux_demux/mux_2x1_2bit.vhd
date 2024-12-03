@@ -31,15 +31,21 @@ architecture Structural of mux_2x1_2bit is
 begin
 
     -- Instantiate the mux_2x1 for each bit
-    gen_mux_2x1: for i in 0 to 1 generate
-        mux_2x1_inst: mux_2x1
-        port map (
-            A      => A(i),
-            B      => B(i),
-            sel    => sel,
-            output => mux_out(i)
-        );
-    end generate;
+    mux_2x1_inst0: mux_2x1
+    port map (
+        A      => A(0),
+        B      => B(0),
+        sel    => sel,
+        output => mux_out(0)
+    );
+
+    mux_2x1_inst1: mux_2x1
+    port map (
+        A      => A(1),
+        B      => B(1),
+        sel    => sel,
+        output => mux_out(1)
+    );
 
     output <= mux_out;
 

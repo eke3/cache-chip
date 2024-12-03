@@ -56,13 +56,17 @@ architecture Structural of mux_4x1 is
 begin
 
     -- Instantiate inverters for sel signal
-    gen_inverters: for i in 0 to 1 generate
-        sel_inverter: inverter
-        port map (
-            input  => sel(i),
-            output => sel_not(i)
-        );
-    end generate;
+    inv0: inverter
+    port map (
+        input  => sel(0),
+        output => sel_not(0)
+    );
+
+    inv1: inverter
+    port map (
+        input  => sel(1),
+        output => sel_not(1)
+    );
 
     -- Instantiate and_3x1 gates for each read_data input
     and_gate0: and_3x1
