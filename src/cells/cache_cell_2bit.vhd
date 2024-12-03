@@ -30,14 +30,20 @@ architecture Structural of cache_cell_2bit is
 
 begin
 
-    gen_cache_cells: for i in 0 to 1 generate
-        cache_cell_inst: cache_cell
-        port map (
-            write_data(i),
-            chip_enable,
-            RW,
-            read_data(i)
-        );
-    end generate;
+    cache_cell_inst_0: cache_cell
+    port map (
+        write_data(0),
+        chip_enable,
+        RW,
+        read_data(0)
+    );
+
+    cache_cell_inst_1: cache_cell
+    port map (
+        write_data(1),
+        chip_enable,
+        RW,
+        read_data(1)
+    );
 
 end Structural;

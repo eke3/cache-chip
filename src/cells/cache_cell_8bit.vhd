@@ -30,14 +30,36 @@ architecture Structural of cache_cell_8bit is
 
 begin
 
-    gen_cache_cells: for i in 0 to 3 generate
-        cache_cell_inst: cache_cell_2bit
-        port map (
-            write_data  => write_data((2 * i + 1) downto 2 * i),
-            chip_enable => chip_enable,
-            RW          => RW,
-            read_data   => read_data((2 * i + 1) downto 2 * i)
-        );
-    end generate;
+    cache_cell_inst_0: cache_cell_2bit
+    port map (
+        write_data  => write_data(1 downto 0),
+        chip_enable => chip_enable,
+        RW          => RW,
+        read_data   => read_data(1 downto 0)
+    );
+
+    cache_cell_inst_1: cache_cell_2bit
+    port map (
+        write_data  => write_data(3 downto 2),
+        chip_enable => chip_enable,
+        RW          => RW,
+        read_data   => read_data(3 downto 2)
+    );
+
+    cache_cell_inst_2: cache_cell_2bit
+    port map (
+        write_data  => write_data(5 downto 4),
+        chip_enable => chip_enable,
+        RW          => RW,
+        read_data   => read_data(5 downto 4)
+    );
+
+    cache_cell_inst_3: cache_cell_2bit
+    port map (
+        write_data  => write_data(7 downto 6),
+        chip_enable => chip_enable,
+        RW          => RW,
+        read_data   => read_data(7 downto 6)
+    );
 
 end Structural;

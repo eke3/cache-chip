@@ -78,18 +78,49 @@ begin
     );
 
     -- Instantiate each valid_cell and connect signals as required
-    gen_valid_cells: for i in 0 to 3 generate
-        cell: valid_cell
-        port map (
-            vdd         => vdd,
-            gnd         => gnd,
-            write_data  => demux_out(i),                   -- Demux output for cell i
-            reset       => reset,                          -- Shared reset signal
-            chip_enable => chip_enable(i),                 -- Unique chip enable for cell i
-            RW          => RW,                             -- Shared Read/Write signal
-            read_data   => read_valid_out(i)               -- Unique read data output for cell i
-        );
-    end generate;
+    cell_0: valid_cell
+    port map (
+        vdd         => vdd,
+        gnd         => gnd,
+        write_data  => demux_out(0),                    -- Demux output for cell 0
+        reset       => reset,                           -- Shared reset signal
+        chip_enable => chip_enable(0),                  -- Unique chip enable for cell 0
+        RW          => RW,                              -- Shared Read/Write signal
+        read_data   => read_valid_out(0)                -- Unique read data output for cell 0
+    );
+
+    cell_1: valid_cell
+    port map (
+        vdd         => vdd,
+        gnd         => gnd,
+        write_data  => demux_out(1),                    -- Demux output for cell 1
+        reset       => reset,                           -- Shared reset signal
+        chip_enable => chip_enable(1),                  -- Unique chip enable for cell 1
+        RW          => RW,                              -- Shared Read/Write signal
+        read_data   => read_valid_out(1)                -- Unique read data output for cell 1
+    );
+
+    cell_2: valid_cell
+    port map (
+        vdd         => vdd,
+        gnd         => gnd,
+        write_data  => demux_out(2),                    -- Demux output for cell 2
+        reset       => reset,                           -- Shared reset signal
+        chip_enable => chip_enable(2),                  -- Unique chip enable for cell 2
+        RW          => RW,                              -- Shared Read/Write signal
+        read_data   => read_valid_out(2)                -- Unique read data output for cell 2
+    );
+
+    cell_3: valid_cell
+    port map (
+        vdd         => vdd,
+        gnd         => gnd,
+        write_data  => demux_out(3),                    -- Demux output for cell 3
+        reset       => reset,                           -- Shared reset signal
+        chip_enable => chip_enable(3),                  -- Unique chip enable for cell 3
+        RW          => RW,                              -- Shared Read/Write signal
+        read_data   => read_valid_out(3)                -- Unique read data output for cell 3
+    );
 
     -- get only the output you want
     mux: mux_4x1

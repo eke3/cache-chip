@@ -139,85 +139,261 @@ begin
         output          => RW_nand_out
     );
 
-    gen_cell_1: for i in 0 to 3 generate
-        and_1: and_3x1
-        port map (
-            A           => block_offset(0),
-            B           => byte_offset(i),
-            C           => hit_miss,
-            output      => CE(15 - (i * 1))
-        );
-    end generate;
+    and_1: and_3x1
+    port map (
+        A           => block_offset(0),
+        B           => byte_offset(0),
+        C           => hit_miss,
+        output      => CE(15)
+    );
 
-    gen_cell_2: for i in 0 to 3 generate
-        and_2: and_3x1
-        port map (
-            A           => block_offset(1),
-            B           => byte_offset(i),
-            C           => hit_miss,
-            output      => CE(11 - (i * 1))
-        );
-    end generate;
+    and_2: and_3x1
+    port map (
+        A           => block_offset(0),
+        B           => byte_offset(1),
+        C           => hit_miss,
+        output      => CE(14)
+    );
 
-    gen_cell_3: for i in 0 to 3 generate
-        and_3: and_3x1
-        port map (
-            A           => block_offset(2),
-            B           => byte_offset(i),
-            C           => hit_miss,
-            output      => CE(7 - (i * 1))
-        );
-    end generate;
+    and_3: and_3x1
+    port map (
+        A           => block_offset(0),
+        B           => byte_offset(2),
+        C           => hit_miss,
+        output      => CE(13)
+    );
 
-    gen_cell_4: for i in 0 to 3 generate
-        and_4: and_3x1
-        port map (
-            A           => block_offset(3),
-            B           => byte_offset(i),
-            C           => hit_miss,
-            output      => CE(3 - (i * 1))
-        );
-    end generate;
+    and_4: and_3x1
+    port map (
+        A           => block_offset(0),
+        B           => byte_offset(3),
+        C           => hit_miss,
+        output      => CE(12)
+    );
 
-    gen_cell_5: for i in 0 to 3 generate
-        block_cell_1: cache_cell_8bit
-        port map (
-            write_data  => demux_out(127 - (8 * i) downto 127 - (8 * i) - 7),
-            chip_enable => CE(15 - ((i) * 1)),
-            RW          => RW_nand_out,
-            read_data   => read_array(127 - (8 * i) downto 127 - (8 * i) - 7)
-        );
-    end generate;
+    and_2_0: and_3x1
+    port map (
+        A           => block_offset(1),
+        B           => byte_offset(0),
+        C           => hit_miss,
+        output      => CE(11)
+    );
 
-    gen_cell_6: for i in 0 to 3 generate
-        block_cell_2: cache_cell_8bit
-        port map (
-            write_data  => demux_out(95 - (8 * i) downto 95 - (8 * i) - 7),
-            chip_enable => CE(11 - ((i) * 1)),
-            RW          => RW_nand_out,
-            read_data   => read_array(95 - (8 * i) downto 95 - (8 * i) - 7)
-        );
-    end generate;
+    and_2_1: and_3x1
+    port map (
+        A           => block_offset(1),
+        B           => byte_offset(1),
+        C           => hit_miss,
+        output      => CE(10)
+    );
 
-    gen_cell_7: for i in 0 to 3 generate
-        block_cell_3: cache_cell_8bit
-        port map (
-            write_data  => demux_out(63 - (8 * i) downto 63 - (8 * i) - 7),
-            chip_enable => CE(7 - ((i) * 1)),
-            RW          => RW_nand_out,
-            read_data   => read_array(63 - (8 * i) downto 63 - (8 * i) - 7)
-        );
-    end generate;
+    and_2_2: and_3x1
+    port map (
+        A           => block_offset(1),
+        B           => byte_offset(2),
+        C           => hit_miss,
+        output      => CE(9)
+    );
 
-    gen_cell_8: for i in 0 to 3 generate
-        block_cell_4: cache_cell_8bit
-        port map (
-            write_data  => demux_out(31 - (8 * i) downto 31 - (8 * i) - 7),
-            chip_enable => CE(3 - ((i) * 1)),
-            RW          => RW_nand_out,
-            read_data   => read_array(31 - (8 * i) downto 31 - (8 * i) - 7)
-        );
-    end generate;
+    and_2_3: and_3x1
+    port map (
+        A           => block_offset(1),
+        B           => byte_offset(3),
+        C           => hit_miss,
+        output      => CE(8)
+    );
+
+    and_3_0: and_3x1
+    port map (
+        A           => block_offset(2),
+        B           => byte_offset(0),
+        C           => hit_miss,
+        output      => CE(7)
+    );
+
+    and_3_1: and_3x1
+    port map (
+        A           => block_offset(2),
+        B           => byte_offset(1),
+        C           => hit_miss,
+        output      => CE(6)
+    );
+
+    and_3_2: and_3x1
+    port map (
+        A           => block_offset(2),
+        B           => byte_offset(2),
+        C           => hit_miss,
+        output      => CE(5)
+    );
+
+    and_3_3: and_3x1
+    port map (
+        A           => block_offset(2),
+        B           => byte_offset(3),
+        C           => hit_miss,
+        output      => CE(4)
+    );
+
+    and_4_0: and_3x1
+    port map (
+        A           => block_offset(3),
+        B           => byte_offset(0),
+        C           => hit_miss,
+        output      => CE(3)
+    );
+
+    and_4_1: and_3x1
+    port map (
+        A           => block_offset(3),
+        B           => byte_offset(1),
+        C           => hit_miss,
+        output      => CE(2)
+    );
+
+    and_4_2: and_3x1
+    port map (
+        A           => block_offset(3),
+        B           => byte_offset(2),
+        C           => hit_miss,
+        output      => CE(1)
+    );
+
+    and_4_3: and_3x1
+    port map (
+        A           => block_offset(3),
+        B           => byte_offset(3),
+        C           => hit_miss,
+        output      => CE(0)
+    );
+
+    block_cell_1_0: cache_cell_8bit
+    port map (
+        write_data  => demux_out(127 downto 120),
+        chip_enable => CE(15),
+        RW          => RW_nand_out,
+        read_data   => read_array(127 downto 120)
+    );
+
+    block_cell_1_1: cache_cell_8bit
+    port map (
+        write_data  => demux_out(119 downto 112),
+        chip_enable => CE(14),
+        RW          => RW_nand_out,
+        read_data   => read_array(119 downto 112)
+    );
+
+    block_cell_1_2: cache_cell_8bit
+    port map (
+        write_data  => demux_out(111 downto 104),
+        chip_enable => CE(13),
+        RW          => RW_nand_out,
+        read_data   => read_array(111 downto 104)
+    );
+
+    block_cell_1_3: cache_cell_8bit
+    port map (
+        write_data  => demux_out(103 downto 96),
+        chip_enable => CE(12),
+        RW          => RW_nand_out,
+        read_data   => read_array(103 downto 96)
+    );
+
+    block_cell_2_0: cache_cell_8bit
+    port map (
+        write_data  => demux_out(95 downto 88),
+        chip_enable => CE(11),
+        RW          => RW_nand_out,
+        read_data   => read_array(95 downto 88)
+    );
+
+    block_cell_2_1: cache_cell_8bit
+    port map (
+        write_data  => demux_out(87 downto 80),
+        chip_enable => CE(10),
+        RW          => RW_nand_out,
+        read_data   => read_array(87 downto 80)
+    );
+
+    block_cell_2_2: cache_cell_8bit
+    port map (
+        write_data  => demux_out(79 downto 72),
+        chip_enable => CE(9),
+        RW          => RW_nand_out,
+        read_data   => read_array(79 downto 72)
+    );
+
+    block_cell_2_3: cache_cell_8bit
+    port map (
+        write_data  => demux_out(71 downto 64),
+        chip_enable => CE(8),
+        RW          => RW_nand_out,
+        read_data   => read_array(71 downto 64)
+    );
+
+    block_cell_3_0: cache_cell_8bit
+    port map (
+        write_data  => demux_out(63 downto 56),
+        chip_enable => CE(7),
+        RW          => RW_nand_out,
+        read_data   => read_array(63 downto 56)
+    );
+
+    block_cell_3_1: cache_cell_8bit
+    port map (
+        write_data  => demux_out(55 downto 48),
+        chip_enable => CE(6),
+        RW          => RW_nand_out,
+        read_data   => read_array(55 downto 48)
+    );
+
+    block_cell_3_2: cache_cell_8bit
+    port map (
+        write_data  => demux_out(47 downto 40),
+        chip_enable => CE(5),
+        RW          => RW_nand_out,
+        read_data   => read_array(47 downto 40)
+    );
+
+    block_cell_3_3: cache_cell_8bit
+    port map (
+        write_data  => demux_out(39 downto 32),
+        chip_enable => CE(4),
+        RW          => RW_nand_out,
+        read_data   => read_array(39 downto 32)
+    );
+
+    block_cell_4_0: cache_cell_8bit
+    port map (
+        write_data  => demux_out(31 downto 24),
+        chip_enable => CE(3),
+        RW          => RW_nand_out,
+        read_data   => read_array(31 downto 24)
+    );
+
+    block_cell_4_1: cache_cell_8bit
+    port map (
+        write_data  => demux_out(23 downto 16),
+        chip_enable => CE(2),
+        RW          => RW_nand_out,
+        read_data   => read_array(23 downto 16)
+    );
+
+    block_cell_4_2: cache_cell_8bit
+    port map (
+        write_data  => demux_out(15 downto 8),
+        chip_enable => CE(1),
+        RW          => RW_nand_out,
+        read_data   => read_array(15 downto 8)
+    );
+
+    block_cell_4_3: cache_cell_8bit
+    port map (
+        write_data  => demux_out(7 downto 0),
+        chip_enable => CE(0),
+        RW          => RW_nand_out,
+        read_data   => read_array(7 downto 0)
+    );
 
     demux: demux_1x16_8bit
     port map (
