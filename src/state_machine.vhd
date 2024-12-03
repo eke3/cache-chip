@@ -16,8 +16,7 @@ entity state_machine is
         hit_miss             : in  std_logic;
         R_W                  : in  std_logic;
         cache_RW             : out std_logic;
-        valid_WE             : out std_logic;
-        tag_WE               : out std_logic;
+        tag_valid_WE               : out std_logic;
         decoder_enable       : out std_logic;
         mem_addr_out_enable  : out std_logic;
         mem_data_read_enable : out std_logic;
@@ -165,7 +164,7 @@ architecture Structural of state_machine is
     signal write_count_criteria, set_temp, set_temp_2, output_enable_temp_2, output_enable_temp_3, read_miss
                                                                                                : std_logic;
 
-    signal tag_valid_WE, tag_valid_ready                                                       : std_logic;
+    signal tag_valid_WEn, tag_valid_ready                                                       : std_logic;
 
     signal mem_addr_out_enable_sig, shift_7_enable                                             : std_logic;
 
@@ -439,7 +438,7 @@ begin
     port map (
         input       => mem_addr_out_enable_sig,
         clk         => clk,
-        output      => tag_valid_WE
+        output      => tag_valid_WEn
     );
 
     decoder_enable_logic: or_2x1
@@ -451,8 +450,7 @@ begin
 
     busy                 <= busy_sig;
     output_enable        <= output_enable_temp;
-    tag_WE               <= tag_valid_WE;
-    valid_WE             <= tag_valid_WE;
+    tag_valid_WE               <= tag_valid_WEn;
     mem_addr_out_enable  <= mem_addr_out_enable_sig;
     mem_data_read_enable <= mem_data_read_enable_sig;
 

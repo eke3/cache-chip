@@ -34,8 +34,7 @@ architecture Structural of chip is
             hit_miss             : in  std_logic;
             R_W                  : in  std_logic;
             cache_RW             : out std_logic;
-            valid_WE             : out std_logic;
-            tag_WE               : out std_logic;
+            tag_valid_WE               : out std_logic;
             decoder_enable       : out std_logic;
             mem_addr_out_enable  : out std_logic;
             mem_data_read_enable : out std_logic;
@@ -130,7 +129,7 @@ architecture Structural of chip is
     for all: inverter use entity work.inverter(Structural);
 
 
-    signal busy_out, mem_data_read_enable, valid_WE, tag_WE, output_enable, cache_RW, mem_addr_out_enable, hit_or_miss,
+    signal busy_out, mem_data_read_enable, tag_valid_WE, output_enable, cache_RW, mem_addr_out_enable, hit_or_miss,
         not_clk, not_busy, decoder_enable : std_logic;
     signal tag_reg_data_out, block_reg_data_out, byte_selector_out : std_logic_vector(1 downto 0);
     signal data_reg_mux_out, shift_reg_out, data_reg_out           : std_logic_vector(7 downto 0);
@@ -232,8 +231,7 @@ begin
         hit_miss               => hit_or_miss,
         R_W                    => cpu_rd_wrn,
         cache_RW               => cache_RW,
-        valid_WE               => valid_WE,
-        tag_WE                 => tag_WE,
+        tag_valid_WE                 => tag_valid_WE,
         decoder_enable         => decoder_enable,
         mem_addr_out_enable    => mem_addr_out_enable,
         mem_data_read_enable   => mem_data_read_enable,
@@ -252,8 +250,8 @@ begin
         block_offset           => block_reg_data_out,
         byte_offset            => byte,
         tag                    => tag_reg_data_out,
-        valid_WE               => valid_WE,
-        tag_WE                 => tag_WE,
+        valid_WE               => tag_valid_WE,
+        tag_WE                 => tag_valid_WE,
         output_enable          => output_enable,
         RW_cache               => cache_RW,
         decoder_enable         => decoder_enable,
