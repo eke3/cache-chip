@@ -25,7 +25,7 @@ architecture Structural of and_3x1 is
     end component;
 
 
-    for all: and_2x1 use entity work.and_2x1(Structural);
+    for and_gate1, and_gate2: and_2x1 use entity work.and_2x1(Structural);
     -- Intermediate signal to hold the result of the first and_2x1 gate
     signal intermediate : STD_LOGIC;
 

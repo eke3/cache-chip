@@ -47,6 +47,14 @@ architecture Structural of timed_cache is
         );
     end component;
 
+    component dff_posedge_8bit 
+        port (
+            d    : in  STD_LOGIC_VECTOR(7 downto 0);
+            clk  : in  STD_LOGIC;
+            q    : out STD_LOGIC_VECTOR(7 downto 0);
+            qbar : out STD_LOGIC_VECTOR(7 downto 0)
+        );
+    end component;
 
     component dff_negedge_8bit 
         port (
@@ -142,6 +150,7 @@ architecture Structural of timed_cache is
 
     for all: dff_posedge use entity work.dff_posedge(Structural);
     for all: dff_posedge_4bit use entity work.dff_posedge_4bit(Structural);
+    for all: dff_posedge_8bit use entity work.dff_posedge_8bit(Structural);
     for all: dff_negedge_8bit use entity work.dff_negedge_8bit(Structural);
     for all: decoder_2x4 use entity work.decoder_2x4(Structural);
     for all: tag_comparator_2x1 use entity work.tag_comparator_2x1(Structural);
@@ -203,7 +212,7 @@ begin
     );
 
     -- Second Input data register.
-    data_ff2: dff_negedge_8bit
+    data_ff2: dff_posedge_8bit
     port map (
         d            => data_reg1,
         clk          => clk,

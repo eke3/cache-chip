@@ -6,14 +6,6 @@ library STD;
 library IEEE;
 use IEEE.std_logic_1164.all;
 
--- decoder enable
--- start bit input
--- memory address output enable
--- hit_miss input
--- busy bit input
--- R/W register enable
--- R/W darta bit
--- mux send enable
 entity state_machine is
     port (
         vdd                  : in  std_logic;
@@ -53,7 +45,7 @@ architecture Structural of state_machine is
         );
     end component;
 
-    component and_4x1
+    component and_4x1 
         port (
             A      : in  STD_LOGIC;    -- First input
             B      : in  STD_LOGIC;    -- Second input
@@ -63,17 +55,26 @@ architecture Structural of state_machine is
         );
     end component;
 
-    component inverter
+    component inverter 
         port (
             input  : in  STD_LOGIC;
             output : out STD_LOGIC
         );
     end component;
 
-    component or_2x1
+    component or_2x1 
         port (
             A      : in  STD_LOGIC;
             B      : in  STD_LOGIC;
+            output : out STD_LOGIC
+        );
+    end component;
+
+    component or_3x1 
+        port (
+            A      : in  STD_LOGIC;
+            B      : in  STD_LOGIC;
+            C      : in  STD_LOGIC;
             output : out STD_LOGIC
         );
     end component;
@@ -145,6 +146,7 @@ architecture Structural of state_machine is
     for all: and_4x1 use entity work.and_4x1(Structural);
     for all: inverter use entity work.inverter(Structural);
     for all: or_2x1 use entity work.or_2x1(Structural);
+    for all: or_3x1 use entity work.or_3x1(Structural);
     for all: or_4x1 use entity work.or_4x1(Structural);
     for all: mux_2x1 use entity work.mux_2x1(Structural);
     for all: dff_negedge use entity work.dff_negedge(Structural);
@@ -152,6 +154,7 @@ architecture Structural of state_machine is
     for all: shift_register_bit_19 use entity work.shift_register_bit_19(Structural);
     for all: sr_latch use entity work.sr_latch(Structural);
     for all: shift_register_bit_7 use entity work.shift_register_bit_7(Structural);
+    
 
     signal hit_miss_inv, RW_inv, not_busy, temp_oe_1, temp_oe_2, output_enable_temp, read_miss_count, read_hit_count,
         write_count : std_logic;
@@ -256,7 +259,7 @@ begin
     );
 
     -- checks for a read miss to trigger write enables for valid and tag
-    --  sr_latch_2: entity work.sr_latch(Structural) port map(
+    --  sr_latch_2: sr_latch port map(
     --      S => read_miss,
     --      R => busy_sig_inv,
     --      Q => mem_addr_ready

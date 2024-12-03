@@ -29,8 +29,8 @@ architecture Structural of xnor_2x1 is
         );
     end component;
 
-    for all: xor_2x1 use entity work.xor_2x1(Structural);
-    for all: inverter use entity work.inverter(Structural);
+    for xor_gate: xor_2x1 use entity work.xor_2x1(Structural);
+    for not_gate: inverter use entity work.inverter(Structural);
 
     -- Intermediate signal to hold the result of XOR operation
     signal xor_out : STD_LOGIC;

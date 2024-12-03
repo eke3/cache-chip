@@ -51,9 +51,9 @@ architecture Structural of tag_vector is
         );
     end component;
 
-    for all: mux_4x1_2bit use entity work.mux_4x1_2bit(Structural);
-    for all: cache_cell_2bit use entity work.cache_cell_2bit(Structural);
-    for all: demux_1x4_2bit use entity work.demux_1x4_2bit(Structural);
+    for mux: mux_4x1_2bit use entity work.mux_4x1_2bit(Structural);
+    for cache_0, cache_1, cache_2, cache_3: cache_cell_2bit use entity work.cache_cell_2bit(Structural);
+    for demux_inst: demux_1x4_2bit use entity work.demux_1x4_2bit(Structural);
 
     -- Internal signals for the demux outputs
     signal demux_out_3, demux_out_2, demux_out_1, demux_out_0 : STD_LOGIC_VECTOR(1 downto 0);

@@ -38,8 +38,8 @@ architecture Structural of or_8x1 is
         );
     end component;
 
-    for all: or_4x1 use entity work.or_4x1(Structural);
-    for all: or_2x1 use entity work.or_2x1(Structural);
+    for or_1, or_2: or_4x1 use entity work.or_4x1(Structural);
+    for or_3: or_2x1 use entity work.or_2x1(Structural);
 
     signal or_4x1_out1, or_4x1_out2, or_8x1_out : STD_LOGIC; -- Intermediate signal for OR operation
 
