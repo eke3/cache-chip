@@ -39,13 +39,17 @@ architecture Structural of decoder_2x4 is
 begin
 
     -- Instantiate components
-    gen_inv: for i in 0 to 1 generate
-        inv: inverter
-        port map (
-            input  => A(i),
-            output => not_A(i)
-        );
-    end generate;
+    inv0: inverter
+    port map (
+        input  => A(0),
+        output => not_A(0)
+    );
+
+    inv1: inverter
+    port map (
+        input  => A(1),
+        output => not_A(1)
+    );
 
     AND1: and_2x1
     port map (
@@ -75,13 +79,32 @@ begin
         output     => and_vec(0)
     );
 
-    gen_and: for i in 0 to 3 generate
-        ANDX: and_2x1
-        port map (
-            A      => and_vec(i),
-            B      => E,
-            output => Y(i)
-        );
-    end generate;
+    and5: and_2x1
+    port map (
+        A      => and_vec(0),
+        B      => E,
+        output => Y(0)
+    );
+
+    and6: and_2x1
+    port map (
+        A      => and_vec(1),
+        B      => E,
+        output => Y(1)
+    );
+
+    and7: and_2x1
+    port map (
+        A      => and_vec(2),
+        B      => E,
+        output => Y(2)
+    );
+
+    and8: and_2x1
+    port map (
+        A      => and_vec(3),
+        B      => E,
+        output => Y(3)
+    );
 
 end Structural;

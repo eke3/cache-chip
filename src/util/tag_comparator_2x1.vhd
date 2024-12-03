@@ -36,14 +36,19 @@ architecture Structural of tag_comparator_2x1 is
 
 begin
     -- Compare each bit of A and B using XNOR gates
-    gen_bit_compare: for i in 0 to 1 generate
-        U: xnor_2x1
-        port map (
-            A      => A(i),
-            B      => B(i),
-            output => bit_equal(i)
-        );
-    end generate;
+    U0: xnor_2x1
+    port map (
+        A      => A(0),
+        B      => B(0),
+        output => bit_equal(0)
+    );
+
+    U1: xnor_2x1
+    port map (
+        A      => A(1),
+        B      => B(1),
+        output => bit_equal(1)
+    );
 
     -- AND the results to check if both bits are equal
     U3: and_2x1

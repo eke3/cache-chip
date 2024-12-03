@@ -43,14 +43,20 @@ begin
         output     => output(7 downto 2)
     );
 
-    gen_tx: for i in 0 to 1 generate
-        tx_instance: tx
-        port map (
-            sel    => sel,
-            selnot => selnot,
-            input  => input(i),
-            output => output(i)
-        );
-    end generate;
+    tx_instance_0: tx
+    port map (
+        sel    => sel,
+        selnot => selnot,
+        input  => input(0),
+        output => output(0)
+    );
+
+    tx_instance_1: tx
+    port map (
+        sel    => sel,
+        selnot => selnot,
+        input  => input(1),
+        output => output(1)
+    );
 
 end Structural;
