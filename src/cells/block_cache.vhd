@@ -54,7 +54,6 @@ architecture Structural of block_cache is
         port (
             inputs   : in  STD_LOGIC_VECTOR(127 downto 0);  -- 16 inputs, each 8-bit wide
             sel      : in  STD_LOGIC_VECTOR(15 downto 0);   -- 16-bit 1-hot select signal
-            sel_4bit : in  std_logic_vector(3 downto 0);
             output   : out STD_LOGIC_VECTOR(7 downto 0)     -- 8-bit output
         );
     end component;
@@ -421,7 +420,6 @@ begin
     port map (
         inputs          => read_array,
         sel             => CE,
-        sel_4bit        => comb_addr,
         output          => read_out
     );
 
