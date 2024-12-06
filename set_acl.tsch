@@ -1,9 +1,0 @@
-#!/bin/tcsh
-foreach folder (*)
-    if (-d $folder) then
-        foreach subfolder (`find $folder -type d`)
-            fs setacl "$subfolder" abbyj1:finalproj rlidwka
-        end
-    endif
-end
-
