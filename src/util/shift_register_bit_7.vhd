@@ -33,6 +33,7 @@ architecture Structural of shift_register_bit_7 is
 
     -- Signal declarations for the flip-flops
     signal count_1, count_2, count_3, count_4, count_5, count_6, count_7 : std_logic;
+    signal count : std_logic_vector(7 downto 0);
 
 begin
 
@@ -101,11 +102,13 @@ begin
         qbar => open
     );
 
+    count <= (count_7, count_6, count_5, count_4, count_3, count_2, count_1, input);
+
     -- Assign the byte to the full_output signal
 
     buff: buffer_8bit 
     port map (
-        input => (count_7, count_6, count_5, count_4, count_3, count_2, count_1, input),
+        input => count,
         output => full_output
     );
     -- full_output(7) <= count_7;
