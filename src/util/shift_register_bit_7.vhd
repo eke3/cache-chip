@@ -105,7 +105,7 @@ begin
 
     buff: buffer_8bit 
     port map (
-        input => (count_7 & count_6 & count_5 & count_4 & count_3 & count_2 & count_1 & input),
+        input => (count_7, count_6, count_5, count_4, count_3, count_2, count_1, input),
         output => full_output
     );
     -- full_output(7) <= count_7;
