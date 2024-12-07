@@ -20,7 +20,7 @@ architecture Structural of mux_16x1_8bit is
         );
     end component;
 
-    signal bits : std_logic_vector(127 downto 0);
+    signal bits_vector : std_logic_vector(127 downto 0);
 
     -- Bind components
     for all : mux_16x1 use entity work.mux_16x1(Structural);
@@ -28,7 +28,7 @@ architecture Structural of mux_16x1_8bit is
 begin
 
     -- Generate block for routing wires directly
-    bits(15 downto 0) <= (
+    bits_vector(15 downto 0) <= (
         inputs(120), 
         inputs(112), 
         inputs(104), 
@@ -46,7 +46,7 @@ begin
         inputs(8), 
         inputs(0)
     );
-    bits(31 downto 16) <= (
+    bits_vector(31 downto 16) <= (
         inputs(121), 
         inputs(113), 
         inputs(105), 
@@ -64,7 +64,7 @@ begin
         inputs(9), 
         inputs(1)
     );
-    bits(47 downto 32) <= (
+    bits_vector(47 downto 32) <= (
         inputs(122), 
         inputs(114), 
         inputs(106), 
@@ -82,7 +82,7 @@ begin
         inputs(10), 
         inputs(2)
     );
-    bits(63 downto 48) <= (
+    bits_vector(63 downto 48) <= (
         inputs(123), 
         inputs(115), 
         inputs(107), 
@@ -100,7 +100,7 @@ begin
         inputs(11), 
         inputs(3)
     );
-    bits(79 downto 64) <= (
+    bits_vector(79 downto 64) <= (
         inputs(124), 
         inputs(116), 
         inputs(108), 
@@ -118,7 +118,7 @@ begin
         inputs(12), 
         inputs(4)
     );
-    bits(95 downto 80) <= (
+    bits_vector(95 downto 80) <= (
         inputs(125), 
         inputs(117), 
         inputs(109), 
@@ -136,7 +136,7 @@ begin
         inputs(13), 
         inputs(5)
     );
-    bits(111 downto 96) <= (
+    bits_vector(111 downto 96) <= (
         inputs(126), 
         inputs(118), 
         inputs(110), 
@@ -154,7 +154,7 @@ begin
         inputs(14), 
         inputs(6)
     );
-    bits(127 downto 112) <= (
+    bits_vector(127 downto 112) <= (
         inputs(127), 
         inputs(119), 
         inputs(111), 
@@ -176,56 +176,56 @@ begin
     -- Generate block for multiplexers
     select_out0: mux_16x1
     port map (
-        inputs      => bits(127 downto 112),
+        inputs      => bits_vector(127 downto 112),
         sel_one_hot => sel,
         output      => output(7)
     );
 
     select_out1: mux_16x1
     port map (
-        inputs      => bits(111 downto 96),
+        inputs      => bits_vector(111 downto 96),
         sel_one_hot => sel,
         output      => output(6)
     );
 
     select_out2: mux_16x1
     port map (
-        inputs      => bits(95 downto 80),
+        inputs      => bits_vector(95 downto 80),
         sel_one_hot => sel,
         output      => output(5)
     );
 
     select_out3: mux_16x1
     port map (
-        inputs      => bits(79 downto 64),
+        inputs      => bits_vector(79 downto 64),
         sel_one_hot => sel,
         output      => output(4)
     );
 
     select_out4: mux_16x1
     port map (
-        inputs      => bits(63 downto 48),
+        inputs      => bits_vector(63 downto 48),
         sel_one_hot => sel,
         output      => output(3)
     );
 
     select_out5: mux_16x1
     port map (
-        inputs      => bits(47 downto 32),
+        inputs      => bits_vector(47 downto 32),
         sel_one_hot => sel,
         output      => output(2)
     );
 
     select_out6: mux_16x1
     port map (
-        inputs      => bits(31 downto 16),
+        inputs      => bits_vector(31 downto 16),
         sel_one_hot => sel,
         output      => output(1)
     );
 
     select_out7: mux_16x1
     port map (
-        inputs      => bits(15 downto 0),
+        inputs      => bits_vector(15 downto 0),
         sel_one_hot => sel,
         output      => output(0)
     );
