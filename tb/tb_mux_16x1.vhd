@@ -11,7 +11,6 @@ architecture Test of tb_mux_16x1 is
     component mux_16x1
         port (
             inputs      : in  STD_LOGIC_VECTOR(15 downto 0); -- 16-bit input vector
-            sel         : in  STD_LOGIC_VECTOR(3 downto 0);  -- 4-bit select signal
             sel_one_hot : in  STD_LOGIC_VECTOR(15 downto 0); -- One-hot select
             output      : out STD_LOGIC                      -- Output of the multiplexer
         );
@@ -21,7 +20,6 @@ architecture Test of tb_mux_16x1 is
 
     -- Test signals
     signal inputs      : STD_LOGIC_VECTOR(15 downto 0);
-    signal sel         : STD_LOGIC_VECTOR(3 downto 0);
     signal sel_one_hot : STD_LOGIC_VECTOR(15 downto 0);
     signal output      : STD_LOGIC;
 
@@ -31,7 +29,6 @@ begin
     UUT: mux_16x1
     port map (
         inputs      => inputs,
-        sel         => sel,
         sel_one_hot => sel_one_hot,
         output      => output
     );
@@ -42,21 +39,17 @@ begin
     begin
         -- Initialize signals
         inputs      <= "0101010101010101";
-        sel         <= "0000";
         sel_one_hot <= (others => '0');
         wait for 10 ns;
 
 
         sel_one_hot <= "0000000000000001";
-        sel         <= "0001";
         wait for 20 ns;
 
         sel_one_hot <= "0000000000000010";
-        sel         <= "0010";
         wait for 20 ns;
 
         sel_one_hot <= "0000000000000100";
-        sel         <= "0011";
         wait for 20 ns;
 
         -- End simulation

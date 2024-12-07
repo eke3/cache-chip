@@ -94,7 +94,14 @@ begin
     );
 
     -- Assign the byte to the full_output signal
-    full_output <= (count_7, count_6, count_5, count_4, count_3, count_2, count_1, input);
+    full_output(7) <= count_7;
+    full_output(6) <= count_6;
+    full_output(5) <= count_5;
+    full_output(4) <= count_4;
+    full_output(3) <= count_3;
+    full_output(2) <= count_2;
+    full_output(1) <= count_1;
+    full_output(0) <= input;
 
 end Structural;
 

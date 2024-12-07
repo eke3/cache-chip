@@ -54,7 +54,6 @@ architecture Structural of block_cache is
         port (
             inputs   : in  STD_LOGIC_VECTOR(127 downto 0);  -- 16 inputs, each 8-bit wide
             sel      : in  STD_LOGIC_VECTOR(15 downto 0);   -- 16-bit 1-hot select signal
-            sel_4bit : in  std_logic_vector(3 downto 0);
             output   : out STD_LOGIC_VECTOR(7 downto 0)     -- 8-bit output
         );
     end component;
@@ -70,7 +69,7 @@ architecture Structural of block_cache is
 
     component one_hot_to_binary 
         port (
-            one_hot : in  STD_LOGIC_VECTOR(3 downto 0);     -- One-hot encoded input
+            one_hot : in  STD_LOGIC_VECTOR(2 downto 0);     -- One-hot encoded input
             binary  : out STD_LOGIC_VECTOR(1 downto 0)      -- 2-bit binary output
         );
     end component;
@@ -421,19 +420,18 @@ begin
     port map (
         inputs          => read_array,
         sel             => CE,
-        sel_4bit        => comb_addr,
         output          => read_out
     );
 
     convert_1: one_hot_to_binary
     port map (
-        one_hot         => block_offset,
+        one_hot         => block_offset(3 downto 1),
         binary          => block_off_bin
     );
 
     convert_2: one_hot_to_binary
     port map (
-        one_hot         => byte_offset,
+        one_hot         => byte_offset(3 downto 1),
         binary          => byte_off_bin
     );
 
