@@ -1,16 +1,16 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 
-entity shift_register_bit_7 is
+entity shift_register_7bit is
     port (
         input       : in  std_logic;
         clk         : in  std_logic;
         output      : out std_logic;
         full_output : out std_logic_vector(7 downto 0)
     );
-end shift_register_bit_7;
+end shift_register_7bit;
 
-architecture Structural of shift_register_bit_7 is
+architecture Structural of shift_register_7bit is
 
     component dff_negedge
         port (

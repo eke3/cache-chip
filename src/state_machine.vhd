@@ -106,7 +106,7 @@ architecture Structural of state_machine is
         );
     end component;
 
-    component shift_register_bit_3 
+    component shift_register_3bit 
         port (
             input  : in  std_logic;
             clk    : in  std_logic;
@@ -114,7 +114,7 @@ architecture Structural of state_machine is
         );
     end component;
 
-    component shift_register_bit_19 
+    component shift_register_19bit 
         port (
             input  : in  std_logic;
             clk    : in  std_logic;
@@ -131,7 +131,7 @@ architecture Structural of state_machine is
         );
     end component;
 
-    component shift_register_bit_7
+    component shift_register_7bit
         port (
             input       : in  std_logic;
             clk         : in  std_logic;
@@ -149,10 +149,10 @@ architecture Structural of state_machine is
     for all: or_4x1 use entity work.or_4x1(Structural);
     for all: mux_2x1 use entity work.mux_2x1(Structural);
     for all: dff_negedge use entity work.dff_negedge(Structural);
-    for all: shift_register_bit_3 use entity work.shift_register_bit_3(Structural);
-    for all: shift_register_bit_19 use entity work.shift_register_bit_19(Structural);
+    for all: shift_register_3bit use entity work.shift_register_3bit(Structural);
+    for all: shift_register_19bit use entity work.shift_register_19bit(Structural);
     for all: sr_latch use entity work.sr_latch(Structural);
-    for all: shift_register_bit_7 use entity work.shift_register_bit_7(Structural);
+    for all: shift_register_7bit use entity work.shift_register_7bit(Structural);
     
 
     signal hit_miss_inv, RW_inv, not_busy, temp_oe_1, temp_oe_2, output_enable_temp, read_miss_count, read_hit_count,
@@ -330,7 +330,7 @@ begin
 
     -- shift register timer for a read miss operation. Used to hold busy signal high
     -- for the correct amount of clock signals
-    shift_reg_19: shift_register_bit_19
+    shift_reg_19: shift_register_19bit
     port map (
         input       => read_miss_trigger,
         clk         => clk,
@@ -368,7 +368,7 @@ begin
     );
 
     -- start and high clock indicates incoming signals are ready to use
-    shift_reg_3_2: shift_register_bit_3
+    shift_reg_3_2: shift_register_3bit
     port map (
         input       => start,
         clk         => clk,
@@ -376,7 +376,7 @@ begin
     );
 
     -- set_temp logic all just used to determine when to send busy signal high
-    shift_reg_3_3: shift_register_bit_3
+    shift_reg_3_3: shift_register_3bit
     port map (
         input       => set_temp,
         clk         => not_clk,
@@ -392,7 +392,7 @@ begin
 
     -- shift register to trigger memory data read enable after 8 clk cycles from
     -- mem_addr send enable
-    shift_reg_7: shift_register_bit_7
+    shift_reg_7: shift_register_7bit
     port map (
         input       => shift_7_enable,
         clk         => clk,
@@ -417,7 +417,7 @@ begin
     );
 
     -- shift register to disable memory read enable signal after 8 clock cycles
-    shift_reg_7_2: shift_register_bit_7
+    shift_reg_7_2: shift_register_7bit
     port map (
         input       => mem_data_read_enable_temp,
         clk         => clk,
@@ -434,7 +434,7 @@ begin
         output      => shift_7_enable
     );
 
-    shift_tag_valid: shift_register_bit_3
+    shift_tag_valid: shift_register_3bit
     port map (
         input       => mem_addr_out_enable_sig,
         clk         => clk,

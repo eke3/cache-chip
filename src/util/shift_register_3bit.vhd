@@ -1,4 +1,4 @@
--- Entity: shift_register_bit_3
+-- Entity: shift_register_3bit
 -- Architecture: Structural
 -- Author:
 
@@ -6,15 +6,15 @@ library STD;
 library IEEE;
 use IEEE.std_logic_1164.all;
 
-entity shift_register_bit_3 is
+entity shift_register_3bit is
     port (
         input  : in  std_logic;
         clk    : in  std_logic;
         output : out std_logic
     );
-end shift_register_bit_3;
+end shift_register_3bit;
 
-architecture Structural of shift_register_bit_3 is
+architecture Structural of shift_register_3bit is
 
     component dff_negedge
         port (
