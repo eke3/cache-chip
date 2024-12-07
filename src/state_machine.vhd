@@ -8,7 +8,6 @@ use IEEE.std_logic_1164.all;
 
 entity state_machine is
     port (
-        vdd                  : in  std_logic;
         gnd                  : in  std_logic;
         clk                  : in  std_logic;
         start                : in  std_logic;
