@@ -1,3 +1,7 @@
+-- Entity: tb_mux_16x1
+-- Architecture: Test
+-- Note: Run for 100 ns
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 

@@ -1,3 +1,6 @@
+-- Entity: shift_register_7bit
+-- Architecture: Structural
+
 library IEEE;
 use IEEE.std_logic_1164.all;
 

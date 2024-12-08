@@ -26,7 +26,6 @@ architecture Structural of chip is
 
     component state_machine 
         port (
-            vdd                  : in  std_logic;
             gnd                  : in  std_logic;
             clk                  : in  std_logic;
             start                : in  std_logic;
@@ -54,8 +53,7 @@ architecture Structural of chip is
             block_offset           : in  std_logic_vector(1 downto 0); -- from on-chip register, released by state machine
             byte_offset            : in  std_logic_vector(1 downto 0); -- from on-chip register, released by state machine
             tag                    : in  std_logic_vector(1 downto 0); -- from on-chip register, released by state machine
-            valid_WE               : in  std_logic;                    -- from state machine
-            tag_WE                 : in  std_logic;                    -- from state machine
+            valid_tag_WE               : in  std_logic;                    -- from state machine
             output_enable          : in  std_logic;                    -- from state machine
             RW_cache               : in  std_logic;                    -- from reg
             decoder_enable         : in  std_logic;                    -- from state machine
@@ -223,7 +221,6 @@ begin
 
     state_machine_inst: state_machine
     port map (
-        vdd                    => vdd,
         gnd                    => gnd,
         clk                    => clk,
         start                  => start,
@@ -250,8 +247,7 @@ begin
         block_offset           => block_reg_data_out,
         byte_offset            => byte,
         tag                    => tag_reg_data_out,
-        valid_WE               => tag_valid_WE,
-        tag_WE                 => tag_valid_WE,
+        valid_tag_WE                 => tag_valid_WE,
         output_enable          => output_enable,
         RW_cache               => cache_RW,
         decoder_enable         => decoder_enable,

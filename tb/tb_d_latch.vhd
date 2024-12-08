@@ -1,3 +1,7 @@
+-- Entity: tb_d_latch
+-- Architecture: Test
+-- Note: Run for 500 ns
+
 library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.std_logic_textio.all;

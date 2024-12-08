@@ -1,3 +1,6 @@
+-- Entity: tag_comparator_2x1
+-- Architecture: Structural
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 

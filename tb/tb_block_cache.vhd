@@ -57,7 +57,7 @@ begin
 
 
         -- Test Case 1: Write miss
-        write_cache  <= X"BC";
+        write_cache  <= "10111100";
         hit_miss     <= '0';
         R_W          <= '0';
         byte_offset  <= "1000";
@@ -74,7 +74,7 @@ begin
         assert (read_data = "XXXXXXXX") report "Write miss test failed." severity warning;
 
         -- Test Case 2: Write hit
-        write_cache  <= X"AB";
+        write_cache  <= "10101011";
         hit_miss     <= '1'; -- hit
         R_W          <= '0'; -- Write operation
         byte_offset  <= "1000";

@@ -14,8 +14,7 @@ entity timed_cache is
         block_offset           : in  std_logic_vector(1 downto 0); -- from on-chip register, released by state machine
         byte_offset            : in  std_logic_vector(1 downto 0); -- from on-chip register, released by state machine
         tag                    : in  std_logic_vector(1 downto 0); -- from on-chip register, released by state machine
-        valid_WE               : in  std_logic; -- from state machine
-        tag_WE                 : in  std_logic; -- from state machine
+        valid_tag_WE               : in  std_logic; -- from state machine
         output_enable          : in  std_logic; -- from state machine
         RW_cache               : in  std_logic; -- from state machine
         decoder_enable         : in  std_logic; -- from state machine
@@ -170,7 +169,7 @@ architecture Structural of timed_cache is
     signal data_reg1, data_reg2                          : std_logic_vector(7 downto 0);
     signal byte_decoder_out, block_decoder_out           : std_logic_vector(3 downto 0);
     signal byte_decoder_reg, block_decoder_reg           : std_logic_vector(3 downto 0);
-    signal RW_valid, RW_tag                              : std_logic;
+    signal RW_valid_tag                              : std_logic;
     signal read_cache_data_out                           : std_logic_vector(7 downto 0);
     signal read_cache_data_tx_in, read_cache_data_tx_out : STD_LOGIC_VECTOR(7 downto 0);
     signal mem_addr_tx_in, mem_addr_tx_out               : std_logic_vector(5 downto 0);
@@ -190,16 +189,10 @@ begin
         output       => mem_addr_output_enable_not
     );
 
-    rw_valid_inv: inverter
+    rw_valid_tag_inv: inverter
     port map (
-        input        => valid_WE,
-        output       => RW_valid
-    );
-
-    rw_tag_inv: inverter
-    port map (
-        input        => tag_WE,
-        output       => RW_tag
+        input        => valid_tag_WE,
+        output       => RW_valid_tag
     );
 
     -- First input data register.
@@ -259,7 +252,7 @@ begin
     port map (
         write_data   => tag,
         chip_enable  => block_decoder_out,
-        RW           => RW_tag,
+        RW           => RW_valid_tag,
         sel          => block_offset,
         read_data    => read_tag
     );
@@ -272,7 +265,7 @@ begin
         write_data   => vdd,
         reset        => reset,
         chip_enable  => block_decoder_out,
-        RW           => RW_valid,
+        RW           => RW_valid_tag,
         sel          => block_offset,
         read_data    => read_valid
     );

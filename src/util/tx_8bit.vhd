@@ -1,3 +1,6 @@
+-- Entity: tx_8bit
+-- Architecture: Structural
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 

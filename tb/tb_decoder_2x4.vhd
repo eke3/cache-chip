@@ -1,4 +1,6 @@
--- tb_decoder_2x4.vhd
+-- Entity: tb_decoder_2x4
+-- Architecture: Test
+-- Note: Run for 500 ns
 
 library IEEE;
 use IEEE.std_logic_1164.all;

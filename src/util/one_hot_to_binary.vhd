@@ -1,3 +1,6 @@
+-- Entity: one_hot_to_binary
+-- Architecture: Structural
+
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
 

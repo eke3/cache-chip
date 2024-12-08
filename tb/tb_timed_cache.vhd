@@ -20,8 +20,7 @@ architecture Test of tb_timed_cache is
             block_offset           : in  std_logic_vector(1 downto 0); -- from on-chip register, released by state machine
             byte_offset            : in  std_logic_vector(1 downto 0); -- from on-chip register, released by state machine
             tag                    : in  std_logic_vector(1 downto 0); -- from on-chip register, released by state machine
-            valid_WE               : in  std_logic;                    -- from state machine
-            tag_WE                 : in  std_logic;                    -- from state machine
+            valid_tag_WE               : in  std_logic;                    -- from state machine
             output_enable          : in  std_logic;
             RW_cache               : in  std_logic;                    -- from reg
             busy                   : in  std_logic;
@@ -46,7 +45,7 @@ architecture Test of tb_timed_cache is
     signal START                                                                                   : STD_LOGIC;
 
     -- signals from state machine
-    signal valid_WE, tag_WE, output_enable, RW_cache, decoder_enable, mem_addr_output_enable, BUSY : STD_LOGIC;
+    signal valid_tag_WE, output_enable, RW_cache, decoder_enable, mem_addr_output_enable, BUSY : STD_LOGIC;
 
     -- status signal for state machine
     signal hit_or_miss                                                                             : STD_LOGIC;
@@ -70,8 +69,7 @@ begin
         block_offset           => block_offset,
         byte_offset            => byte_offset,
         tag                    => tag,
-        valid_WE               => valid_WE,
-        tag_WE                 => tag_WE,
+        valid_tag_WE               => valid_tag_WE,
         output_enable          => output_enable,
         RW_cache               => RW_cache,
         busy                   => BUSY,
@@ -94,7 +92,7 @@ begin
     -- Stimulus process
     stim: process
         -- write miss procedure
-        procedure write_miss_test 
+        procedure write_miss_test is
         begin
             wait for 60 ns;
             START                  <= '1';
@@ -105,8 +103,7 @@ begin
             tag                    <= "01";
             block_offset           <= "01";
             byte_offset            <= "01";
-            valid_WE               <= '0';
-            tag_WE                 <= '0';
+            valid_tag_WE               <= '0';
             decoder_enable         <= '1';                             -- signal goes high on the negative clock edge
             output_enable          <= '0';
             mem_addr_output_enable <= '0';
@@ -119,7 +116,7 @@ begin
         end write_miss_test;
 
         -- write hit procedure
-        procedure write_hit_test 
+        procedure write_hit_test is
         begin
             wait for 70 ns;
             START                  <= '1';
@@ -130,8 +127,7 @@ begin
             tag                    <= "01";
             block_offset           <= "01";
             byte_offset            <= "01";
-            valid_WE               <= '0';
-            tag_WE                 <= '0';
+            valid_tag_WE               <= '0';
             decoder_enable         <= '1';                             -- signal goes high on the negative clock edge
             output_enable          <= '0';
             mem_addr_output_enable <= '0';
@@ -144,7 +140,7 @@ begin
         end write_hit_test;
 
         -- read miss procedure
-        procedure read_miss_test 
+        procedure read_miss_test is
         begin
             wait for 60 ns;
             START                  <= '1';
@@ -154,8 +150,7 @@ begin
             tag                    <= "01";
             block_offset           <= "01";
             byte_offset            <= "01";
-            valid_WE               <= '0';
-            tag_WE                 <= '0';
+            valid_tag_WE               <= '0';
             decoder_enable         <= '1';                             -- signal goes high on the negative clock edge
             output_enable          <= '0';
             mem_addr_output_enable <= '0';
@@ -169,11 +164,9 @@ begin
             mem_addr_output_enable <= '0';
             wait for 20 ns;
             -- briefly enable writing to valid and tag
-            valid_WE               <= '1';
-            tag_WE                 <= '1';
+            valid_tag_WE               <= '1';
             wait for 20 ns;
-            valid_WE               <= '0';
-            tag_WE                 <= '0';
+            valid_tag_WE               <= '0';
             wait for 100 ns;
 
             -- start transmitting data to write
@@ -211,7 +204,7 @@ begin
         end read_miss_test;
 
         -- read hit procedure
-        procedure read_hit_test 
+        procedure read_hit_test is
         begin
             wait for 10 ns;
             -- initialize values
@@ -221,8 +214,7 @@ begin
             block_offset           <= "ZZ";
             byte_offset            <= "ZZ";
             tag                    <= "ZZ";
-            valid_WE               <= 'Z';
-            tag_WE                 <= 'Z';
+            valid_tag_WE               <= 'Z';
             output_enable          <= 'Z';
             RW_cache               <= 'Z';
             decoder_enable         <= 'Z';
@@ -236,8 +228,7 @@ begin
             tag                    <= "01";
             block_offset           <= "01";
             byte_offset            <= "01";
-            valid_WE               <= '0';
-            tag_WE                 <= '0';
+            valid_tag_WE               <= '0';
             decoder_enable         <= '1';                             -- signal goes high on the negative clock edge
             output_enable          <= '0';
             mem_addr_output_enable <= '0';
@@ -251,7 +242,7 @@ begin
             output_enable          <= '0';
         end read_hit_test;
 
-        procedure system_reset 
+        procedure system_reset is
         begin
 
             -- initialize values
@@ -261,8 +252,7 @@ begin
             block_offset           <= "ZZ";
             byte_offset            <= "ZZ";
             tag                    <= "ZZ";
-            valid_WE               <= 'Z';
-            tag_WE                 <= 'Z';
+            valid_tag_WE               <= 'Z';
             output_enable          <= 'Z';
             RW_cache               <= 'Z';
             decoder_enable         <= 'Z';

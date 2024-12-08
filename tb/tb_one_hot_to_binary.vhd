@@ -14,7 +14,7 @@ architecture Test of tb_one_hot_to_binary is
 
     component one_hot_to_binary 
         port (
-            one_hot : in  STD_LOGIC_VECTOR(3 downto 0); -- One-hot encoded input
+            one_hot : in  STD_LOGIC_VECTOR(2 downto 0); -- One-hot encoded input
             binary  : out STD_LOGIC_VECTOR(1 downto 0) -- 2-bit binary output
         );
     end component;
@@ -28,7 +28,7 @@ begin
 
     DUT: one_hot_to_binary
     port map (
-        one_hot => one_hot,
+        one_hot => one_hot(3 downto 1),
         binary  => binary
     );
 

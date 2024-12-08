@@ -1,4 +1,5 @@
--- decoder_2x4.vhd
+-- Entity: decoder_2x4
+-- Architecture: Structural
 
 library IEEE;
 use IEEE.STD_LOGIC_1164.all;
