@@ -48,6 +48,7 @@ architecture Test of tb_state_machine is
     signal tb_output_enable        : std_logic;
     signal tb_reset_in             : std_logic;
     signal tb_shift_reg_out        : std_logic_vector(7 downto 0);
+    signal gnd : std_logic := '0';
 
     -- Clock generation process
 
@@ -56,7 +57,7 @@ begin
     -- Instantiate the state_machine
     DUT: state_machine
     port map (
-        gnd                  => '0',
+        gnd                  => gnd,
         clk                  => tb_clk,
         start                => tb_start,
         reset_in             => tb_reset_in,
@@ -161,7 +162,8 @@ begin
         wait for 500 ns;
 
         -- End simulation
-        assert false report "Simulation completed" severity failure;
+        assert false report "Simulation completed" severity warning;
+	wait;
     end process;
 
 end Test;

@@ -32,7 +32,7 @@ architecture Test of tb_decoder_2x4 is
     signal input_vector : unsigned(2 downto 0) := "000";
 
     -- Procedure to print the inputs and outputs of the decoder
-    procedure print_output 
+    procedure print_output is
         variable out_line : line;
 
     begin

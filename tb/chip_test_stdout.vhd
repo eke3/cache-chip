@@ -654,8 +654,8 @@ begin
         wait for 10 ns;
         print_output;
 
-	assert false report "End Simulation" severity failure;
-        --wait;
+	assert false report "End Simulation" severity warning;
+        wait;
     end process;
 
 end Test;

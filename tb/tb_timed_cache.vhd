@@ -55,14 +55,16 @@ architecture Test of tb_timed_cache is
 
     -- output to cpu
     signal read_cache                                                                              : STD_LOGIC_VECTOR(7 downto 0);
+    signal vdd : std_logic := '1';
+    signal gnd : std_logic := '0';
 
 
 begin
 
     cache: timed_cache
     port map (
-        vdd                    => '1',
-        gnd                    => '0',
+        vdd                    => vdd,
+        gnd                    => gnd,
         clk                    => clk,
         reset                  => reset,
         write_cache            => write_cache,
@@ -299,7 +301,8 @@ begin
         wait for 10 ns;
         system_reset;
 
-        assert false report "Testbench completed." severity failure;
+        assert false report "Testbench completed." severity warning;
+	wait;
     end process;
 
 end Test;

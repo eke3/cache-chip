@@ -8,7 +8,7 @@ use IEEE.STD_LOGIC_TEXTIO.all;
 use STD.TEXTIO.all;
 
 entity tb_selector is
-end entity tb_selector;
+end tb_selector;
 
 architecture Test of tb_selector is
     -- Component declaration for selector
@@ -42,7 +42,7 @@ architecture Test of tb_selector is
     signal test_index     : integer           := 0;
 
     -- Procedure to print current input and output values
-    procedure print_output 
+    procedure print_output is
         variable out_line : line;
     begin
         write(out_line, string'("Inputs - Chip Enable: "));

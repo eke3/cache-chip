@@ -25,8 +25,10 @@ architecture Test of tb_byte_selector is
 
     signal shift_register_data : std_logic_vector(7 downto 0);
     signal byte_offset         : std_logic_vector(1 downto 0);
+    signal vdd : std_logic := '1';
+    signal gnd : std_logic := '0';
 
-    procedure print_output
+    procedure print_output is
         variable out_line : line;
     begin
         write(out_line, string'(" Input: "));
@@ -43,8 +45,8 @@ begin
     -- Instantiate the byte_selector component
     byte_selector_inst: byte_selector
     port map (
-        vdd                 => '1',
-        gnd                 => '0',
+        vdd                 => vdd,
+        gnd                 => gnd,
         shift_register_data => shift_register_data,
         byte_offset         => byte_offset
     );
@@ -97,7 +99,8 @@ begin
         print_output;
 
         -- End simulation
-        assert false report "Test bench completed." severity failure;
+        assert false report "Test bench completed." severity warning;
+	wait;
     end process;
 
 end Test;
