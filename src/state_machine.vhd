@@ -68,15 +68,6 @@ architecture Structural of state_machine is
         );
     end component;
 
-    component or_3x1 
-        port (
-            A      : in  STD_LOGIC;
-            B      : in  STD_LOGIC;
-            C      : in  STD_LOGIC;
-            output : out STD_LOGIC
-        );
-    end component;
-
     component or_4x1 
         port (
             A      : in  STD_LOGIC;
@@ -144,7 +135,6 @@ architecture Structural of state_machine is
     for all: and_4x1 use entity work.and_4x1(Structural);
     for all: inverter use entity work.inverter(Structural);
     for all: or_2x1 use entity work.or_2x1(Structural);
-    for all: or_3x1 use entity work.or_3x1(Structural);
     for all: or_4x1 use entity work.or_4x1(Structural);
     for all: mux_2x1 use entity work.mux_2x1(Structural);
     for all: dff_negedge use entity work.dff_negedge(Structural);
