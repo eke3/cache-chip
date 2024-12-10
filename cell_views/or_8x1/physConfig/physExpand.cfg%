@@ -1,0 +1,16 @@
+//Revision 1
+//NOTE
+//VXL Configuration
+//END_NOTE
+
+config or_8x1;
+design finalproj.or_8x1:structural;
+liblist finalproj;
+
+viewlist physConfig, schematic, symbol;
+
+constraintviewlist constraint;
+stoplist layout, abstract;
+
+
+endconfig

@@ -1,0 +1,18 @@
+-- Created by @(#)$CDS: vhdlin version 6.1.8-64b 06/22/2022 16:17 (sjfhw317) $
+-- on Mon Dec  2 15:24:48 2024
+
+
+architecture structural of d_latch is
+
+begin
+
+    output: process (d, clk)
+
+    begin
+        if clk = '1' then
+            q    <= d;
+            qbar <= not d;
+        end if;
+    end process output;
+
+end structural;

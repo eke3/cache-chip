@@ -1,0 +1,16 @@
+#
+# Edit Lock-Stake file. CAUTION: Please do not change.
+#
+# Information about current Edit Lock Owner.
+#
+LockStakeVersion               1.1
+LoginName                      eekey1
+HostName                       ite375pc12.cs.umbc.edu
+ProcessIdentifier              1263243
+ProcessCreationTime_UTC        1733434009
+ProcessCreationTime_Readable   Thu Dec  5 16:26:49 2024 EST
+AppIdentifier                  OA File System Design Manager
+OSType                         unix
+ReasonForPlacingEditLock       OpenAccess edit lock
+FilePathUsedToEditLock         /afs/umbc.edu/users/a/b/abbyj1/home/cadence/finalproj/d_latch/layout/layout.oa.cdslck
+TimeEditLocked                 Thu Dec  5 17:13:50 2024 EST

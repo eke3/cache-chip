@@ -1,0 +1,16 @@
+#
+# Edit Lock-Stake file. CAUTION: Please do not change.
+#
+# Information about current Edit Lock Owner.
+#
+LockStakeVersion               1.1
+LoginName                      eekey1
+HostName                       ite375pc12.cs.UMBC.EDU
+ProcessIdentifier              1263243
+ProcessCreationTime_UTC        1733433962
+ProcessCreationTime_Readable   Thu Dec  5 16:26:02 2024 EST
+AppIdentifier                  /umbc/software/cadence/installs/IC618/tools/dfII/bin/64bit/virtuoso
+OSType                         lnx86
+ReasonForPlacingEditLock       
+FilePathUsedToEditLock         /afs/umbc.edu/users/a/b/abbyj1/home/cadence/finalproj/d_latch/physConfig/physExpand.cfg
+TimeEditLocked                 Thu Dec  5 17:13:51 2024 EST
