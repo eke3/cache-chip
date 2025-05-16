@@ -1,4 +1,4 @@
-# CMPE413_project
+# Cache Chip Design Using VHDL and Layouts
 
 ## Compiling on Lab Computers
 
